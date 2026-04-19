@@ -1,0 +1,97 @@
+# ================================================================================
+# Local Values in development
+# ================================================================================
+
+# ================================================================================
+# Environment
+# ================================================================================
+locals {
+  env             = "dev"
+  repository_name = "vlayusuke"
+}
+
+
+# ================================================================================
+# Network
+# ================================================================================
+locals {
+  vpc_cidr_block       = "10.40.0.0/16"
+  default_gateway_cidr = "0.0.0.0/0"
+}
+
+
+# ================================================================================
+# Amazon Aurora
+# ================================================================================
+locals {
+  rds_max_connections = 512
+
+  enabled_cloudwatch_logs_exports = toset([
+    "audit",
+    "error",
+    "general",
+    "slowquery",
+    "iam-db-auth-error"
+  ])
+}
+
+
+# ================================================================================
+# Amazon CloudWatch
+# ================================================================================
+locals {
+  retention_in_days = 180
+
+  lambda_functions = toset([
+    aws_lambda_function.rds_control.function_name,
+    aws_lambda_function.lambda_log_error_alert.function_name,
+    aws_lambda_function.lambda_metric_alarm.function_name,
+    aws_lambda_function.lambda_schedule_ecs_maintenance.function_name,
+    aws_lambda_function.lambda_execute_ecs_force_deployment.function_name,
+  ])
+
+  app_log_group = toset([
+    "app-app",
+    "cron",
+    "queue",
+    "migrate",
+  ])
+
+  nginx_log_group = toset([
+    "app-nginx"
+  ])
+
+  aurora_log_types = {
+    audit             = aws_kinesis_firehose_delivery_stream.aurora_logs_audit.arn
+    error             = aws_kinesis_firehose_delivery_stream.aurora_logs_error.arn
+    general           = aws_kinesis_firehose_delivery_stream.aurora_logs_general.arn
+    slowquery         = aws_kinesis_firehose_delivery_stream.aurora_logs_slowquery.arn
+    iam-db-auth-error = aws_kinesis_firehose_delivery_stream.aurora_logs_iam_db_auth_error.arn
+  }
+}
+
+
+# ================================================================================
+# AWS Lambda
+# ================================================================================
+locals {
+  ssm_parameter_store_timeout_millis = 3000
+  ecs_maintenance_time               = 2
+}
+
+
+# ================================================================================
+# Amazon S3
+# ================================================================================
+locals {
+  transition_days = 365
+  expire_days     = 1827
+}
+
+
+# ================================================================================
+# AWS WAFv2 Rule Notification ARN
+# ================================================================================
+locals {
+  wafv2_rule_notification_arn = "arn:aws:sns:us-east-1:248400274283:aws-managed-waf-rule-notifications"
+}
