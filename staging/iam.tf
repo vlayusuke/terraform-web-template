@@ -182,8 +182,8 @@ data "aws_iam_policy_document" "github_actions_deploy" {
     resources = [
       "arn:aws:s3:::${local.project}-${local.env}-*",
       "arn:aws:s3:::${local.project}-${local.env}-*/*",
-      "arn:aws:s3:::terraform-*",
-      "arn:aws:s3:::terraform-*/*",
+      "arn:aws:s3:::v-terraform-*",
+      "arn:aws:s3:::v-terraform-*/*",
     ]
   }
 
@@ -401,7 +401,6 @@ data "aws_iam_policy_document" "ecs_service" {
       aws_ssm_parameter.aurora_reader_endpoint.arn,
       aws_ssm_parameter.ec_writer_endpoint.arn,
       aws_ssm_parameter.ec_reader_endpoint.arn,
-      aws_ssm_parameter.new_relic_license_key.arn,
     ]
   }
 
@@ -524,7 +523,7 @@ data "aws_iam_policy_document" "ecs_task" {
       "elasticfilesystem:ClientWrite",
     ]
     resources = [
-      aws_efs_file_system.staging.arn,
+      aws_efs_file_system.main.arn,
     ]
   }
 
@@ -552,7 +551,7 @@ data "aws_iam_policy_document" "ecs_task" {
     ]
     resources = [
       "arn:aws:ses:${local.region}:${data.aws_caller_identity.current.account_id}:identity/*",
-      aws_ses_configuration_set.staging_event.arn,
+      aws_ses_configuration_set.main_event.arn,
     ]
   }
 
@@ -712,6 +711,8 @@ data "aws_iam_policy_document" "lambda_cloudwatch" {
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
   }
 }
@@ -812,6 +813,8 @@ data "aws_iam_policy_document" "rds_control" {
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
   }
 }
@@ -922,6 +925,10 @@ data "aws_iam_policy_document" "amazon_data_firehose" {
       "${aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_metric_alarm.function_name].arn}:*",
       aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.rds_control.function_name].arn,
       "${aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.rds_control.function_name].arn}:*",
+      aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      "${aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn}:*",
+      aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
+      "${aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn}:*",
       aws_cloudwatch_log_stream.ses.arn,
       "${aws_cloudwatch_log_stream.ses.arn}:*",
       aws_cloudwatch_log_stream.sns.arn,
@@ -989,7 +996,6 @@ data "aws_iam_policy_document" "ses" {
     resources = [
       aws_kinesis_firehose_delivery_stream.ses_logs.arn,
       aws_kinesis_firehose_delivery_stream.ses_event_log.arn,
-      aws_kinesis_firehose_delivery_stream.newrelic_firehose_stream.arn,
     ]
   }
 }
@@ -1137,6 +1143,8 @@ data "aws_iam_policy_document" "inspector" {
       aws_lambda_function.lambda_log_error_alert.arn,
       aws_lambda_function.lambda_metric_alarm.arn,
       aws_lambda_function.rds_control.arn,
+      aws_lambda_function.lambda_schedule_ecs_maintenance.arn,
+      aws_lambda_function.lambda_execute_ecs_force_deployment.arn,
     ]
   }
 
@@ -1161,16 +1169,16 @@ resource "aws_iam_role_policy_attachment" "inspector" {
 # ===============================================================================
 # AWS IAM for AWS Chatbot
 # ===============================================================================
-resource "aws_iam_role" "chatbot_stg" {
-  name               = "${local.project}-${local.env}-iam-chatbot-role-stg"
-  assume_role_policy = data.aws_iam_policy_document.chatbot_assume_stg.json
+resource "aws_iam_role" "chatbot" {
+  name               = "${local.project}-${local.env}-iam-chatbot-role"
+  assume_role_policy = data.aws_iam_policy_document.chatbot_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-role-stg"
+    Name = "${local.project}-${local.env}-iam-chatbot-role"
   }
 }
 
-data "aws_iam_policy_document" "chatbot_assume_stg" {
+data "aws_iam_policy_document" "chatbot_assume" {
   statement {
     sid    = "ChatbotAssume"
     effect = "Allow"
@@ -1186,17 +1194,17 @@ data "aws_iam_policy_document" "chatbot_assume_stg" {
   }
 }
 
-resource "aws_iam_policy" "chatbot_stg" {
-  name   = "${local.project}-${local.env}-iam-chatbot-policy-stg"
+resource "aws_iam_policy" "chatbot" {
+  name   = "${local.project}-${local.env}-iam-chatbot-policy"
   path   = "/"
-  policy = data.aws_iam_policy_document.chatbot_stg.json
+  policy = data.aws_iam_policy_document.chatbot.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-policy-stg"
+    Name = "${local.project}-${local.env}-iam-chatbot-policy"
   }
 }
 
-data "aws_iam_policy_document" "chatbot_stg" {
+data "aws_iam_policy_document" "chatbot" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
@@ -1273,13 +1281,13 @@ data "aws_iam_policy_document" "chatbot_stg" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "chatbot_stg" {
-  role       = aws_iam_role.chatbot_stg.name
-  policy_arn = aws_iam_policy.chatbot_stg.arn
+resource "aws_iam_role_policy_attachment" "chatbot" {
+  role       = aws_iam_role.chatbot.name
+  policy_arn = aws_iam_policy.chatbot.name
 }
 
-resource "aws_iam_role_policy_attachment" "chatbot_resource_read_only_access_stg" {
-  role       = aws_iam_role.chatbot_stg.name
+resource "aws_iam_role_policy_attachment" "chatbot_resource_read_only_access" {
+  role       = aws_iam_role.chatbot.name
   policy_arn = "arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess"
 }
 
@@ -1438,6 +1446,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_amazon_data_firehose" {
       [for key in local.app_log_group : aws_cloudwatch_log_group.app[key].arn],
       [for key in local.nginx_log_group : aws_cloudwatch_log_group.nginx[key].arn],
       [for key in local.enabled_cloudwatch_logs_exports : aws_cloudwatch_log_group.rds[key].arn],
+      [for key in local.lambda_functions : aws_cloudwatch_log_group.lambda_functions[key].arn],
       [aws_cloudwatch_log_stream.ses.arn],
       [aws_cloudwatch_log_stream.sns.arn],
       [aws_cloudwatch_log_stream.adf.arn],
@@ -1790,8 +1799,8 @@ data "aws_iam_policy_document" "enforce_mfa" {
       "s3:PutObject",
     ]
     resources = [
-      "arn:aws:s3:::terraform-web-template",
-      "arn:aws:s3:::terraform-web-template/*",
+      "arn:aws:s3:::v-terraform-web-template-stg",
+      "arn:aws:s3:::v-terraform-web-template-stg/*",
     ]
   }
 }
