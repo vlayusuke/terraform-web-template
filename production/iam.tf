@@ -857,6 +857,7 @@ data "aws_iam_policy_document" "lambda_schedule_ecs_maintenance_assume" {
 resource "aws_iam_policy" "lambda_schedule_ecs_maintenance" {
   name   = "${local.project}-${local.env}-iam-lambda-schedule-ecs-maintenance-handler-policy"
   policy = data.aws_iam_policy_document.lambda_schedule_ecs_maintenance.json
+
   tags = {
     Name = "${local.project}-${local.env}-iam-lambda-schedule-ecs-maintenance-handler-policy"
   }
@@ -914,7 +915,7 @@ data "aws_iam_policy_document" "lambda_schedule_ecs_maintenance" {
       test     = "StringLike"
       variable = "iam:PassedToService"
       values = [
-        "scheduler.amazonaws.com"
+        "scheduler.amazonaws.com",
       ]
     }
   }
@@ -925,7 +926,6 @@ resource "aws_iam_role_policy_attachment" "lambda_schedule_ecs_maintenance" {
   role       = aws_iam_role.lambda_schedule_ecs_maintenance.name
   policy_arn = aws_iam_policy.lambda_schedule_ecs_maintenance.arn
 }
-
 
 
 # ===============================================================================
@@ -960,6 +960,7 @@ data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment_assume" {
 resource "aws_iam_policy" "lambda_execute_ecs_force_deployment" {
   name   = "${local.project}-${local.env}-iam-lambda-execute-ecs-force-deployment-policy"
   policy = data.aws_iam_policy_document.lambda_execute_ecs_force_deployment.json
+
   tags = {
     Name = "${local.project}-${local.env}-iam-lambda-execute-ecs-force-deployment-policy"
   }
@@ -991,8 +992,8 @@ data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment" {
       aws_ecs_service.queue.arn,
     ]
   }
-
 }
+
 resource "aws_iam_role_policy_attachment" "lambda_execute_ecs_force_deployment" {
   role       = aws_iam_role.lambda_execute_ecs_force_deployment.name
   policy_arn = aws_iam_policy.lambda_execute_ecs_force_deployment.arn
@@ -1031,6 +1032,7 @@ data "aws_iam_policy_document" "eventbridge_scheduler_maintenance_ecs_assume" {
 resource "aws_iam_policy" "eventbridge_scheduler_maintenance_ecs" {
   name   = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-policy"
   policy = data.aws_iam_policy_document.eventbridge_scheduler_maintenance_ecs.json
+
   tags = {
     Name = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-policy"
   }
@@ -1044,10 +1046,9 @@ data "aws_iam_policy_document" "eventbridge_scheduler_maintenance_ecs" {
       "lambda:InvokeFunction",
     ]
     resources = [
-      aws_lambda_function.lambda_execute_ecs_force_deployment.arn
+      aws_lambda_function.lambda_execute_ecs_force_deployment.arn,
     ]
   }
-
 }
 
 resource "aws_iam_role_policy_attachment" "eventbridge_scheduler_maintenance_ecs" {
