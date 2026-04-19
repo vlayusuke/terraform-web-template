@@ -826,6 +826,237 @@ resource "aws_iam_role_policy_attachment" "rds_control" {
 
 
 # ===============================================================================
+# AWS IAM for AWS Lambda (Schedule ECS Maintenance Handler)
+# ===============================================================================
+resource "aws_iam_role" "lambda_schedule_ecs_maintenance" {
+  name               = "${local.project}-${local.env}-iam-schedule-ecs-maintenance-handler-role"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.lambda_schedule_ecs_maintenance_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-lambda-schedule-ecs-maintenance-handler-role"
+  }
+}
+
+data "aws_iam_policy_document" "lambda_schedule_ecs_maintenance_assume" {
+  statement {
+    sid    = "LambdaAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "lambda.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_policy" "lambda_schedule_ecs_maintenance" {
+  name   = "${local.project}-${local.env}-iam-lambda-schedule-ecs-maintenance-handler-policy"
+  policy = data.aws_iam_policy_document.lambda_schedule_ecs_maintenance.json
+  tags = {
+    Name = "${local.project}-${local.env}-iam-lambda-schedule-ecs-maintenance-handler-policy"
+  }
+}
+
+data "aws_iam_policy_document" "lambda_schedule_ecs_maintenance" {
+  statement {
+    sid    = "LogAccess"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = [
+      "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/*:*",
+    ]
+  }
+
+  # Retrieve cluster name and service name from ECS task name.
+  statement {
+    sid    = "AllowECSDescribeTasks"
+    effect = "Allow"
+    actions = [
+      "ecs:DescribeTasks",
+    ]
+    resources = [
+      "*",
+    ]
+  }
+
+  # Create an EventBridge scheduler.
+  statement {
+    sid    = "AllowCreateSchedule"
+    effect = "Allow"
+    actions = [
+      "scheduler:CreateSchedule",
+    ]
+    resources = [
+      "*",
+    ]
+  }
+
+  # Pass Role to pass an IAM role to the EventBridge scheduler when creating a schedule.
+  statement {
+    sid    = "AllowPassRoleToScheduler"
+    effect = "Allow"
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      aws_iam_role.eventbridge_scheduler_maintenance_ecs.arn,
+    ]
+    condition {
+      test     = "StringLike"
+      variable = "iam:PassedToService"
+      values = [
+        "scheduler.amazonaws.com"
+      ]
+    }
+  }
+
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_schedule_ecs_maintenance" {
+  role       = aws_iam_role.lambda_schedule_ecs_maintenance.name
+  policy_arn = aws_iam_policy.lambda_schedule_ecs_maintenance.arn
+}
+
+
+
+# ===============================================================================
+# AWS IAM for AWS Lambda (Execute ECS Force Deployment)
+# ===============================================================================
+resource "aws_iam_role" "lambda_execute_ecs_force_deployment" {
+  name               = "${local.project}-${local.env}-iam-execute-ecs-force-deployment-role"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.lambda_execute_ecs_force_deployment_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-lambda-execute-ecs-force-deployment-role"
+  }
+}
+
+data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment_assume" {
+  statement {
+    sid    = "LambdaAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "lambda.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_policy" "lambda_execute_ecs_force_deployment" {
+  name   = "${local.project}-${local.env}-iam-lambda-execute-ecs-force-deployment-policy"
+  policy = data.aws_iam_policy_document.lambda_execute_ecs_force_deployment.json
+  tags = {
+    Name = "${local.project}-${local.env}-iam-lambda-execute-ecs-force-deployment-policy"
+  }
+}
+
+data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment" {
+  statement {
+    sid    = "LogAccess"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = [
+      "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/*:*",
+    ]
+  }
+  # Perform rolling updates on ECS services to apply new task definitions.
+  statement {
+    sid    = "AllowECSUpdateService"
+    effect = "Allow"
+    actions = [
+      "ecs:UpdateService",
+    ]
+    resources = [
+      aws_ecs_service.app.arn,
+      aws_ecs_service.cron.arn,
+      aws_ecs_service.queue.arn,
+    ]
+  }
+
+}
+resource "aws_iam_role_policy_attachment" "lambda_execute_ecs_force_deployment" {
+  role       = aws_iam_role.lambda_execute_ecs_force_deployment.name
+  policy_arn = aws_iam_policy.lambda_execute_ecs_force_deployment.arn
+}
+
+
+# ===============================================================================
+# AWS IAM for Amazon EventBridge Scheduler (EventBridge Scheduler Maintenance ECS)
+# ===============================================================================
+resource "aws_iam_role" "eventbridge_scheduler_maintenance_ecs" {
+  name               = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-role"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_scheduler_maintenance_ecs_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-role"
+  }
+}
+
+data "aws_iam_policy_document" "eventbridge_scheduler_maintenance_ecs_assume" {
+  statement {
+    sid    = "EventBridgeSchedulerAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "scheduler.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_policy" "eventbridge_scheduler_maintenance_ecs" {
+  name   = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-policy"
+  policy = data.aws_iam_policy_document.eventbridge_scheduler_maintenance_ecs.json
+  tags = {
+    Name = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-policy"
+  }
+}
+
+data "aws_iam_policy_document" "eventbridge_scheduler_maintenance_ecs" {
+  statement {
+    sid    = "AllowInvokeLambda"
+    effect = "Allow"
+    actions = [
+      "lambda:InvokeFunction",
+    ]
+    resources = [
+      aws_lambda_function.lambda_execute_ecs_force_deployment.arn
+    ]
+  }
+
+}
+
+resource "aws_iam_role_policy_attachment" "eventbridge_scheduler_maintenance_ecs" {
+  role       = aws_iam_role.eventbridge_scheduler_maintenance_ecs.name
+  policy_arn = aws_iam_policy.eventbridge_scheduler_maintenance_ecs.arn
+}
+
+
+# ===============================================================================
 # AWS IAM for Amazon Data Firehose
 # ===============================================================================
 resource "aws_iam_role" "amazon_data_firehose" {
@@ -1283,7 +1514,7 @@ data "aws_iam_policy_document" "chatbot" {
 
 resource "aws_iam_role_policy_attachment" "chatbot" {
   role       = aws_iam_role.chatbot.name
-  policy_arn = aws_iam_policy.chatbot.name
+  policy_arn = aws_iam_policy.chatbot.arn
 }
 
 resource "aws_iam_role_policy_attachment" "chatbot_resource_read_only_access" {
