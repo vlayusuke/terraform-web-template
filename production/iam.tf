@@ -711,6 +711,8 @@ data "aws_iam_policy_document" "lambda_cloudwatch" {
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
   }
 }
@@ -811,6 +813,8 @@ data "aws_iam_policy_document" "rds_control" {
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
   }
 }
@@ -1152,6 +1156,10 @@ data "aws_iam_policy_document" "amazon_data_firehose" {
       "${aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_metric_alarm.function_name].arn}:*",
       aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.rds_control.function_name].arn,
       "${aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.rds_control.function_name].arn}:*",
+      aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      "${aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn}:*",
+      aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
+      "${aws_cloudwatch_log_stream.lambda_functions[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn}:*",
       aws_cloudwatch_log_stream.ses.arn,
       "${aws_cloudwatch_log_stream.ses.arn}:*",
       aws_cloudwatch_log_stream.sns.arn,
@@ -1366,6 +1374,8 @@ data "aws_iam_policy_document" "inspector" {
       aws_lambda_function.lambda_log_error_alert.arn,
       aws_lambda_function.lambda_metric_alarm.arn,
       aws_lambda_function.rds_control.arn,
+      aws_lambda_function.lambda_schedule_ecs_maintenance.arn,
+      aws_lambda_function.lambda_execute_ecs_force_deployment.arn,
     ]
   }
 
@@ -1390,16 +1400,16 @@ resource "aws_iam_role_policy_attachment" "inspector" {
 # ===============================================================================
 # AWS IAM for AWS Chatbot
 # ===============================================================================
-resource "aws_iam_role" "chatbot_prd" {
-  name               = "${local.project}-${local.env}-iam-chatbot-role-prd"
-  assume_role_policy = data.aws_iam_policy_document.chatbot_assume_prd.json
+resource "aws_iam_role" "chatbot" {
+  name               = "${local.project}-${local.env}-iam-chatbot-role"
+  assume_role_policy = data.aws_iam_policy_document.chatbot_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-role-prd"
+    Name = "${local.project}-${local.env}-iam-chatbot-role"
   }
 }
 
-data "aws_iam_policy_document" "chatbot_assume_prd" {
+data "aws_iam_policy_document" "chatbot_assume" {
   statement {
     sid    = "ChatbotAssume"
     effect = "Allow"
@@ -1415,17 +1425,17 @@ data "aws_iam_policy_document" "chatbot_assume_prd" {
   }
 }
 
-resource "aws_iam_policy" "chatbot_prd" {
-  name   = "${local.project}-${local.env}-iam-chatbot-policy-prd"
+resource "aws_iam_policy" "chatbot" {
+  name   = "${local.project}-${local.env}-iam-chatbot-policy"
   path   = "/"
-  policy = data.aws_iam_policy_document.chatbot_prd.json
+  policy = data.aws_iam_policy_document.chatbot.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-policy-prd"
+    Name = "${local.project}-${local.env}-iam-chatbot-policy"
   }
 }
 
-data "aws_iam_policy_document" "chatbot_prd" {
+data "aws_iam_policy_document" "chatbot" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
@@ -1502,13 +1512,13 @@ data "aws_iam_policy_document" "chatbot_prd" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "chatbot_prd" {
-  role       = aws_iam_role.chatbot_prd.name
-  policy_arn = aws_iam_policy.chatbot_prd.arn
+resource "aws_iam_role_policy_attachment" "chatbot" {
+  role       = aws_iam_role.chatbot.name
+  policy_arn = aws_iam_policy.chatbot.arn
 }
 
-resource "aws_iam_role_policy_attachment" "chatbot_resource_read_only_access_prd" {
-  role       = aws_iam_role.chatbot_prd.name
+resource "aws_iam_role_policy_attachment" "chatbot_resource_read_only_access" {
+  role       = aws_iam_role.chatbot.name
   policy_arn = "arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess"
 }
 
@@ -1667,6 +1677,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_amazon_data_firehose" {
       [for key in local.app_log_group : aws_cloudwatch_log_group.app[key].arn],
       [for key in local.nginx_log_group : aws_cloudwatch_log_group.nginx[key].arn],
       [for key in local.enabled_cloudwatch_logs_exports : aws_cloudwatch_log_group.rds[key].arn],
+      [for key in local.lambda_functions : aws_cloudwatch_log_group.lambda_functions[key].arn],
       [aws_cloudwatch_log_stream.ses.arn],
       [aws_cloudwatch_log_stream.sns.arn],
       [aws_cloudwatch_log_stream.adf.arn],
