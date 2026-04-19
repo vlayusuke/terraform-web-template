@@ -919,7 +919,6 @@ data "aws_iam_policy_document" "lambda_schedule_ecs_maintenance" {
       ]
     }
   }
-
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_schedule_ecs_maintenance" {
@@ -979,6 +978,7 @@ data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment" {
       "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/*:*",
     ]
   }
+
   # Perform rolling updates on ECS services to apply new task definitions.
   statement {
     sid    = "AllowECSUpdateService"
