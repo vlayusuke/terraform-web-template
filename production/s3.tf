@@ -102,7 +102,7 @@ resource "aws_s3_bucket_cors_configuration" "assets" {
       "GET",
     ]
     allowed_origins = [
-      "https://${local.env}.${local.domain}",
+      "https://${local.domain}",
     ]
     max_age_seconds = 3600
   }
@@ -163,7 +163,7 @@ data "aws_iam_policy_document" "assets_oac" {
       test     = "StringEquals"
       variable = "aws:SourceArn"
       values = [
-        aws_cloudfront_distribution.staging.arn,
+        aws_cloudfront_distribution.main.arn,
       ]
     }
   }
@@ -191,7 +191,7 @@ data "aws_iam_policy_document" "assets_oac" {
       test     = "StringEquals"
       variable = "aws:SourceArn"
       values = [
-        aws_cloudfront_distribution.staging.arn,
+        aws_cloudfront_distribution.main.arn,
       ]
     }
   }
@@ -301,7 +301,7 @@ resource "aws_s3_bucket_cors_configuration" "uploads" {
       "GET",
     ]
     allowed_origins = [
-      "https://${local.env}.${local.domain}",
+      "https://${local.domain}",
     ]
     max_age_seconds = 3600
   }
@@ -362,7 +362,7 @@ data "aws_iam_policy_document" "uploads_oac" {
       test     = "StringEquals"
       variable = "aws:SourceArn"
       values = [
-        aws_cloudfront_distribution.staging.arn,
+        aws_cloudfront_distribution.main.arn,
       ]
     }
   }
@@ -391,7 +391,7 @@ data "aws_iam_policy_document" "uploads_oac" {
       test     = "StringEquals"
       variable = "aws:SourceArn"
       values = [
-        aws_cloudfront_distribution.staging.arn
+        aws_cloudfront_distribution.main.arn
       ]
     }
   }
@@ -1353,33 +1353,33 @@ data "aws_iam_policy_document" "ses_logs" {
 # ===============================================================================
 # Amazon S3 Bucket for Amazon SES event logs
 # ===============================================================================
-resource "aws_s3_bucket" "ses_event_log" {
-  bucket = "${local.project}-${local.env}-s3-ses-event-log-bucket"
+resource "aws_s3_bucket" "ses_event_logs" {
+  bucket = "${local.project}-${local.env}-s3-ses-event-logs-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-ses-event-log-bucket"
+    Name = "${local.project}-${local.env}-s3-ses-event-logs-bucket"
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "ses_event_log" {
-  bucket = aws_s3_bucket.ses_event_log.id
+resource "aws_s3_bucket_ownership_controls" "ses_event_logs" {
+  bucket = aws_s3_bucket.ses_event_logs.id
 
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
 }
 
-resource "aws_s3_bucket_acl" "ses_event_log" {
-  bucket = aws_s3_bucket.ses_event_log.id
+resource "aws_s3_bucket_acl" "ses_event_logs" {
+  bucket = aws_s3_bucket.ses_event_logs.id
   acl    = "private"
 
   depends_on = [
-    aws_s3_bucket_ownership_controls.ses_event_log,
+    aws_s3_bucket_ownership_controls.ses_event_logs,
   ]
 }
 
-resource "aws_s3_bucket_public_access_block" "ses_event_log" {
-  bucket = aws_s3_bucket.ses_event_log.id
+resource "aws_s3_bucket_public_access_block" "ses_event_logs" {
+  bucket = aws_s3_bucket.ses_event_logs.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -1387,8 +1387,8 @@ resource "aws_s3_bucket_public_access_block" "ses_event_log" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "ses_event_log" {
-  bucket = aws_s3_bucket.ses_event_log.bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "ses_event_logs" {
+  bucket = aws_s3_bucket.ses_event_logs.bucket
 
   rule {
     apply_server_side_encryption_by_default {
@@ -1398,23 +1398,23 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ses_event_log" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "ses_event_log" {
-  bucket = aws_s3_bucket.ses_event_log.id
+resource "aws_s3_bucket_versioning" "ses_event_logs" {
+  bucket = aws_s3_bucket.ses_event_logs.id
 
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket_logging" "ses_event_log" {
-  bucket = aws_s3_bucket.ses_event_log.id
+resource "aws_s3_bucket_logging" "ses_event_logs" {
+  bucket = aws_s3_bucket.ses_event_logs.id
 
   target_bucket = aws_s3_bucket.s3_logs.id
   target_prefix = "ses-event-logs/"
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "ses_event_log" {
-  bucket = aws_s3_bucket.ses_event_log.id
+resource "aws_s3_bucket_lifecycle_configuration" "ses_event_logs" {
+  bucket = aws_s3_bucket.ses_event_logs.id
 
   rule {
     id     = "transition-and-delete-object"
@@ -1444,16 +1444,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "ses_event_log" {
   }
 
   depends_on = [
-    aws_s3_bucket_versioning.ses_event_log,
+    aws_s3_bucket_versioning.ses_event_logs,
   ]
 }
 
-resource "aws_s3_bucket_policy" "ses_event_log" {
-  bucket = aws_s3_bucket.ses_event_log.id
-  policy = data.aws_iam_policy_document.ses_event_log.json
+resource "aws_s3_bucket_policy" "ses_event_logs" {
+  bucket = aws_s3_bucket.ses_event_logs.id
+  policy = data.aws_iam_policy_document.ses_event_logs.json
 }
 
-data "aws_iam_policy_document" "ses_event_log" {
+data "aws_iam_policy_document" "ses_event_logs" {
   statement {
     sid    = "EnforceSSL"
     effect = "Deny"
@@ -1461,8 +1461,8 @@ data "aws_iam_policy_document" "ses_event_log" {
       "s3:*",
     ]
     resources = [
-      aws_s3_bucket.ses_event_log.arn,
-      "${aws_s3_bucket.ses_event_log.arn}/*",
+      aws_s3_bucket.ses_event_logs.arn,
+      "${aws_s3_bucket.ses_event_logs.arn}/*",
     ]
     condition {
       test     = "Bool"
@@ -1617,41 +1617,41 @@ data "aws_iam_policy_document" "sns_logs" {
 # ===============================================================================
 # Amazon S3 Bucket for Amazon SNS event logs
 # ===============================================================================
-resource "aws_s3_bucket" "sns_event_log" {
-  bucket = "${local.project}-${local.env}-s3-sns-event-log-bucket"
+resource "aws_s3_bucket" "sns_event_logs" {
+  bucket = "${local.project}-${local.env}-s3-sns-event-logs-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-sns-event-log-bucket"
+    Name = "${local.project}-${local.env}-s3-sns-event-logs-bucket"
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "sns_event_log" {
-  bucket = aws_s3_bucket.sns_event_log.id
+resource "aws_s3_bucket_ownership_controls" "sns_event_logs" {
+  bucket = aws_s3_bucket.sns_event_logs.id
 
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
 }
 
-resource "aws_s3_bucket_acl" "sns_event_log" {
-  bucket = aws_s3_bucket.sns_event_log.id
+resource "aws_s3_bucket_acl" "sns_event_logs" {
+  bucket = aws_s3_bucket.sns_event_logs.id
   acl    = "private"
 
   depends_on = [
-    aws_s3_bucket_ownership_controls.sns_event_log,
+    aws_s3_bucket_ownership_controls.sns_event_logs,
   ]
 }
 
-resource "aws_s3_bucket_public_access_block" "sns_event_log" {
-  bucket                  = aws_s3_bucket.sns_event_log.id
+resource "aws_s3_bucket_public_access_block" "sns_event_logs" {
+  bucket                  = aws_s3_bucket.sns_event_logs.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "sns_event_log" {
-  bucket = aws_s3_bucket.sns_event_log.bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "sns_event_logs" {
+  bucket = aws_s3_bucket.sns_event_logs.bucket
 
   rule {
     apply_server_side_encryption_by_default {
@@ -1661,22 +1661,22 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "sns_event_log" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "sns_event_log" {
-  bucket = aws_s3_bucket.sns_event_log.id
+resource "aws_s3_bucket_versioning" "sns_event_logs" {
+  bucket = aws_s3_bucket.sns_event_logs.id
 
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket_logging" "sns_event_log" {
-  bucket        = aws_s3_bucket.sns_event_log.id
+resource "aws_s3_bucket_logging" "sns_event_logs" {
+  bucket        = aws_s3_bucket.sns_event_logs.id
   target_bucket = aws_s3_bucket.s3_logs.id
   target_prefix = "sns-event-logs/"
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "sns_event_log" {
-  bucket = aws_s3_bucket.sns_event_log.id
+resource "aws_s3_bucket_lifecycle_configuration" "sns_event_logs" {
+  bucket = aws_s3_bucket.sns_event_logs.id
 
   rule {
     id     = "transition-and-delete-object"
@@ -1706,16 +1706,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "sns_event_log" {
   }
 
   depends_on = [
-    aws_s3_bucket_versioning.sns_event_log,
+    aws_s3_bucket_versioning.sns_event_logs,
   ]
 }
 
-resource "aws_s3_bucket_policy" "sns_event_log" {
-  bucket = aws_s3_bucket.sns_event_log.id
-  policy = data.aws_iam_policy_document.sns_event_log.json
+resource "aws_s3_bucket_policy" "sns_event_logs" {
+  bucket = aws_s3_bucket.sns_event_logs.id
+  policy = data.aws_iam_policy_document.sns_event_logs.json
 }
 
-data "aws_iam_policy_document" "sns_event_log" {
+data "aws_iam_policy_document" "sns_event_logs" {
   statement {
     sid    = "EnforceSSL"
     effect = "Deny"
@@ -1723,8 +1723,8 @@ data "aws_iam_policy_document" "sns_event_log" {
       "s3:*",
     ]
     resources = [
-      aws_s3_bucket.sns_event_log.arn,
-      "${aws_s3_bucket.sns_event_log.arn}/*",
+      aws_s3_bucket.sns_event_logs.arn,
+      "${aws_s3_bucket.sns_event_logs.arn}/*",
     ]
     condition {
       test     = "Bool"
@@ -2339,131 +2339,6 @@ data "aws_iam_policy_document" "s3_server_access_logs" {
 
 
 # ================================================================================
-# Amazon S3 Bucket for Source Code Backup (Tokyo)
-# ================================================================================
-resource "aws_s3_bucket" "source_backup_tokyo" {
-  bucket = "${local.project}-${local.env}-s3-github-backup-tokyo-bucket"
-
-  tags = {
-    Name = "${local.project}-${local.env}-s3-github-backup-tokyo-bucket"
-  }
-}
-
-resource "aws_s3_bucket_ownership_controls" "source_backup_tokyo" {
-  bucket = aws_s3_bucket.source_backup_tokyo.id
-
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
-resource "aws_s3_bucket_acl" "source_backup_tokyo" {
-  bucket = aws_s3_bucket.source_backup_tokyo.id
-  acl    = "private"
-
-  depends_on = [
-    aws_s3_bucket_ownership_controls.source_backup_tokyo,
-  ]
-}
-
-resource "aws_s3_bucket_public_access_block" "source_backup_tokyo" {
-  bucket = aws_s3_bucket.source_backup_tokyo.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "source_backup_tokyo" {
-  bucket = aws_s3_bucket.source_backup_tokyo.bucket
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-    bucket_key_enabled = false
-  }
-}
-
-resource "aws_s3_bucket_versioning" "source_backup_tokyo" {
-  bucket = aws_s3_bucket.source_backup_tokyo.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "source_backup_tokyo" {
-  bucket = aws_s3_bucket.source_backup_tokyo.id
-
-  rule {
-    id     = "transition-and-delete-object"
-    status = "Enabled"
-
-    filter {
-      object_size_greater_than = 0
-    }
-
-    transition {
-      days          = local.transition_days
-      storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
-    }
-
-    noncurrent_version_transition {
-      noncurrent_days = local.transition_days
-      storage_class   = "GLACIER"
-    }
-
-    noncurrent_version_expiration {
-      noncurrent_days = local.expire_days
-    }
-  }
-
-  depends_on = [
-    aws_s3_bucket_versioning.source_backup_tokyo,
-  ]
-}
-
-resource "aws_s3_bucket_policy" "source_backup_tokyo" {
-  bucket = aws_s3_bucket.source_backup_tokyo.id
-  policy = data.aws_iam_policy_document.source_backup_tokyo.json
-}
-
-data "aws_iam_policy_document" "source_backup_tokyo" {
-  statement {
-    sid    = "EnforceSSL"
-    effect = "Deny"
-    actions = [
-      "s3:*",
-    ]
-    resources = [
-      aws_s3_bucket.source_backup_tokyo.arn,
-      "${aws_s3_bucket.source_backup_tokyo.arn}/*",
-    ]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "false",
-      ]
-    }
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        "*",
-      ]
-    }
-  }
-}
-
-
-# ================================================================================
 # Amazon S3 Bucket for Source Code Backup (Osaka)
 # ================================================================================
 resource "aws_s3_bucket" "source_backup_osaka" {
@@ -2543,138 +2418,6 @@ data "aws_iam_policy_document" "source_backup_osaka" {
     resources = [
       aws_s3_bucket.source_backup_osaka.arn,
       "${aws_s3_bucket.source_backup_osaka.arn}/*",
-    ]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "false",
-      ]
-    }
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        "*",
-      ]
-    }
-  }
-}
-
-
-# ===============================================================================
-# Amazon S3 Bucket for New Relic
-# ===============================================================================
-resource "aws_s3_bucket" "new_relic" {
-  bucket = "${local.project}-${local.env}-s3-new-relic-bucket"
-
-  tags = {
-    Name = "${local.project}-${local.env}-s3-new-relic-bucket"
-  }
-}
-
-resource "aws_s3_bucket_ownership_controls" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
-resource "aws_s3_bucket_acl" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-  acl    = "log-delivery-write"
-
-  depends_on = [
-    aws_s3_bucket_ownership_controls.new_relic,
-  ]
-}
-
-resource "aws_s3_bucket_public_access_block" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.bucket
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-    bucket_key_enabled = false
-  }
-}
-
-resource "aws_s3_bucket_versioning" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_logging" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  target_bucket = aws_s3_bucket.s3_logs.id
-  target_prefix = "new-relic/"
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  rule {
-    id     = "transition-and-delete-object"
-    status = "Enabled"
-
-    filter {
-      object_size_greater_than = 0
-    }
-
-    transition {
-      days          = local.transition_days
-      storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
-    }
-
-    noncurrent_version_transition {
-      noncurrent_days = local.transition_days
-      storage_class   = "GLACIER"
-    }
-
-    noncurrent_version_expiration {
-      noncurrent_days = local.expire_days
-    }
-  }
-
-  depends_on = [
-    aws_s3_bucket_versioning.new_relic,
-  ]
-}
-
-resource "aws_s3_bucket_policy" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-  policy = data.aws_iam_policy_document.new_relic.json
-}
-
-data "aws_iam_policy_document" "new_relic" {
-  statement {
-    sid    = "EnforceSSL"
-    effect = "Deny"
-    actions = [
-      "s3:*",
-    ]
-    resources = [
-      aws_s3_bucket.new_relic.arn,
-      "${aws_s3_bucket.new_relic.arn}/*",
     ]
     condition {
       test     = "Bool"
