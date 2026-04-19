@@ -135,8 +135,8 @@ data "aws_iam_policy_document" "github_actions_deploy" {
     ]
     resources = [
       aws_iam_role.ecs_task.arn,
-      aws_subnet.staging_private[0].arn,
-      aws_subnet.staging_private[1].arn,
+      aws_subnet.main_private[0].arn,
+      aws_subnet.main_private[1].arn,
       aws_security_group.app.arn,
       aws_security_group.cron.arn,
       aws_security_group.queue.arn,
@@ -158,7 +158,7 @@ data "aws_iam_policy_document" "github_actions_deploy" {
       "ecs:UpdateService",
     ]
     resources = [
-      aws_ecs_cluster.staging.arn,
+      aws_ecs_cluster.main.arn,
       aws_ecs_service.app.arn,
       aws_ecs_service.cron.arn,
       aws_ecs_service.queue.arn,
