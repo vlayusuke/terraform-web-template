@@ -19,3 +19,17 @@ Web3レイヤ構成のWebアプリケーション向けの**ステージング�
 ### `develop`
 
 Web3レイヤ構成のWebアプリケーション向けの**開発環境**のAWSリソースを実装しています。
+
+## Terraformや各種ProviderのVersion
+
+| Resources                  | Version  |
+| -------------------------- | -------- |
+| Terraform                  | 1.14.8   |
+| AWS Provider               | 6.41.0   |
+| AWS Cloud Control Provider | 1.80.0   |
+
+## AWS Lambda関数に使用しているPythonのruntime
+
+| Resources                  | Version  |
+| -------------------------- | -------- |
+| Python                     | 3.14     |
