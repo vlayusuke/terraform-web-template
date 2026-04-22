@@ -63,8 +63,8 @@ resource "aws_cloudfront_distribution" "main" {
     target_origin_id           = aws_s3_bucket.assets.bucket
     trusted_signers            = []
     viewer_protocol_policy     = "redirect-to-https"
-    cache_policy_id            = aws_cloudfront_cache_policy.production.id
-    response_headers_policy_id = aws_cloudfront_response_headers_policy.production.id
+    cache_policy_id            = aws_cloudfront_cache_policy.main.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.main.id
   }
 
   ordered_cache_behavior {
@@ -83,8 +83,8 @@ resource "aws_cloudfront_distribution" "main" {
     target_origin_id           = aws_s3_bucket.uploads.bucket
     trusted_signers            = []
     viewer_protocol_policy     = "redirect-to-https"
-    cache_policy_id            = aws_cloudfront_cache_policy.production.id
-    response_headers_policy_id = aws_cloudfront_response_headers_policy.production.id
+    cache_policy_id            = aws_cloudfront_cache_policy.main.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.main.id
   }
 
   default_cache_behavior {
