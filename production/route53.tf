@@ -1,7 +1,7 @@
 # ================================================================================
 # Amazon Route 53 Host Zone
 # ================================================================================
-resource "aws_route53_zone" "production" {
+resource "aws_route53_zone" "main" {
   name    = local.domain
   comment = "Amazon Route 53 Host Zone for ${local.project}-${local.env}"
 
@@ -15,7 +15,7 @@ resource "aws_route53_zone" "production" {
 # Amazon Route 53 Record
 # ================================================================================
 resource "aws_route53_record" "main_A" {
-  zone_id        = aws_route53_zone.production.id
+  zone_id        = aws_route53_zone.main.id
   name           = local.domain
   type           = "A"
   set_identifier = "${local.project}-${local.env}-route-53-record-a"
@@ -32,7 +32,7 @@ resource "aws_route53_record" "main_A" {
 }
 
 resource "aws_route53_record" "main_AAAA" {
-  zone_id        = aws_route53_zone.production.id
+  zone_id        = aws_route53_zone.main.id
   name           = local.domain
   type           = "AAAA"
   set_identifier = "${local.project}-${local.env}-route-53-record-aaaa"
