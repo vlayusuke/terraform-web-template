@@ -33,3 +33,16 @@ Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構
 | Resources                  | Version  |
 | -------------------------- | -------- |
 | Python                     | 3.14     |
+
+## 複数のプラットフォームでTerraformコマンドを実行する際の注意点
+
+Terraformや各種Providerのアップデートを行なってから `terraform init -reconfigure` や `terraform init -upgrade` をした際に、macOSやWindowsなどの複数のプラットフォームで `.terraform.hcl.lock` に含まれるproviderのチェックサムがずれてしまうことを防止するため、 `terraform plan` で実行計画の実施を行う前に、ターミナル上で以下のコマンドを実行してください。
+
+```bash
+terraform providers lock \
+  -platform=windows_amd64 \
+  -platform=darwin_amd64 \
+  -platform=linux_amd64  \
+  -platform=darwin_arm64 \
+  -platform=linux_arm64
+```
