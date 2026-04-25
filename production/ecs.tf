@@ -1,0 +1,433 @@
+# ===============================================================================
+# Amazon ECS Cluster
+# ===============================================================================
+resource "aws_ecs_cluster" "main" {
+  name = "${local.project}-${local.env}-ecs-cluster"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-cluster"
+  }
+}
+
+resource "aws_ecs_cluster_capacity_providers" "main" {
+  cluster_name = aws_ecs_cluster.main.name
+  capacity_providers = [
+    "FARGATE",
+    "FARGATE_SPOT",
+  ]
+
+  default_capacity_provider_strategy {
+    base              = 1
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
+}
+
+
+# ===============================================================================
+# Amazon ECS Service for App
+# ===============================================================================
+resource "aws_ecs_service" "app" {
+  name                               = "app"
+  cluster                            = aws_ecs_cluster.main.id
+  task_definition                    = data.aws_ecs_task_definition.app.arn
+  desired_count                      = 2
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+  platform_version                   = "1.4.0"
+  enable_execute_command             = true
+  force_new_deployment               = true
+
+  capacity_provider_strategy {
+    base              = 1
+    capacity_provider = "FARGATE"
+    weight            = 0
+  }
+
+  capacity_provider_strategy {
+    base              = 0
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 1
+  }
+
+  deployment_controller {
+    type = "ECS"
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.alb_external_tg.arn
+    container_name   = "nginx"
+    container_port   = 80
+  }
+
+  network_configuration {
+    subnets = [
+      for subnet in aws_subnet.main_private :
+      subnet.id
+    ]
+    security_groups = [
+      aws_security_group.app.id,
+    ]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      capacity_provider_strategy,
+      task_definition,
+      desired_count,
+    ]
+  }
+
+  depends_on = [
+    aws_lb_target_group.alb_external_tg,
+  ]
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-service-app"
+  }
+}
+
+resource "aws_appautoscaling_target" "app" {
+  service_namespace  = "ecs"
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  min_capacity       = 2
+  max_capacity       = 4
+
+  lifecycle {
+    ignore_changes = [
+      max_capacity,
+      min_capacity,
+    ]
+  }
+}
+
+resource "aws_appautoscaling_policy" "app_scale_out" {
+  name               = "scale-out"
+  policy_type        = "StepScaling"
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+
+  step_scaling_policy_configuration {
+    adjustment_type         = "ChangeInCapacity"
+    cooldown                = 120
+    metric_aggregation_type = "Average"
+
+    step_adjustment {
+      metric_interval_lower_bound = 0
+      scaling_adjustment          = 2
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      step_scaling_policy_configuration,
+    ]
+  }
+
+  depends_on = [
+    aws_appautoscaling_target.app,
+  ]
+}
+
+resource "aws_appautoscaling_policy" "app_scale_in" {
+  name               = "scale-in"
+  policy_type        = "StepScaling"
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+
+  step_scaling_policy_configuration {
+    adjustment_type         = "ChangeInCapacity"
+    cooldown                = 600
+    metric_aggregation_type = "Average"
+
+    step_adjustment {
+      metric_interval_upper_bound = 0
+      scaling_adjustment          = -1
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      step_scaling_policy_configuration,
+    ]
+  }
+
+  depends_on = [
+    aws_appautoscaling_target.app,
+  ]
+}
+
+resource "aws_ecs_task_definition" "app" {
+  family                   = "app"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 512
+  memory                   = 1024
+  execution_role_arn       = aws_iam_role.ecs_service.arn
+  task_role_arn            = aws_iam_role.ecs_task.arn
+
+  container_definitions = templatefile(
+    "files/task_definitions/app.json",
+    {
+      project          = local.project
+      env              = local.env
+      region           = local.region
+      log_group_prefix = "${local.project}-${local.env}"
+    }
+  )
+
+  runtime_platform {
+    cpu_architecture        = "ARM64"
+    operating_system_family = "LINUX"
+  }
+
+  volume {
+    name = "${local.project}-${local.env}-efs-volume"
+
+    efs_volume_configuration {
+      file_system_id     = aws_efs_file_system.main.id
+      root_directory     = "/"
+      transit_encryption = "ENABLED"
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      container_definitions,
+      volume,
+    ]
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-task-app"
+  }
+}
+
+data "aws_ecs_task_definition" "app" {
+  task_definition = aws_ecs_task_definition.app.family
+}
+
+
+# ===============================================================================
+# Amazon ECS Service for Cron
+# ===============================================================================
+resource "aws_ecs_service" "cron" {
+  name                               = "cron"
+  cluster                            = aws_ecs_cluster.main.id
+  task_definition                    = data.aws_ecs_task_definition.cron.arn
+  desired_count                      = 1
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+  platform_version                   = "1.4.0"
+  enable_execute_command             = true
+  force_new_deployment               = true
+
+  capacity_provider_strategy {
+    base              = 1
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
+
+  deployment_controller {
+    type = "ECS"
+  }
+
+  network_configuration {
+    subnets = [
+      for subnet in aws_subnet.main_private :
+      subnet.id
+    ]
+    security_groups = [
+      aws_security_group.cron.id,
+    ]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      capacity_provider_strategy,
+      task_definition,
+      desired_count,
+    ]
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-service-cron"
+  }
+}
+
+resource "aws_ecs_task_definition" "cron" {
+  family                   = "cron"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 256
+  memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs_service.arn
+  task_role_arn            = aws_iam_role.ecs_task.arn
+
+  container_definitions = templatefile(
+    "files/task_definitions/cron.json",
+    {
+      project          = local.project
+      env              = local.env
+      region           = local.region
+      log_group_prefix = "${local.project}-${local.env}"
+    }
+  )
+
+  runtime_platform {
+    cpu_architecture        = "ARM64"
+    operating_system_family = "LINUX"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      container_definitions,
+    ]
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-task-cron"
+  }
+}
+
+data "aws_ecs_task_definition" "cron" {
+  task_definition = aws_ecs_task_definition.cron.family
+}
+
+
+# ===============================================================================
+# Amazon ECS Service for Queue
+# ===============================================================================
+resource "aws_ecs_service" "queue" {
+  name                               = "queue"
+  cluster                            = aws_ecs_cluster.main.id
+  task_definition                    = data.aws_ecs_task_definition.queue.arn
+  desired_count                      = 1
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+  platform_version                   = "1.4.0"
+  enable_execute_command             = true
+  force_new_deployment               = true
+
+  capacity_provider_strategy {
+    base              = 1
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
+
+  deployment_controller {
+    type = "ECS"
+  }
+
+  network_configuration {
+    subnets = [
+      for subnet in aws_subnet.main_private :
+      subnet.id
+    ]
+    security_groups = [
+      aws_security_group.queue.id,
+    ]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      capacity_provider_strategy,
+      task_definition,
+      desired_count,
+    ]
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-service-queue"
+  }
+}
+
+resource "aws_ecs_task_definition" "queue" {
+  family                   = "queue"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 256
+  memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs_service.arn
+  task_role_arn            = aws_iam_role.ecs_task.arn
+
+  container_definitions = templatefile(
+    "files/task_definitions/queue.json",
+    {
+      project          = local.project
+      env              = local.env
+      region           = local.region
+      log_group_prefix = "${local.project}-${local.env}"
+    }
+  )
+
+  runtime_platform {
+    cpu_architecture        = "ARM64"
+    operating_system_family = "LINUX"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      container_definitions,
+    ]
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-task-queue"
+  }
+}
+
+data "aws_ecs_task_definition" "queue" {
+  task_definition = aws_ecs_task_definition.queue.family
+}
+
+
+# ===============================================================================
+# Amazon ECS Task for migrate
+# ===============================================================================
+resource "aws_ecs_task_definition" "migrate" {
+  family                   = "migrate"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 256
+  memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs_service.arn
+  task_role_arn            = aws_iam_role.ecs_task.arn
+
+  container_definitions = templatefile(
+    "files/task_definitions/migrate.json",
+    {
+      project          = local.project
+      env              = local.env
+      region           = local.region
+      log_group_prefix = "${local.project}-${local.env}"
+    }
+  )
+
+  runtime_platform {
+    cpu_architecture        = "ARM64"
+    operating_system_family = "LINUX"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-task-migrate"
+  }
+}
+
+
+# ===============================================================================
+# Amazon ECS Account Default Settings
+# Reference: https://github.com/hashicorp/terraform-provider-aws/issues/45696
+# ===============================================================================
+resource "aws_ecs_account_setting_default" "production" {
+  name  = "fargateEventWindows"
+  value = "enabled"
+}
