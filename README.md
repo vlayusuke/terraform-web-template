@@ -25,8 +25,8 @@ Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構
 | Resources                  | Version  |
 | -------------------------- | -------- |
 | Terraform                  | 1.14.9   |
-| AWS Provider               | 6.41.0   |
-| AWS Cloud Control Provider | 1.80.0   |
+| AWS Provider               | 6.42.0   |
+| AWS Cloud Control Provider | 1.81.0   |
 
 ## AWS Lambda関数に使用しているPythonのruntime
 
@@ -36,7 +36,7 @@ Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構
 
 ## 複数のプラットフォームでTerraformコマンドを実行する際の注意点
 
-Terraformや各種Providerのアップデートを行なってから `terraform init -reconfigure` や `terraform init -upgrade` をした際に、macOSやWindowsなどの複数のプラットフォームで `.terraform.hcl.lock` に含まれるproviderのチェックサムがずれてしまうことを防止するため、 `terraform plan` で実行計画の実施を行う前に、ターミナル上で以下のコマンドを実行してください。
+Terraformや各種Providerのアップデートを行なってから `terraform init -reconfigure` や `terraform init -upgrade` をした際に、macOSやWindowsなどの複数のプラットフォームで `.terraform.lock.hcl` に含まれるproviderのチェックサムがずれてしまうことを防止するため、 `terraform plan` で実行計画の実施を行う前に、ターミナル上で以下のコマンドを実行してください。
 
 ```bash
 terraform providers lock \
