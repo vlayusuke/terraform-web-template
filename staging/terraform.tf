@@ -8,7 +8,7 @@ terraform {
     bucket  = "v-terraform-web-template-stg"
     key     = "state/staging.terraform.tfstate"
     region  = "ap-northeast-1"
-    profile = "v-terraform-web-template-stg"
+    profile = "terraform-template"
   }
 
   required_providers {
@@ -30,7 +30,7 @@ data "aws_region" "current" {}
 
 provider "aws" {
   region  = "ap-northeast-1"
-  profile = "v-terraform-web-template-stg"
+  profile = "terraform-template"
 
   default_tags {
     tags = {
@@ -46,7 +46,7 @@ provider "aws" {
 provider "aws" {
   region  = "us-east-1"
   alias   = "virginia"
-  profile = "v-terraform-web-template-stg"
+  profile = "terraform-template"
 
   default_tags {
     tags = {
@@ -62,7 +62,7 @@ provider "aws" {
 provider "aws" {
   region  = "ap-northeast-3"
   alias   = "osaka"
-  profile = "v-terraform-web-template-stg"
+  profile = "terraform-template"
 
   default_tags {
     tags = {
