@@ -3,7 +3,7 @@
     "name": "cron",
     "image": "php:8.5-fpm-bookworm",
     "repositoryCredentials": {
-      "credentialsParameter": "arn:aws:secretsmanager:${region}:${account_id}:secret:mcury-web-prd-smg-dockerhub-credentials"
+      "credentialsParameter": "arn:aws:secretsmanager:${region}:${account_id}:secret:tf-web-prd-smg-dockerhub-credentials"
     },
     "cpu": 256,
     "memoryReservation": 512,
