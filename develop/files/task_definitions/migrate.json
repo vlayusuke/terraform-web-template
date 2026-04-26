@@ -1,0 +1,47 @@
+[
+  {
+    "name": "migrate",
+    "image": "php:8.5-fpm-bookworm",
+    "repositoryCredentials": {
+      "credentialsParameter": "arn:aws:secretsmanager:${region}:${account_id}:secret:tf-web-dev-smg-dockerhub-credentials"
+    },
+    "cpu": 256,
+    "memoryReservation": 512,
+    "readonlyRootFilesystem": true,
+    "entryPoint": [
+      "/bin/sh"
+    ],
+    "command": [
+      "-c",
+      "php artisan migrate --force"
+    ],
+    "essential": true,
+    "environment": [
+      {
+        "name": "PROJECT",
+        "value": "${project}"
+      },
+      {
+        "name": "ENV",
+        "value": "${env}"
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awsfirelens",
+      "options": {
+        "Name": "cloudwatch",
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_prefix}-cw-migrate-cwlog",
+        "auto-create-group": "true",
+        "awslogs-stream-prefix": "migrate"
+      }
+    },
+    "ulimits": [
+      {
+        "softLimit": 1024000,
+        "hardLimit": 1024000,
+        "name": "nofile"
+      }
+    ]
+  }
+]
