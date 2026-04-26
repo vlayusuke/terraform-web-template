@@ -1,0 +1,47 @@
+[
+  {
+    "name": "cron",
+    "image": "php:8.5-fpm-bookworm",
+    "repositoryCredentials": {
+      "credentialsParameter": "arn:aws:secretsmanager:${region}:${account_id}:secret:mcury-web-prd-smg-dockerhub-credentials"
+    },
+    "cpu": 256,
+    "memoryReservation": 512,
+    "readonlyRootFilesystem": true,
+    "entryPoint": [
+      "/bin/sh"
+    ],
+    "command": [
+      "-c",
+      "echo '* * * * * php /app/artisan schedule:run' > /var/spool/cron/crontabs/root && crond -l 2 -f"
+    ],
+    "essential": true,
+    "environment": [
+      {
+        "name": "PROJECT",
+        "value": "${project}"
+      },
+      {
+        "name": "ENV",
+        "value": "${env}"
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awsfirelens",
+      "options": {
+        "Name": "cloudwatch",
+        "awslogs-region": "${region}",
+        "awslogs-group": "${log_group_prefix}-cw-cron-cwlog",
+        "auto-create-group": "true",
+        "awslogs-stream-prefix": "cron"
+      }
+    },
+    "ulimits": [
+      {
+        "softLimit": 1024000,
+        "hardLimit": 1024000,
+        "name": "nofile"
+      }
+    ]
+  }
+]
