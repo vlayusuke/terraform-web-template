@@ -46,3 +46,11 @@ terraform providers lock \
   -platform=darwin_arm64 \
   -platform=linux_arm64
 ```
+
+## インフラ構成図
+
+このテンプレートで構築が可能なアーキテクチャのインフラ構成図は以下の通りです。
+
+* ![本番環境](./terraform-web-template-v2.4-en-prd.svg)
+* ![ステージング環境](./terraform-web-template-v2.4-en-stg.svg)
+* ![開発環境](./terraform-web-template-v2.4-en-dev.svg)
