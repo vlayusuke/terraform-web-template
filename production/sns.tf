@@ -24,12 +24,12 @@ resource "aws_sns_topic" "metric_alarm" {
   }
 }
 
-resource "aws_sns_topic_policy" "metric_alarm_to_slack" {
+resource "aws_sns_topic_policy" "metric_alarm" {
   arn    = aws_sns_topic.metric_alarm.arn
-  policy = data.aws_iam_policy_document.metric_alarm_to_slack.json
+  policy = data.aws_iam_policy_document.metric_alarm.json
 }
 
-data "aws_iam_policy_document" "metric_alarm_to_slack" {
+data "aws_iam_policy_document" "metric_alarm" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
@@ -107,12 +107,12 @@ resource "aws_sns_topic" "event_alarm" {
   }
 }
 
-resource "aws_sns_topic_policy" "event_alarm_to_slack" {
+resource "aws_sns_topic_policy" "event_alarm" {
   arn    = aws_sns_topic.event_alarm.arn
-  policy = data.aws_iam_policy_document.event_alarm_to_slack.json
+  policy = data.aws_iam_policy_document.event_alarm.json
 }
 
-data "aws_iam_policy_document" "event_alarm_to_slack" {
+data "aws_iam_policy_document" "event_alarm" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
@@ -190,12 +190,12 @@ resource "aws_sns_topic" "inspector_notification" {
   }
 }
 
-resource "aws_sns_topic_policy" "inspector_notification_to_slack" {
+resource "aws_sns_topic_policy" "inspector_notification" {
   arn    = aws_sns_topic.inspector_notification.arn
-  policy = data.aws_iam_policy_document.inspector_notification_to_slack.json
+  policy = data.aws_iam_policy_document.inspector_notification.json
 }
 
-data "aws_iam_policy_document" "inspector_notification_to_slack" {
+data "aws_iam_policy_document" "inspector_notification" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
