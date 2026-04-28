@@ -2,7 +2,7 @@
 # AWS Lambda Function for CloudWatch log error alert
 # ===============================================================================
 resource "aws_lambda_function" "lambda_log_error_alert" {
-  function_name    = "${local.project}-${local.env}-lmd-cw-log-error-alert"
+  function_name    = "lmd-cw-log-error-alert"
   role             = aws_iam_role.lambda_cloudwatch.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.log_error_alert.output_path
@@ -51,7 +51,7 @@ resource "aws_lambda_permission" "lambda_cloudwatch_app" {
 # AWS Lambda Function for Metric Alarm
 # ===============================================================================
 resource "aws_lambda_function" "lambda_metric_alarm" {
-  function_name    = "${local.project}-${local.env}-lmd-metric-alarm"
+  function_name    = "lmd-metric-alarm"
   role             = aws_iam_role.lambda_cloudwatch.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.metric_alarm.output_path
@@ -101,7 +101,7 @@ resource "aws_lambda_permission" "lambda_metric_alarm" {
 # AWS Lambda Function for RDS Control
 # ===============================================================================
 resource "aws_lambda_function" "rds_control" {
-  function_name    = "${local.project}-${local.env}-lmd-rds-control"
+  function_name    = "lmd-rds-control"
   role             = aws_iam_role.rds_control.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.rds_control.output_path
@@ -158,7 +158,7 @@ resource "aws_lambda_permission" "rds_control" {
 # AWS Lambda Function for Create EventBridge Scheduler
 # ===============================================================================
 resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
-  function_name    = "${local.project}-${local.env}-lmd-schedule-ecs-maintenance-handler"
+  function_name    = "lmd-schedule-ecs-maintenance"
   role             = aws_iam_role.lambda_schedule_ecs_maintenance.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_schedule_ecs_maintenance.output_path
@@ -186,7 +186,7 @@ resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-lmd-schedule-ecs-maintenance-handler"
+    Name = "${local.project}-${local.env}-lmd-schedule-ecs-maintenance"
   }
 }
 
@@ -206,8 +206,8 @@ resource "aws_lambda_function_event_invoke_config" "lambda_schedule_ecs_maintena
 
 data "archive_file" "lambda_schedule_ecs_maintenance" {
   type        = "zip"
-  source_dir  = "${path.cwd}/files/lambda/schedule-ecs-maintenance-handler"
-  output_path = "${path.module}/artifacts/schedule-ecs-maintenance-handler.zip"
+  source_dir  = "${path.cwd}/files/lambda/schedule-ecs-maintenance"
+  output_path = "${path.module}/artifacts/schedule-ecs-maintenance.zip"
 }
 
 resource "aws_lambda_permission" "lambda_schedule_ecs_maintenance" {
@@ -223,7 +223,7 @@ resource "aws_lambda_permission" "allow_eventbridge_to_call_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_schedule_ecs_maintenance.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.detect_ecs_retirement.arn
+  source_arn    = aws_cloudwatch_event_rule.detect_ecs_task_retirement.arn
 }
 
 
@@ -231,7 +231,7 @@ resource "aws_lambda_permission" "allow_eventbridge_to_call_lambda" {
 # AWS Lambda Function for Execute ECS Force Deployment
 # ===============================================================================
 resource "aws_lambda_function" "lambda_execute_ecs_force_deployment" {
-  function_name    = "${local.project}-${local.env}-lmd-execute-ecs-force-deployment"
+  function_name    = "lmd-execute-ecs-force-deployment"
   role             = aws_iam_role.lambda_execute_ecs_force_deployment.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_execute_ecs_force_deployment.output_path
