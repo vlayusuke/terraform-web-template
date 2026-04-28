@@ -2242,7 +2242,8 @@ locals {
   aws_ec2_ssh_conf = templatefile(
     "files/iam_ssh/aws-ec2-ssh.conf",
     {
-      project = local.project
+      project    = local.project
+      account-id = data.aws_caller_identity.current.account_id
     }
   )
 }
