@@ -283,14 +283,14 @@ data "aws_iam_policy_document" "to_slack" {
     sid    = "SNSAccess"
     effect = "Allow"
     actions = [
-      "SNS:Publish",
-      "SNS:RemovePermission",
-      "SNS:SetTopicAttributes",
-      "SNS:DeleteTopic",
-      "SNS:ListSubscriptionsByTopic",
-      "SNS:GetTopicAttributes",
-      "SNS:AddPermission",
-      "SNS:Subscribe",
+      "sns:Publish",
+      "sns:RemovePermission",
+      "sns:SetTopicAttributes",
+      "sns:DeleteTopic",
+      "sns:ListSubscriptionsByTopic",
+      "sns:GetTopicAttributes",
+      "sns:AddPermission",
+      "sns:Subscribe",
     ]
     resources = [
       aws_sns_topic.to_slack.arn,
