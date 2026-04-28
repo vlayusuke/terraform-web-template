@@ -97,12 +97,12 @@ resource "aws_ses_event_destination" "firehose" {
   ]
 
   kinesis_destination {
-    stream_arn = aws_kinesis_firehose_delivery_stream.ses_event_log.arn
+    stream_arn = aws_kinesis_firehose_delivery_stream.ses_event_logs.arn
     role_arn   = aws_iam_role.ses.arn
   }
 
   depends_on = [
-    aws_kinesis_firehose_delivery_stream.ses_event_log,
+    aws_kinesis_firehose_delivery_stream.ses_event_logs,
     aws_iam_policy.ses,
     aws_iam_role_policy_attachment.ses,
   ]
