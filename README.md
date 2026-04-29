@@ -1,12 +1,12 @@
 # terraform-web-template
 
-このテンプレートは、Amazon Web ServicesとTerraformによるWeb3レイヤ構成のWebアプリケーション向けのリソースを構築するために使用するものです。AWS Fargateを用いたコンテナで、Webアプリケーションを構築することを想定しています。
+このテンプレートは、Amazon Web ServicesとTerraformによる、Web3レイヤ構成のWebアプリケーション向けのリソースを構築するために使用するものです。AWS Fargateを用いたコンテナを用いてWebアプリケーションを構築することを想定しています。
 
-また、3ステージ構成を組みますが、1つのAWSアカウントに対して、1つの環境を構築することを前提としています。
+また、標準的な3ステージ構成としていますが、1つのAWSアカウントに対して、1つの環境を構築することを前提としています。
 
 ## ディレクトリ構成
 
-このテンプレートは以下のようなディレクトリで構成されています。
+このテンプレートは以下のディレクトリで構成されています。
 
 ### `production`
 
@@ -20,7 +20,11 @@ Web3レイヤ構成のWebアプリケーション向けの**ステージング�
 
 Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構築するためのAWSリソースを実装しています。
 
-## Terraformや各種ProviderのVersion
+## 各種ProviderやruntimeのVersion
+
+このテンプレートで使用している、Terraformの各種Providerや、PythonのruntimeのVersionは、以下の通りです。
+
+### Terraformや各種ProviderのVersion
 
 | Resources                  | Version  |
 | -------------------------- | -------- |
@@ -28,15 +32,25 @@ Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構
 | AWS Provider               | 6.42.0   |
 | AWS Cloud Control Provider | 1.81.0   |
 
-## AWS Lambda関数に使用しているPythonのruntime
+### AWS Lambda関数に使用しているPythonのruntimeのVersion
 
 | Resources                  | Version  |
 | -------------------------- | -------- |
 | Python                     | 3.14     |
 
-## 複数のプラットフォームでTerraformコマンドを実行する際の注意点
+## 環境構築をする際の注意事項
 
-Terraformや各種Providerのアップデートを行なってから `terraform init -reconfigure` や `terraform init -upgrade` をした際に、macOSやWindowsなどの複数のプラットフォームで `.terraform.lock.hcl` に含まれるproviderのチェックサムがずれてしまうことを防止するため、 `terraform plan` で実行計画の実施を行う前に、ターミナル上で以下のコマンドを実行してください。
+このテンプレートをベースラインとして環境構築をする際の注意事項は、以下の通りです。
+
+### コードを修正する際の注意点
+
+このリポジトリでは、GitHubユーザーに対してGPGキーによる認証を必須としています。この認証設定を有効にしていない場合はコミットやPull Requestの作成等が行えません。GPGキーによる認証を有効化する方法については、以下のGitHub公式ドキュメントを参考にしてください。
+
+[新しいGPGキーを生成する - GitHubドキュメント](https://docs.github.com/ja/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
+
+### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
+
+Terraformや各種Providerのアップデートを行なってから `terraform init -reconfigure` コマンドや `terraform init -upgrade` コマンドを実行した後に、macOSやWindowsなどの複数のプラットフォームで `.terraform.lock.hcl` に含まれるproviderのチェックサムがずれてしまうことを防止するため、 `terraform plan` コマンドを実行する前に、ターミナル上で以下のコマンドを実行してください。
 
 ```bash
 terraform providers lock \
