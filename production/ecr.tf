@@ -3,7 +3,7 @@
 # ===============================================================================
 resource "aws_ecr_repository" "nginx_base" {
   name                 = "${local.project}/${local.env}/base/nginx"
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "IMMUTABLE"
 
   tags = {
     Name      = "${local.project}-${local.env}-ecr-nginx-base"
