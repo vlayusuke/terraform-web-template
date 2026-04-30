@@ -42,6 +42,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_logs" 
   bucket = aws_s3_bucket.cloudtrail_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -215,6 +218,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_logs_o
   bucket   = aws_s3_bucket.cloudtrail_logs_osaka.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -392,6 +398,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_logs_g
   bucket   = aws_s3_bucket.cloudtrail_logs_global.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -564,6 +573,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "config_logs" {
   bucket = aws_s3_bucket.config_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -742,6 +754,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "secure_info" {
   bucket = aws_s3_bucket.secure_info.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -875,6 +890,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "new_relic" {
   bucket = aws_s3_bucket.new_relic.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -1007,6 +1025,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_logs" {
   bucket = aws_s3_bucket.s3_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
