@@ -5,7 +5,7 @@ terraform {
   required_version = ">= 1.10.0, < 2.0.0"
 
   backend "s3" {
-    bucket  = "v-terraform-web-template-aud-${local.account_id}"
+    bucket  = "v-terraform-web-template-aud-634989770450"
     key     = "state/audit.terraform.tfstate"
     region  = "ap-northeast-1"
     profile = "terraform-template"
@@ -14,12 +14,12 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.42.0"
+      version = "6.43.0"
     }
 
     awscc = {
       source  = "hashicorp/awscc"
-      version = "1.81.0"
+      version = "1.82.0"
     }
   }
 }

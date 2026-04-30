@@ -40,7 +40,7 @@ resource "aws_cloudtrail" "audit" {
 # ===============================================================================
 # AWS CloudTrail (ap-northeast-3)
 # ===============================================================================
-resource "aws_cloudtrail" "audit" {
+resource "aws_cloudtrail" "audit_osaka" {
   name                          = "${local.project}-${local.env}-ct-audit"
   provider                      = aws.osaka
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs_osaka.id
@@ -79,7 +79,7 @@ resource "aws_cloudtrail" "audit" {
 # ===============================================================================
 # AWS CloudTrail (Global / us-east-1)
 # ===============================================================================
-resource "aws_cloudtrail" "audit" {
+resource "aws_cloudtrail" "audit_global" {
   name                          = "${local.project}-${local.env}-ct-audit-global"
   provider                      = aws.virginia
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs_global.id
