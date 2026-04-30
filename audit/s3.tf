@@ -533,7 +533,7 @@ data "aws_iam_policy_document" "cloudtrail_logs_global" {
 
 
 # ===============================================================================
-# Amazon S3 Bucket for AWS Config
+# Amazon S3 Bucket for AWS Config (ap-northeast-1)
 # ===============================================================================
 resource "aws_s3_bucket" "config_logs" {
   bucket = "${local.project}-${local.env}-${local.account_id}-s3-config-logs-bucket"
@@ -713,6 +713,195 @@ data "aws_iam_policy_document" "config_logs" {
 
 
 # ===============================================================================
+# Amazon S3 Bucket for AWS Config (Global / us-east-1)
+# ===============================================================================
+resource "aws_s3_bucket" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = "${local.project}-${local.env}-${local.account_id}-s3-config-logs-global-bucket"
+
+  tags = {
+    Name = "${local.project}-${local.env}-${local.account_id}-s3-config-logs-global-bucket"
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = aws_s3_bucket.config_logs_global.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = aws_s3_bucket.config_logs_global.id
+  acl      = "log-delivery-write"
+
+  depends_on = [
+    aws_s3_bucket_ownership_controls.config_logs_global,
+  ]
+}
+
+resource "aws_s3_bucket_public_access_block" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = aws_s3_bucket.config_logs_global.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = aws_s3_bucket.config_logs_global.bucket
+
+  rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+    bucket_key_enabled = false
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = aws_s3_bucket.config_logs_global.id
+
+  rule {
+    id     = "delete-object"
+    status = "Enabled"
+
+    filter {
+      object_size_greater_than = 0
+    }
+
+    expiration {
+      days = local.expire_days
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = local.expire_days
+    }
+  }
+
+  depends_on = [
+    aws_s3_bucket_versioning.config_logs_global,
+  ]
+}
+
+resource "aws_s3_bucket_versioning" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = aws_s3_bucket.config_logs_global.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = aws_s3_bucket.config_logs_global.id
+
+  target_bucket = aws_s3_bucket.s3_logs.id
+  target_prefix = "config-logs-global/"
+
+}
+
+resource "aws_s3_bucket_policy" "config_logs_global" {
+  provider = aws.virginia
+  bucket   = aws_s3_bucket.config_logs_global.id
+  policy   = data.aws_iam_policy_document.config_logs_global.json
+}
+
+data "aws_iam_policy_document" "config_logs_global" {
+  statement {
+    sid    = "EnforceSSL"
+    effect = "Deny"
+    actions = [
+      "s3:*",
+    ]
+    resources = [
+      aws_s3_bucket.config_logs_global.arn,
+      "${aws_s3_bucket.config_logs_global.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
+      ]
+    }
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AWSConfigBucketPermissionsCheck"
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketAcl",
+    ]
+    resources = [
+      aws_s3_bucket.config_logs_global.arn,
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "config.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AWSConfigBucketExistenceCheck"
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket",
+    ]
+    resources = [
+      aws_s3_bucket.config_logs_global.arn,
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "config.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AWSConfigBucketDelivery"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+    ]
+    resources = [
+      "${aws_s3_bucket.config_logs_global.arn}/*",
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "config.amazonaws.com",
+      ]
+    }
+  }
+}
+
+
+# ===============================================================================
 # Amazon S3 Bucket for Secure Information
 # ===============================================================================
 resource "aws_s3_bucket" "secure_info" {
@@ -830,141 +1019,6 @@ data "aws_iam_policy_document" "secure_info" {
     resources = [
       aws_s3_bucket.secure_info.arn,
       "${aws_s3_bucket.secure_info.arn}/*",
-    ]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "false",
-      ]
-    }
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        "*",
-      ]
-    }
-  }
-}
-
-
-# ===============================================================================
-# Amazon S3 Bucket for New Relic
-# ===============================================================================
-resource "aws_s3_bucket" "new_relic" {
-  bucket = "${local.project}-${local.env}-${local.account_id}-s3-new-relic-bucket"
-
-  tags = {
-    Name = "${local.project}-${local.env}-${local.account_id}-s3-new-relic-bucket"
-  }
-}
-
-resource "aws_s3_bucket_ownership_controls" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
-resource "aws_s3_bucket_acl" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-  acl    = "log-delivery-write"
-
-  depends_on = [
-    aws_s3_bucket_ownership_controls.new_relic,
-  ]
-}
-
-resource "aws_s3_bucket_public_access_block" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.bucket
-
-  rule {
-    blocked_encryption_types = [
-      "SSE-C"
-    ]
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-    bucket_key_enabled = false
-  }
-}
-
-resource "aws_s3_bucket_versioning" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_logging" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  target_bucket = aws_s3_bucket.s3_logs.id
-  target_prefix = "new-relic/"
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-
-  rule {
-    id     = "transition-and-delete-object"
-    status = "Enabled"
-
-    filter {
-      object_size_greater_than = 0
-    }
-
-    transition {
-      days          = local.transition_days
-      storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
-    }
-
-    noncurrent_version_transition {
-      noncurrent_days = local.transition_days
-      storage_class   = "GLACIER"
-    }
-
-    noncurrent_version_expiration {
-      noncurrent_days = local.expire_days
-    }
-  }
-
-  depends_on = [
-    aws_s3_bucket_versioning.new_relic,
-  ]
-}
-
-resource "aws_s3_bucket_policy" "new_relic" {
-  bucket = aws_s3_bucket.new_relic.id
-  policy = data.aws_iam_policy_document.new_relic.json
-}
-
-data "aws_iam_policy_document" "new_relic" {
-  statement {
-    sid    = "EnforceSSL"
-    effect = "Deny"
-    actions = [
-      "s3:*",
-    ]
-    resources = [
-      aws_s3_bucket.new_relic.arn,
-      "${aws_s3_bucket.new_relic.arn}/*",
     ]
     condition {
       test     = "Bool"
