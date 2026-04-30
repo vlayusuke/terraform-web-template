@@ -54,8 +54,8 @@ data "aws_iam_policy_document" "github_actions_backup" {
       "s3:DeleteObject",
     ]
     resources = [
-      "arn:aws:s3:::${local.project}-${local.env}-*",
-      "arn:aws:s3:::${local.project}-${local.env}-*/*",
+      "arn:aws:s3:::${local.project}-${local.env}-${local.account_id}-*",
+      "arn:aws:s3:::${local.project}-${local.env}-${local.account_id}-*/*",
     ]
   }
 }
