@@ -4,7 +4,7 @@
 # ===============================================================================
 resource "aws_config_configuration_recorder" "default" {
   name     = "${local.project}-${local.env}-aws-cfg-default"
-  role_arn = aws_iam_role.config_recorder.arn
+  role_arn = aws_iam_role.config.arn
 
   recording_group {
     all_supported                 = false
@@ -156,7 +156,7 @@ resource "aws_config_config_rule" "rds_instance_public_access_check" {
 resource "aws_config_configuration_recorder" "default_global" {
   provider = aws.virginia
   name     = "${local.project}-${local.env}-aws-cfg-default-global"
-  role_arn = aws_iam_role.config_recorder.arn
+  role_arn = aws_iam_role.config.arn
 
   recording_group {
     all_supported                 = false
