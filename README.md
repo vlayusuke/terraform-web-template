@@ -54,7 +54,7 @@ Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構
 
 ### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
 
-Terraformや各種Providerのアップデートを行なってから `terraform init -reconfigure` コマンドや `terraform init -upgrade` コマンドを実行した後に、macOSやWindowsなどの複数のプラットフォームで `.terraform.lock.hcl` に含まれるproviderのチェックサムがずれてしまうことを防止するため、 `terraform plan` コマンドを実行する前に、ターミナル上で以下のコマンドを実行してください。
+Terraformや各種Providerのアップデートを行なってから`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるproviderのチェックサムの値がずれてしまうことを防止するため、`terraform plan`コマンドを実行する前に、ターミナル上で以下のコマンドを実行してください。
 
 ```bash
 terraform providers lock \
@@ -79,4 +79,4 @@ terraform providers lock \
 
 ### 開発環境
 
-* ![開発環境](./terraform-web-template-v2.4-en-dev.svg)
+![開発環境](./terraform-web-template-v2.4-en-dev.svg)
