@@ -1,4 +1,53 @@
 # ===============================================================================
+# AWS Lambda Function for CloudWatch log error alert audit
+# ===============================================================================
+resource "aws_lambda_function" "lambda_log_error_alert_audit" {
+  function_name    = "lmd-cw-log-error-alert-audit"
+  role             = aws_iam_role.lambda_cloudwatch.arn
+  handler          = "lambda_function.lambda_handler"
+  filename         = data.archive_file.log_error_alert_audit.output_path
+  source_code_hash = data.archive_file.log_error_alert_audit.output_base64sha256
+  runtime          = "python3.14"
+  timeout          = 10
+  memory_size      = 128
+
+  architectures = [
+    "arm64",
+  ]
+
+  environment {
+    variables = {
+      hook_url = var.audit_hook_url
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      source_code_hash,
+    ]
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-lmd-cw-log-error-alert-audit"
+  }
+}
+
+data "archive_file" "log_error_alert_audit" {
+  type        = "zip"
+  source_dir  = "${path.cwd}/files/lambda/log-error-alert-audit"
+  output_path = "${path.module}/artifacts/log-error-alert-audit.zip"
+}
+
+resource "aws_lambda_permission" "lambda_cloudwatch_audit" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_log_error_alert_audit.function_name
+  principal     = "logs.${local.region}.amazonaws.com"
+  source_arn    = "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:*"
+}
+
+
+# ===============================================================================
 # AWS Lambda Function for Root Login
 # ===============================================================================
 resource "aws_lambda_function" "root_login_monitoring" {
