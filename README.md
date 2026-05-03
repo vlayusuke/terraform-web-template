@@ -91,3 +91,7 @@ terraform providers lock \
 ### 開発環境
 
 ![開発環境](./terraform-web-template-v2.4-en-dev.svg)
+
+## リリース履歴
+
+本テンプレートのリリース履歴は、[Releases](https://github.com/vlayusuke/terraform-web-template/releases)を参照してください。
