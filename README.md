@@ -42,6 +42,17 @@ Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構
 | -------------------------- | -------- |
 | Python                     | 3.14     |
 
+## 構築されるAWSリソースの数
+
+このテンプレートを実行することにより構築されるAWSリソースの数は、以下の表の通りです。
+
+| Environmtnt | Resource | Notice           |
+| ----------- | -------- | ---------------- |
+| develop     |      519 | N/A              |
+| staging     |      519 | N/A              |
+| production  |      519 | N/A              |
+| audit       |      149 | Each AWS account |
+
 ## 環境構築をする際の注意事項
 
 このテンプレートをベースラインとして環境構築をする際の注意事項は、以下の通りです。
@@ -80,3 +91,7 @@ terraform providers lock \
 ### 開発環境
 
 ![開発環境](./terraform-web-template-v2.4-en-dev.svg)
+
+## リリース履歴
+
+本テンプレートのリリース履歴は、[Releases](https://github.com/vlayusuke/terraform-web-template/releases)を参照してください。
