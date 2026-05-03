@@ -67,6 +67,75 @@ resource "aws_iam_role_policy_attachment" "github_actions_backup" {
 
 
 # ===============================================================================
+# AWS IAM for AWS Lambda (CloudWatch Error Alert)
+# ===============================================================================
+resource "aws_iam_role" "lambda_cloudwatch_audit" {
+  name               = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-role"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.lambda_cloudwatch_audit_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-role"
+  }
+}
+
+data "aws_iam_policy_document" "lambda_cloudwatch_audit_assume" {
+  statement {
+    sid    = "LambdaAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "lambda.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_policy" "lambda_cloudwatch_audit" {
+  name   = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-policy"
+  policy = data.aws_iam_policy_document.lambda_cloudwatch_audit.json
+  tags = {
+    Name = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-policy"
+  }
+}
+
+data "aws_iam_policy_document" "lambda_cloudwatch_audit" {
+  statement {
+    sid    = "LogAccess"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = [
+      "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${local.project}-${local.env}-*:*",
+    ]
+  }
+
+  statement {
+    sid    = "SNSPublish"
+    effect = "Allow"
+    actions = [
+      "sns:Publish",
+    ]
+    resources = [
+      aws_sns_topic.to_slack_audit.arn,
+    ]
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_audit" {
+  role       = aws_iam_role.lambda_cloudwatch_audit.name
+  policy_arn = aws_iam_policy.lambda_cloudwatch_audit.arn
+}
+
+
+# ===============================================================================
 # AWS IAM for AWS Lambda (Root Login Monitoring)
 # ===============================================================================
 resource "aws_iam_role" "lambda_root_login_monitoring" {
@@ -585,10 +654,6 @@ data "aws_iam_policy_document" "cloudtrail" {
     resources = [
       aws_cloudwatch_log_group.cloudtrail.arn,
       "${aws_cloudwatch_log_group.cloudtrail.arn}:*",
-      aws_cloudwatch_log_group.cloudtrail_osaka.arn,
-      "${aws_cloudwatch_log_group.cloudtrail_osaka.arn}:*",
-      aws_cloudwatch_log_group.cloudtrail_global.arn,
-      "${aws_cloudwatch_log_group.cloudtrail_global.arn}:*",
     ]
   }
 }

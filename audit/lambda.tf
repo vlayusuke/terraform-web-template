@@ -3,7 +3,7 @@
 # ===============================================================================
 resource "aws_lambda_function" "lambda_log_error_alert_audit" {
   function_name    = "lmd-cw-log-error-alert-audit"
-  role             = aws_iam_role.lambda_cloudwatch.arn
+  role             = aws_iam_role.lambda_cloudwatch_audit.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.log_error_alert_audit.output_path
   source_code_hash = data.archive_file.log_error_alert_audit.output_base64sha256

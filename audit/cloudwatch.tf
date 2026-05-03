@@ -1,41 +1,80 @@
+
+# Amazon CloudWatch Log group for Login root monitoring
 # ===============================================================================
-# Amazon CloudWatch Log group for AWS Lambda Function
-# ===============================================================================
-resource "aws_cloudwatch_log_group" "lamba_function" {
-  for_each          = local.lambda_functions
-  name              = "/aws/lambda/${each.key}-cwlog"
+resource "aws_cloudwatch_log_group" "root_login_monitoring" {
+  name              = "/aws/lambda/${aws_lambda_function.root_login_monitoring.function_name}-cwlog"
   retention_in_days = local.retention_in_days
 
   tags = {
-    Name = "/aws/lambda/${each.key}-cwlog"
+    Name = "/aws/lambda/${aws_lambda_function.root_login_monitoring.function_name}-cwlog"
   }
 }
 
-resource "aws_cloudwatch_log_stream" "lambda_function" {
-  for_each       = local.lambda_functions
-  name           = "${local.project}-${local.env}-cw-lmd-${each.key}-cwstream"
-  log_group_name = aws_cloudwatch_log_group.lambda_functions[each.key].name
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring" {
-  name            = aws_lambda_function.root_login_monitoring.function_name
-  log_group_name  = aws_cloudwatch_log_group.lambda_function[aws_lambda_function.root_login_monitoring.function_name].name
+resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring_lambda" {
+  name            = "${local.project}-${local.env}-cw-root-login-monitoring-lambda"
+  log_group_name  = aws_cloudwatch_log_group.root_login_monitoring.name
   filter_pattern  = "{ $.responseElements.ConsoleLogin = \"Success\" && $.userIdentity.type = \"Root\" }"
   destination_arn = aws_lambda_function.root_login_monitoring.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "lambda_error" {
-  name            = aws_lambda_function.lambda_error.function_name
-  log_group_name  = aws_cloudwatch_log_group.lambda_function[aws_lambda_function.lambda_error.function_name].name
+
+# ===============================================================================
+# Amazon CloudWatch Log group for Lambda errors
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "lambda_error" {
+  name              = "/aws/lambda/${aws_lambda_function.lambda_error.function_name}-cwlog"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "/aws/lambda/${aws_lambda_function.lambda_error.function_name}-cwlog"
+  }
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "lambda_error1" {
+  name            = "${local.project}-${local.env}-cw-lambda-error"
+  log_group_name  = aws_cloudwatch_log_group.lambda_error.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_error.arn
 }
 
+
+# ===============================================================================
+# Amazon CloudWatch Log group for Security Notice
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "security_notice" {
+  name              = "/aws/lambda/${aws_lambda_function.security_notice.function_name}-cwlog"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "/aws/lambda/${aws_lambda_function.security_notice.function_name}-cwlog"
+  }
+}
+
 resource "aws_cloudwatch_log_subscription_filter" "security_notice" {
-  name            = aws_lambda_function.security_notice.function_name
-  log_group_name  = aws_cloudwatch_log_group.lambda_function[aws_lambda_function.security_notice.function_name].name
+  name            = "${local.project}-${local.env}-cw-security-notice"
+  log_group_name  = aws_cloudwatch_log_group.security_notice.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.security_notice.arn
+}
+
+
+# ===============================================================================
+# Amazon CloudWatch Log group for CloudWatch log error alert (Audit)
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "lambda_log_error_alert_audit" {
+  name              = "/aws/lambda/${aws_lambda_function.lambda_log_error_alert_audit.function_name}-cwlog"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "/aws/lambda/${aws_lambda_function.lambda_log_error_alert_audit.function_name}-cwlog"
+  }
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "lambda_log_error_alert_audit" {
+  name            = "${local.project}-${local.env}-cw-lambda-log-error-alert-audit"
+  log_group_name  = aws_cloudwatch_log_group.lambda_log_error_alert_audit.name
+  filter_pattern  = ""
+  destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
 }
 
 
