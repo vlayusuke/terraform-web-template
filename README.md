@@ -63,6 +63,12 @@ Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構
 
 [新しいGPGキーを生成する - GitHubドキュメント](https://docs.github.com/ja/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
 
+### Terraformコマンドを実行する際の注意点
+
+Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。
+
+このリポジトリでは、サンプルとしてGitHubにCommitしない代表的な定数のみを実装していますが、利用方法に応じて適宜修正をしてください。
+
 ### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
 
 Terraformや各種Providerのアップデートを行なってから`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるproviderのチェックサムの値がずれてしまうことを防止するため、`terraform plan`コマンドを実行する前に、ターミナル上で以下のコマンドを実行してください。
