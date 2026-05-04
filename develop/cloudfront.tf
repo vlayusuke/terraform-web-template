@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "main" {
   is_ipv6_enabled = false
   http_version    = "http2and3"
   comment         = "${local.project}-${local.env} CloudFront Distribution"
-  #  web_acl_id      = aws_wafv2_web_acl.main.arn
+  web_acl_id      = aws_wafv2_web_acl.main.arn
 
   aliases = [
     "${local.env}.${local.domain}",
