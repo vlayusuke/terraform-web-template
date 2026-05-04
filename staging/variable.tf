@@ -25,7 +25,7 @@ variable "aws_key_pub_bastion" {
 variable "maintenance_ips" {
   sensitive = true
   default = [
-    "60.67.101.143/32", # Home (IPv4)
+    "192.168.1.1/32", # Example (IPv4)
   ]
 }
 
