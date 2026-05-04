@@ -1,9 +1,13 @@
 # ===============================================================================
-# Amazon ECR for NginX (Base Image)
+# Amazon ECR for Nginx (Base Image)
 # ===============================================================================
 resource "aws_ecr_repository" "nginx_base" {
   name                 = "${local.project}/${local.env}/base/nginx"
   image_tag_mutability = "IMMUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 
   tags = {
     Name      = "${local.project}-${local.env}-ecr-nginx-base"
@@ -40,6 +44,10 @@ resource "aws_ecr_repository" "app_base" {
   name                 = "${local.project}/${local.env}/base/app"
   image_tag_mutability = "IMMUTABLE"
 
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
   tags = {
     Name      = "${local.project}-${local.env}-ecr-app-base"
     inspector = "true"
@@ -69,11 +77,15 @@ resource "aws_ecr_lifecycle_policy" "app_base" {
 
 
 # ===============================================================================
-# Amazon ECR for NginX
+# Amazon ECR for Nginx
 # ===============================================================================
 resource "aws_ecr_repository" "nginx" {
   name                 = "${local.project}/${local.env}/nginx"
   image_tag_mutability = "IMMUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 
   tags = {
     Name      = "${local.project}-${local.env}-ecr-nginx"
@@ -110,6 +122,10 @@ resource "aws_ecr_repository" "app" {
   name                 = "${local.project}/${local.env}/app"
   image_tag_mutability = "IMMUTABLE"
 
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
   tags = {
     Name      = "${local.project}-${local.env}-ecr-app"
     inspector = "true"
@@ -144,6 +160,10 @@ resource "aws_ecr_lifecycle_policy" "app" {
 resource "aws_ecr_repository" "fluent_bit" {
   name                 = "${local.project}/${local.env}/fluent-bit"
   image_tag_mutability = "IMMUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 
   tags = {
     Name      = "${local.project}-${local.env}-ecr-fluent-bit"
