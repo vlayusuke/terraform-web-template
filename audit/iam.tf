@@ -350,7 +350,7 @@ resource "aws_iam_role" "chatbot_audit" {
   assume_role_policy = data.aws_iam_policy_document.chatbot_audit_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-role-audit"
+    Name = "${local.project}-${local.env}-iam-chatbot-audit-role"
   }
 }
 
@@ -458,16 +458,16 @@ resource "aws_iam_role_policy_attachment" "chatbot_resource_read_only_access_aud
 # ===============================================================================
 # AWS IAM for AWS Chatbot Guardrail
 # ===============================================================================
-resource "aws_iam_policy" "chatbot_guardrail" {
+resource "aws_iam_policy" "chatbot_audit_guardrail" {
   name   = "${local.project}-${local.env}-iam-chatbot-guardrail-audit-policy"
-  policy = data.aws_iam_policy_document.chatbot_guardrail.json
+  policy = data.aws_iam_policy_document.chatbot_audit_guardrail.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-guardrail-audit-policy"
+    Name = "${local.project}-${local.env}-iam-chatbot-audit-guardrail-policy"
   }
 }
 
-data "aws_iam_policy_document" "chatbot_guardrail" {
+data "aws_iam_policy_document" "chatbot_audit_guardrail" {
   statement {
     sid    = "ChatbotAccess"
     effect = "Allow"
