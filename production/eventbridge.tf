@@ -78,7 +78,7 @@ resource "aws_cloudwatch_event_rule" "ecr_image_scan" {
 
 resource "aws_cloudwatch_event_target" "ecr_image_scan" {
   rule      = aws_cloudwatch_event_rule.ecr_image_scan.name
-  target_id = aws_sns_topic.to_slack.name
+  target_id = aws_sns_topic.event_notification.name
   arn       = aws_sns_topic.event_notification.arn
 }
 
