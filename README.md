@@ -10,19 +10,21 @@
 
 ### `audit`
 
-Web3レイヤ構成のWebアプリケーションのAWSリソースのうち、セキュリティ & コンプライアンス系のリソースを集中管理して実装しています。
+Web3レイヤ構成のWebアプリケーションのAWSリソースのうち、セキュリティ & コンプライアンス系のリソースと、それらに関連するリソースを集中管理して実装しています。
+
+なお、1つのAWSアカウントに対して、1つの`audit`ディレクトリ内で実装しているをセキュリティ & コンプライアンス系のAWSリソース構築することを想定して実装しています。
 
 ### `production`
 
-Web3レイヤ構成のWebアプリケーション向けの**本番環境**を構築するためのAWSリソースを実装しています。
+Web3レイヤ構成のWebアプリケーション向けの本番環境を構築するためのAWSリソースを実装しています。
 
 ### `staging`
 
-Web3レイヤ構成のWebアプリケーション向けの**ステージング環境**を構築するためのAWSリソースを実装しています。
+Web3レイヤ構成のWebアプリケーション向けのステージング環境を構築するためのAWSリソースを実装しています。
 
 ### `develop`
 
-Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構築するためのAWSリソースを実装しています。
+Web3レイヤ構成のWebアプリケーション向けの開発環境を構築するためのAWSリソースを実装しています。
 
 ## 各種ProviderやruntimeのVersion
 
@@ -63,15 +65,31 @@ Web3レイヤ構成のWebアプリケーション向けの**開発環境**を構
 
 [新しいGPGキーを生成する - GitHubドキュメント](https://docs.github.com/ja/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
 
+### Terraformコマンドを実行する際に必要な事前準備
+
+Terraformコマンドを実行する前に、AWS CLIやTerraform CLIなどの必要なツールをインストールしてください。また、`terraform.tf`で実装している`terraform.tfstate`ファイルはS3バックエンドで保管するという設定にしているため、事前に各環境のAWSアカウントに紐づくAWSマネージメントコンソールの、Amazon S3コンソール内で、
+
+```hcl
+backend "s3" {
+  bucket  = "example-profile-name"
+  key     = "key/example-environment.terraform.tfstate
+  region  = "ap-northeast-1"
+  profile = "example-profile-name"
+...
+
+}
+```
+
+に指定されている`bucket`ディレクティブと同じ名称のS3バケットを作成します。さらに、作成したS3バケットには、`key`プレフィックスを作成してください。Terraformの実行時には、作成した`key`ディレクティブ内に`example-environment.terraform.tfstate`ファイルが作成されます。
+
 ### Terraformコマンドを実行する際の注意点
 
-Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。
-
-このリポジトリでは、サンプルとしてGitHubにCommitしない代表的な定数のみを実装していますが、利用方法に応じて適宜修正をしてください。
+- Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。このリポジトリでは、サンプルとしてGitHubにCommitしない代表的な定数のみを実装していますが、利用方法に応じて適宜修正をしてください。
+- `base_locals.tf`の`# project info`に設定している、`project`、`author`、`email`の値を修正してください。
 
 ### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
 
-Terraformや各種Providerのアップデートを行なってから`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるproviderのチェックサムの値がずれてしまうことを防止するため、`terraform plan`コマンドを実行する前に、ターミナル上で以下のコマンドを実行してください。
+Terraformや各種Providerのバージョンのアップデートを行なってから`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるproviderのチェックサムの値がずれてしまうことを防止するため、`terraform plan`コマンドを実行する前に、ターミナル上で以下のコマンドを実行してください。
 
 ```bash
 terraform providers lock \
