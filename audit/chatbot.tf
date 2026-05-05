@@ -15,7 +15,7 @@ resource "aws_chatbot_slack_channel_configuration" "chatbot_audit_notification_f
 
   sns_topic_arns = [
     aws_sns_topic.config_notifications.arn,
-    aws_sns_topic.to_slack_audit.arn,
+    aws_sns_topic.event_notification_audit.arn,
   ]
 
   tags = {
