@@ -143,11 +143,11 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [
-    aws_sns_topic.to_slack_audit.arn,
+    aws_sns_topic.event_notification_audit.arn,
   ]
 
   ok_actions = [
-    aws_sns_topic.to_slack_audit.arn,
+    aws_sns_topic.event_notification_audit.arn,
   ]
 
   tags = {
@@ -167,11 +167,11 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [
-    aws_sns_topic.to_slack_audit.arn,
+    aws_sns_topic.event_notification_audit.arn,
   ]
 
   ok_actions = [
-    aws_sns_topic.to_slack_audit.arn,
+    aws_sns_topic.event_notification_audit.arn,
   ]
 
   tags = {
@@ -191,11 +191,11 @@ resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [
-    aws_sns_topic.to_slack_audit.arn,
+    aws_sns_topic.event_notification_audit.arn,
   ]
 
   ok_actions = [
-    aws_sns_topic.to_slack_audit.arn,
+    aws_sns_topic.event_notification_audit.arn,
   ]
 
   tags = {

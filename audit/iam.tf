@@ -124,7 +124,7 @@ data "aws_iam_policy_document" "lambda_cloudwatch_audit" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.to_slack_audit.arn,
+      aws_sns_topic.event_notification_audit.arn,
     ]
   }
 }
@@ -193,7 +193,7 @@ data "aws_iam_policy_document" "lambda_root_login_monitoring" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.to_slack_audit.arn,
+      aws_sns_topic.event_notification_audit.arn,
     ]
   }
 }
@@ -262,7 +262,7 @@ data "aws_iam_policy_document" "lambda_error" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.to_slack_audit.arn,
+      aws_sns_topic.event_notification_audit.arn,
     ]
   }
 }
@@ -331,7 +331,7 @@ data "aws_iam_policy_document" "lambda_security_notice" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.to_slack_audit.arn,
+      aws_sns_topic.event_notification_audit.arn,
     ]
   }
 }
@@ -425,7 +425,7 @@ data "aws_iam_policy_document" "chatbot_audit" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.to_slack_audit.arn,
+      aws_sns_topic.event_notification_audit.arn,
     ]
   }
 
@@ -569,7 +569,7 @@ data "aws_iam_policy_document" "config" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.to_slack_audit.arn,
+      aws_sns_topic.event_notification_audit.arn,
     ]
   }
 }
@@ -723,7 +723,7 @@ data "aws_iam_policy_document" "sns" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.to_slack_audit.arn,
+      aws_sns_topic.event_notification_audit.arn,
     ]
   }
 }

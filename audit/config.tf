@@ -78,7 +78,7 @@ resource "aws_config_configuration_recorder" "default" {
 resource "aws_config_delivery_channel" "default" {
   name           = "default"
   s3_bucket_name = aws_s3_bucket.config_logs.bucket
-  sns_topic_arn  = aws_sns_topic.to_slack_audit.arn
+  sns_topic_arn  = aws_sns_topic.event_notification_audit.arn
 
   depends_on = [
     aws_config_configuration_recorder.default,
@@ -204,7 +204,7 @@ resource "aws_config_delivery_channel" "default_global" {
   provider       = aws.virginia
   name           = "${local.project}-${local.env}-aws-cfg-delivery-channel-global"
   s3_bucket_name = aws_s3_bucket.config_logs_global.bucket
-  sns_topic_arn  = aws_sns_topic.to_slack_audit.arn
+  sns_topic_arn  = aws_sns_topic.event_notification_audit.arn
 
   depends_on = [
     aws_config_configuration_recorder.default_global,
