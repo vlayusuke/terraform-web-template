@@ -1300,7 +1300,7 @@ data "aws_iam_policy_document" "sns" {
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
       aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.to_slack.arn,
+      aws_sns_topic.event_notification.arn,
     ]
   }
 
@@ -1457,7 +1457,7 @@ data "aws_iam_policy_document" "chatbot" {
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
       aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.to_slack.arn,
+      aws_sns_topic.event_notification.arn,
     ]
     condition {
       test     = "StringEquals"
@@ -1479,7 +1479,7 @@ data "aws_iam_policy_document" "chatbot" {
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
       aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.to_slack.arn,
+      aws_sns_topic.event_notification.arn,
     ]
   }
 

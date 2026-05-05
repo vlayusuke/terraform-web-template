@@ -17,7 +17,7 @@ resource "aws_chatbot_slack_channel_configuration" "chatbot_notification_for_sla
     aws_sns_topic.metric_alarm.arn,
     aws_sns_topic.event_alarm.arn,
     aws_sns_topic.inspector_notification.arn,
-    aws_sns_topic.to_slack.arn,
+    aws_sns_topic.event_notification.arn,
   ]
 
   tags = {
