@@ -449,7 +449,7 @@ resource "aws_iam_role_policy_attachment" "chatbot_audit" {
   policy_arn = aws_iam_policy.chatbot_audit.arn
 }
 
-resource "aws_iam_role_policy_attachment" "chatbot_resource_read_only_access_audit" {
+resource "aws_iam_role_policy_attachment" "chatbot_audit_resource_read_only_access" {
   role       = aws_iam_role.chatbot_audit.name
   policy_arn = "arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess"
 }
