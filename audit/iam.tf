@@ -346,7 +346,7 @@ resource "aws_iam_role_policy_attachment" "security_notice" {
 # AWS IAM for AWS Chatbot
 # ===============================================================================
 resource "aws_iam_role" "chatbot_audit" {
-  name               = "${local.project}-${local.env}-iam-chatbot-role-audit"
+  name               = "${local.project}-${local.env}-iam-chatbot-audit-role"
   assume_role_policy = data.aws_iam_policy_document.chatbot_audit_assume.json
 
   tags = {
