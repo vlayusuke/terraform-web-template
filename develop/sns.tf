@@ -248,10 +248,10 @@ data "aws_iam_policy_document" "inspector_notification" {
 
 
 # ===============================================================================
-# Amazon SNS Topic for Notification to Slack
+# Amazon SNS Topic for Event Notification
 # ===============================================================================
-resource "aws_sns_topic" "to_slack" {
-  name = "${local.project}-${local.env}-sns-to-slack-topic"
+resource "aws_sns_topic" "event_notification" {
+  name = "${local.project}-${local.env}-sns-event-notification-topic"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -269,16 +269,16 @@ resource "aws_sns_topic" "to_slack" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-sns-to-slack-topic"
+    Name = "${local.project}-${local.env}-sns-event-notification-topic"
   }
 }
 
-resource "aws_sns_topic_policy" "to_slack" {
-  arn    = aws_sns_topic.to_slack.arn
-  policy = data.aws_iam_policy_document.to_slack.json
+resource "aws_sns_topic_policy" "event_notification" {
+  arn    = aws_sns_topic.event_notification.arn
+  policy = data.aws_iam_policy_document.event_notification.json
 }
 
-data "aws_iam_policy_document" "to_slack" {
+data "aws_iam_policy_document" "event_notification" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
@@ -293,7 +293,7 @@ data "aws_iam_policy_document" "to_slack" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.to_slack.arn,
+      aws_sns_topic.event_notification.arn,
     ]
     condition {
       test     = "StringEquals"
@@ -317,7 +317,7 @@ data "aws_iam_policy_document" "to_slack" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.to_slack.arn,
+      aws_sns_topic.event_notification.arn,
     ]
     principals {
       type = "Service"
