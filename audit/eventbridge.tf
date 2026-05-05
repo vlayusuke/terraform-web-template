@@ -27,7 +27,7 @@ resource "aws_cloudwatch_event_rule" "check_config" {
 
 resource "aws_cloudwatch_event_target" "check_config" {
   rule      = aws_cloudwatch_event_rule.check_config.name
-  target_id = aws_sns_topic.to_slack_audit.name
+  target_id = aws_sns_topic.event_notification_audit.name
   arn       = aws_sns_topic.event_notification_audit.arn
 }
 
@@ -105,6 +105,6 @@ resource "aws_cloudwatch_event_rule" "cloudtrail" {
 
 resource "aws_cloudwatch_event_target" "cloudtrail" {
   rule      = aws_cloudwatch_event_rule.cloudtrail.name
-  target_id = aws_sns_topic.to_slack_audit.name
+  target_id = aws_sns_topic.event_notification_audit.name
   arn       = aws_sns_topic.event_notification_audit.arn
 }
