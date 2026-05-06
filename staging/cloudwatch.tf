@@ -167,7 +167,7 @@ resource "aws_cloudwatch_log_subscription_filter" "ses_to_lambda" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "ses_to_firehose" {
-  name            = "${local.project}-${local.env}-cw-ses-to-firehose"
+  name            = "${local.project}-${local.env}-cw-ses-to-adf"
   log_group_name  = aws_cloudwatch_log_group.ses.name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ses_event_logs.arn
@@ -200,7 +200,7 @@ resource "aws_cloudwatch_log_subscription_filter" "sns_to_lambda" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_to_firehose" {
-  name            = "${local.project}-${local.env}-cw-sns-to-firehose"
+  name            = "${local.project}-${local.env}-cw-sns-to-adf"
   log_group_name  = aws_cloudwatch_log_group.sns.name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.sns_event_logs.arn
