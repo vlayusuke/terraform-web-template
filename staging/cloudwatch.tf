@@ -481,8 +481,8 @@ resource "aws_cloudwatch_metric_alarm" "queue_memory_high" {
 # ===============================================================================
 # Amazon CloudWatch Metrics for Application Load Balancer
 # ===============================================================================
-resource "aws_cloudwatch_metric_alarm" "alb_healthy_host" {
-  alarm_name          = "${local.project}-${local.env}-cw-alb-healthy-host-alarm"
+resource "aws_cloudwatch_metric_alarm" "alb_healthy_host_count" {
+  alarm_name          = "${local.project}-${local.env}-cw-alb-healthy-host-count-alarm"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "HealthyHostCount"
@@ -506,12 +506,12 @@ resource "aws_cloudwatch_metric_alarm" "alb_healthy_host" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-alb-healthy-host-alarm"
+    Name = "${local.project}-${local.env}-cw-alb-healthy-host-count-alarm"
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host" {
-  alarm_name          = "${local.project}-${local.env}-cw-alb-un-healthy-host-alarm"
+resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host_count" {
+  alarm_name          = "${local.project}-${local.env}-cw-alb-un-healthy-host-count-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "UnHealthyHostCount"
@@ -535,7 +535,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-alb-un-healthy-host-alarm"
+    Name = "${local.project}-${local.env}-cw-alb-un-healthy-host-count-alarm"
   }
 }
 
