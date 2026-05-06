@@ -35,7 +35,7 @@ resource "aws_lb_listener" "alb_external_listener" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
-  certificate_arn   = aws_acm_certificate.main.arn
+  certificate_arn   = aws_acm_certificate.main_alb.arn
 
   default_action {
     type = "fixed-response"
@@ -47,7 +47,7 @@ resource "aws_lb_listener" "alb_external_listener" {
   }
 
   depends_on = [
-    aws_acm_certificate_validation.main,
+    aws_acm_certificate_validation.main_alb,
   ]
 
   tags = {
@@ -92,7 +92,7 @@ resource "aws_lb_target_group" "alb_external_tg" {
 
 resource "aws_lb_listener_certificate" "alb_listener_cert" {
   listener_arn    = aws_lb_listener.alb_external_listener.arn
-  certificate_arn = aws_acm_certificate.main.arn
+  certificate_arn = aws_acm_certificate.main_alb.arn
 
   depends_on = [
     aws_lb_listener.alb_external_listener,

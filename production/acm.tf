@@ -1,7 +1,7 @@
 # ===============================================================================
 # AWS AWS Certificate Manager for Application Load Balancer
 # ===============================================================================
-resource "aws_acm_certificate" "main" {
+resource "aws_acm_certificate" "main_alb" {
   domain_name       = local.domain
   validation_method = "DNS"
 
@@ -15,13 +15,13 @@ resource "aws_acm_certificate" "main" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-acm-certificate"
+    Name = "${local.project}-${local.env}-acm-certificate-alb"
   }
 }
 
-resource "aws_route53_record" "main" {
+resource "aws_route53_record" "main_alb" {
   for_each = {
-    for dvo in aws_acm_certificate.main.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.main_alb.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -39,10 +39,10 @@ resource "aws_route53_record" "main" {
   ]
 }
 
-resource "aws_acm_certificate_validation" "main" {
-  certificate_arn = aws_acm_certificate.main.arn
+resource "aws_acm_certificate_validation" "main_alb" {
+  certificate_arn = aws_acm_certificate.main_alb.arn
   validation_record_fqdns = [
-    for record in aws_route53_record.main :
+    for record in aws_route53_record.main_alb :
     record.fqdn
   ]
 }
