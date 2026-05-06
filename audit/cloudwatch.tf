@@ -30,8 +30,8 @@ resource "aws_cloudwatch_log_group" "lambda_error" {
   }
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "lambda_error1" {
-  name            = "${local.project}-${local.env}-cw-lambda-error"
+resource "aws_cloudwatch_log_subscription_filter" "lambda_error" {
+  name            = "${local.project}-${local.env}-cw-lmd-error-audit"
   log_group_name  = aws_cloudwatch_log_group.lambda_error.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_error.arn
@@ -51,7 +51,7 @@ resource "aws_cloudwatch_log_group" "security_notice" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "security_notice" {
-  name            = "${local.project}-${local.env}-cw-security-notice"
+  name            = "${local.project}-${local.env}-cw-lmd-security-notice-audit"
   log_group_name  = aws_cloudwatch_log_group.security_notice.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.security_notice.arn
@@ -71,7 +71,7 @@ resource "aws_cloudwatch_log_group" "lambda_log_error_alert_audit" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "lambda_log_error_alert_audit" {
-  name            = "${local.project}-${local.env}-cw-lambda-log-error-alert-audit"
+  name            = "${local.project}-${local.env}-cw-lmd-log-error-alert-audit"
   log_group_name  = aws_cloudwatch_log_group.lambda_log_error_alert_audit.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
@@ -82,21 +82,21 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_log_error_alert_audit"
 # Amazon CloudWatch Log group for AWS CloudTrail
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "cloudtrail" {
-  name              = "${local.project}-${local.env}-cw-cloudtrail-cwlog"
+  name              = "${local.project}-${local.env}-cw-ct-cwlog"
   retention_in_days = local.retention_in_days
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-cloudtrail-cwlog"
+    Name = "${local.project}-${local.env}-cw-ct-cwlog"
   }
 }
 
 resource "aws_cloudwatch_log_stream" "cloudtrail" {
-  name           = "${local.project}-${local.env}-cw-cloudtrail-cwstream"
+  name           = "${local.project}-${local.env}-cw-ct-cwstream"
   log_group_name = aws_cloudwatch_log_group.cloudtrail.name
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "cloudtrail" {
-  name            = "${local.project}-${local.env}-cw-cloudtrail"
+  name            = "${local.project}-${local.env}-cw-ct-subscription-filter"
   log_group_name  = aws_cloudwatch_log_group.cloudtrail.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
@@ -121,7 +121,7 @@ resource "aws_cloudwatch_log_stream" "sns" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns" {
-  name            = "${local.project}-${local.env}-cw-sns"
+  name            = "${local.project}-${local.env}-cw-sns-subscription-filter"
   log_group_name  = aws_cloudwatch_log_group.sns.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
