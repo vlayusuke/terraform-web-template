@@ -19,7 +19,7 @@ resource "aws_cloudwatch_log_stream" "app" {
 
 resource "aws_cloudwatch_log_subscription_filter" "app_to_lambda" {
   for_each        = local.app_log_group
-  name            = aws_lambda_function.lambda_log_error_alert.function_name
+  name            = "${local.project}-${local.env}-cw-${each.key}-to-lmd"
   log_group_name  = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   filter_pattern  = "{ $.level_name = \"ERROR\" || $.level_name = \"CRITICAL\" || $.level_name = \"ALERT\" || $.level_name = \"EMERGENCY\" }"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
@@ -27,7 +27,7 @@ resource "aws_cloudwatch_log_subscription_filter" "app_to_lambda" {
 
 resource "aws_cloudwatch_log_subscription_filter" "app_to_firehose" {
   for_each        = local.app_log_group
-  name            = "${local.project}-${local.env}-cw-${each.key}-to-firehose"
+  name            = "${local.project}-${local.env}-cw-${each.key}-to-adf"
   log_group_name  = aws_cloudwatch_log_group.app[each.key].name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ecs_logs_app[each.key].arn
@@ -52,7 +52,7 @@ resource "aws_cloudwatch_log_stream" "nginx" {
 
 resource "aws_cloudwatch_log_subscription_filter" "nginx_to_lambda" {
   for_each        = local.nginx_log_group
-  name            = aws_lambda_function.lambda_log_error_alert.function_name
+  name            = "${local.project}-${local.env}-cw-${each.key}-to-lmd"
   log_group_name  = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   filter_pattern  = "{ $.status = \"5*\" || $.request_time >= 3.000 }"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
@@ -60,7 +60,7 @@ resource "aws_cloudwatch_log_subscription_filter" "nginx_to_lambda" {
 
 resource "aws_cloudwatch_log_subscription_filter" "nginx_to_firehose" {
   for_each        = local.nginx_log_group
-  name            = "${local.project}-${local.env}-cw-${each.key}-to-firehose"
+  name            = "${local.project}-${local.env}-cw-${each.key}-to-adf"
   log_group_name  = aws_cloudwatch_log_group.nginx[each.key].name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ecs_logs_nginx[each.key].arn
@@ -89,7 +89,7 @@ resource "aws_cloudwatch_log_stream" "rds" {
 
 resource "aws_cloudwatch_log_subscription_filter" "rds_to_lambda" {
   for_each        = local.enabled_cloudwatch_logs_exports
-  name            = aws_lambda_function.lambda_log_error_alert.function_name
+  name            = "${local.project}-${local.env}-cw-rds-${each.key}-to-lmd"
   log_group_name  = "/aws/rds/cluster/${aws_rds_cluster.aurora.cluster_identifier}/${each.key}"
   filter_pattern  = "?Warning ?Error"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
@@ -97,7 +97,7 @@ resource "aws_cloudwatch_log_subscription_filter" "rds_to_lambda" {
 
 resource "aws_cloudwatch_log_subscription_filter" "rds_to_firehose" {
   for_each        = local.aurora_log_types
-  name            = "${local.project}-${local.env}-cw-rds-${each.key}-to-firehose"
+  name            = "${local.project}-${local.env}-cw-rds-${each.key}-to-adf"
   log_group_name  = "/aws/rds/cluster/${aws_rds_cluster.aurora.cluster_identifier}/${each.key}"
   filter_pattern  = ""
   destination_arn = each.value
@@ -126,7 +126,7 @@ resource "aws_cloudwatch_log_stream" "lambda_functions" {
 
 resource "aws_cloudwatch_log_subscription_filter" "lambda_functions_to_lambda" {
   for_each        = local.lambda_functions
-  name            = aws_lambda_function.lambda_log_error_alert.function_name
+  name            = "${local.project}-${local.env}-cw-${each.key}-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.lambda_functions[each.key].name
   filter_pattern  = "ERROR"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
@@ -134,7 +134,7 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_functions_to_lambda" {
 
 resource "aws_cloudwatch_log_subscription_filter" "lambda_function_to_firehose" {
   for_each        = local.lambda_functions
-  name            = "${local.project}-${local.env}-cw-${each.key}-to-firehose"
+  name            = "${local.project}-${local.env}-cw-${each.key}-to-adf"
   log_group_name  = aws_cloudwatch_log_group.lambda_functions[each.key].name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.lambda_logs[each.key].arn
@@ -160,14 +160,14 @@ resource "aws_cloudwatch_log_stream" "ses" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "ses_to_lambda" {
-  name            = aws_lambda_function.lambda_log_error_alert.function_name
+  name            = "${local.project}-${local.env}-cw-ses-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.ses.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "ses_to_firehose" {
-  name            = "${local.project}-${local.env}-cw-ses-to-firehose"
+  name            = "${local.project}-${local.env}-cw-ses-to-adf"
   log_group_name  = aws_cloudwatch_log_group.ses.name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ses_event_logs.arn
@@ -179,28 +179,28 @@ resource "aws_cloudwatch_log_subscription_filter" "ses_to_firehose" {
 # Amazon CloudWatch Log group for Amazon SNS
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "sns" {
-  name              = "${local.project}-${local.env}-cw-sns-status-cwlog"
+  name              = "${local.project}-${local.env}-cw-sns-cwlog"
   retention_in_days = local.retention_in_days
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-sns-status-cwlog"
+    Name = "${local.project}-${local.env}-cw-sns-cwlog"
   }
 }
 
 resource "aws_cloudwatch_log_stream" "sns" {
-  name           = "${local.project}-${local.env}-cw-sns-status-cwstream"
+  name           = "${local.project}-${local.env}-cw-sns-cwstream"
   log_group_name = aws_cloudwatch_log_group.sns.name
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_to_lambda" {
-  name            = aws_lambda_function.lambda_log_error_alert.function_name
+  name            = "${local.project}-${local.env}-cw-sns-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.sns.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_to_firehose" {
-  name            = "${local.project}-${local.env}-cw-sns-to-firehose"
+  name            = "${local.project}-${local.env}-cw-sns-to-adf"
   log_group_name  = aws_cloudwatch_log_group.sns.name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.sns_event_logs.arn
@@ -230,28 +230,28 @@ resource "aws_cloudwatch_log_stream" "adf" {
 # Amazon CloudWatch Log group for Amazon EC2 Bastion
 # ================================================================================
 resource "aws_cloudwatch_log_group" "bastion" {
-  name              = "${local.project}-${local.env}-cw-bastion-cwlog"
+  name              = "${local.project}-${local.env}-cw-ec2-bastion-cwlog"
   retention_in_days = local.retention_in_days
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-bastion-cwlog"
+    Name = "${local.project}-${local.env}-cw-ec2-bastion-cwlog"
   }
 }
 
 resource "aws_cloudwatch_log_stream" "bastion" {
-  name           = "${local.project}-${local.env}-cw-bastion-cwstream"
+  name           = "${local.project}-${local.env}-cw-ec2-bastion-cwstream"
   log_group_name = aws_cloudwatch_log_group.bastion.name
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "bastion_to_lambda" {
-  name            = aws_lambda_function.lambda_log_error_alert.function_name
+  name            = "${local.project}-${local.env}-cw-ec2-bastion-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.bastion.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "bastion_to_firehose" {
-  name            = "${local.project}-${local.env}-cw-bastion-to-firehose"
+  name            = "${local.project}-${local.env}-cw-ec2-bastion-to-adf"
   log_group_name  = aws_cloudwatch_log_group.bastion.name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.bastion_logs.arn
@@ -481,8 +481,8 @@ resource "aws_cloudwatch_metric_alarm" "queue_memory_high" {
 # ===============================================================================
 # Amazon CloudWatch Metrics for Application Load Balancer
 # ===============================================================================
-resource "aws_cloudwatch_metric_alarm" "alb_healthy_host" {
-  alarm_name          = "${local.project}-${local.env}-cw-alb-healthy-host-alarm"
+resource "aws_cloudwatch_metric_alarm" "alb_healthy_host_count" {
+  alarm_name          = "${local.project}-${local.env}-cw-alb-healthy-host-count-alarm"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "HealthyHostCount"
@@ -506,12 +506,12 @@ resource "aws_cloudwatch_metric_alarm" "alb_healthy_host" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-alb-healthy-host-alarm"
+    Name = "${local.project}-${local.env}-cw-alb-healthy-host-count-alarm"
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host" {
-  alarm_name          = "${local.project}-${local.env}-cw-alb-un-healthy-host-alarm"
+resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host_count" {
+  alarm_name          = "${local.project}-${local.env}-cw-alb-un-healthy-host-count-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "UnHealthyHostCount"
@@ -535,7 +535,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-alb-un-healthy-host-alarm"
+    Name = "${local.project}-${local.env}-cw-alb-un-healthy-host-count-alarm"
   }
 }
 
