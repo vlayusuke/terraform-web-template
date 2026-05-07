@@ -35,8 +35,8 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 | Resources                  | Version  |
 | -------------------------- | -------- |
 | Terraform                  | 1.15.1   |
-| AWS Provider               | 6.43.0   |
-| AWS Cloud Control Provider | 1.82.0   |
+| AWS Provider               | 6.44.0   |
+| AWS Cloud Control Provider | 1.83.0   |
 
 ### AWS Lambda関数に使用しているPythonのruntimeのVersion
 
