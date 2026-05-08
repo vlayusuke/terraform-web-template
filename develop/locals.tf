@@ -40,7 +40,7 @@ locals {
 # Amazon CloudWatch
 # ================================================================================
 locals {
-  retention_in_days = 180
+  retention_in_days = 30
 
   lambda_functions = toset([
     aws_lambda_function.rds_control.function_name,
