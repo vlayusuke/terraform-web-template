@@ -1,0 +1,4 @@
+# Slack & Chatbot Settings
+audit_hook_url_app = ""
+audit_slack_workspace_id = ""
+audit_slack_channel_id = ""

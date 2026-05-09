@@ -1,0 +1,26 @@
+# ===============================================================================
+# AWS Chatbot (Amazon Q Developer)
+# ===============================================================================
+resource "aws_chatbot_slack_channel_configuration" "chatbot_notification_for_slack" {
+  configuration_name          = "${local.project}-${local.env}-chatbot-notification-for-slack"
+  iam_role_arn                = aws_iam_role.chatbot.arn
+  slack_channel_id            = var.slack_channel_id
+  slack_team_id               = var.slack_workspace_id
+  logging_level               = "INFO"
+  user_authorization_required = false
+
+  guardrail_policy_arns = [
+    aws_iam_policy.chatbot_guardrail.arn,
+  ]
+
+  sns_topic_arns = [
+    aws_sns_topic.metric_alarm.arn,
+    aws_sns_topic.event_alarm.arn,
+    aws_sns_topic.inspector_notification.arn,
+    aws_sns_topic.event_notification.arn,
+  ]
+
+  tags = {
+    Name = "${local.project}-${local.env}-chatbot-notification-for-slack"
+  }
+}

@@ -42,6 +42,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "assets" {
   bucket = aws_s3_bucket.assets.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -102,7 +105,7 @@ resource "aws_s3_bucket_cors_configuration" "assets" {
       "GET",
     ]
     allowed_origins = [
-      "https://${local.env}.${local.domain}",
+      "https://${local.domain}",
     ]
     max_age_seconds = 3600
   }
@@ -239,6 +242,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "uploads" {
   bucket = aws_s3_bucket.uploads.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -301,7 +307,7 @@ resource "aws_s3_bucket_cors_configuration" "uploads" {
       "GET",
     ]
     allowed_origins = [
-      "https://${local.env}.${local.domain}",
+      "https://${local.domain}",
     ]
     max_age_seconds = 3600
   }
@@ -444,6 +450,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "alb_logs" {
   bucket = aws_s3_bucket.alb_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -610,6 +619,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "vpc_flow_log" {
   bucket = aws_s3_bucket.vpc_flow_log.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -802,6 +814,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ecs_logs" {
   bucket = aws_s3_bucket.ecs_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -945,6 +960,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "lambda_logs" {
   bucket = aws_s3_bucket.lambda_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -1127,6 +1145,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "aurora_logs" {
   bucket = aws_s3_bucket.aurora_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -1259,6 +1280,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ses_logs" {
   bucket = aws_s3_bucket.ses_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -1391,6 +1415,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ses_event_logs" {
   bucket = aws_s3_bucket.ses_event_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -1523,6 +1550,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "sns_logs" {
   bucket = aws_s3_bucket.sns_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -1654,6 +1684,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "sns_event_logs" {
   bucket = aws_s3_bucket.sns_event_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -1785,6 +1818,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloudfront_logs" 
   bucket = aws_s3_bucket.cloudfront_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -1917,6 +1953,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "waf_logs" {
   bucket = aws_s3_bucket.waf_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -2059,6 +2098,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bastion" {
   bucket = aws_s3_bucket.bastion.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -2200,7 +2242,8 @@ locals {
   aws_ec2_ssh_conf = templatefile(
     "files/iam_ssh/aws-ec2-ssh.conf",
     {
-      project = local.project
+      project    = local.project
+      account-id = data.aws_caller_identity.current.account_id
     }
   )
 }
@@ -2247,6 +2290,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_server_access_
   bucket = aws_s3_bucket.s3_server_access_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -2384,6 +2430,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "source_backup_osa
   provider = aws.osaka
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -2478,6 +2527,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_logs" {
   bucket = aws_s3_bucket.s3_logs.bucket
 
   rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }

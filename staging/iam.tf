@@ -1107,10 +1107,10 @@ data "aws_iam_policy_document" "amazon_data_firehose" {
       "s3:DeleteObject",
     ]
     resources = [
-      aws_s3_bucket.ses_event_log.arn,
-      "${aws_s3_bucket.ses_event_log.arn}/*",
-      aws_s3_bucket.sns_event_log.arn,
-      "${aws_s3_bucket.sns_event_log.arn}/*",
+      aws_s3_bucket.ses_event_logs.arn,
+      "${aws_s3_bucket.ses_event_logs.arn}/*",
+      aws_s3_bucket.sns_event_logs.arn,
+      "${aws_s3_bucket.sns_event_logs.arn}/*",
       aws_s3_bucket.ecs_logs.arn,
       "${aws_s3_bucket.ecs_logs.arn}/*",
       aws_s3_bucket.aurora_logs.arn,
@@ -1227,7 +1227,7 @@ data "aws_iam_policy_document" "ses" {
     ]
     resources = [
       aws_kinesis_firehose_delivery_stream.ses_logs.arn,
-      aws_kinesis_firehose_delivery_stream.ses_event_log.arn,
+      aws_kinesis_firehose_delivery_stream.ses_event_logs.arn,
     ]
   }
 }
@@ -1300,7 +1300,7 @@ data "aws_iam_policy_document" "sns" {
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
       aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.to_slack.arn,
+      aws_sns_topic.event_notification.arn,
     ]
   }
 
@@ -1457,7 +1457,7 @@ data "aws_iam_policy_document" "chatbot" {
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
       aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.to_slack.arn,
+      aws_sns_topic.event_notification.arn,
     ]
     condition {
       test     = "StringEquals"
@@ -1479,7 +1479,7 @@ data "aws_iam_policy_document" "chatbot" {
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
       aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.to_slack.arn,
+      aws_sns_topic.event_notification.arn,
     ]
   }
 

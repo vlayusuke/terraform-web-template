@@ -5,7 +5,7 @@ resource "aws_cloudfront_distribution" "main" {
   enabled         = true
   is_ipv6_enabled = false
   http_version    = "http2and3"
-  comment         = "${local.project}-${local.env} CloudFront Distribution"
+  comment         = "${local.project}-${local.env} Amazon CloudFront Distribution"
   web_acl_id      = aws_wafv2_web_acl.main.arn
 
   aliases = [
@@ -122,10 +122,10 @@ resource "aws_cloudfront_distribution" "main" {
       }
     }
 
-    function_association {
-      event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.basic_auth.arn
-    }
+    #    function_association {
+    #      event_type   = "viewer-request"
+    #      function_arn = aws_cloudfront_function.basic_auth.arn
+    #    }
   }
 
   restrictions {
@@ -140,7 +140,7 @@ resource "aws_cloudfront_distribution" "main" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cloudfront-distribution"
+    Name = "${local.project}-${local.env}-cf-distribution"
   }
 }
 
@@ -149,7 +149,8 @@ resource "aws_cloudfront_distribution" "main" {
 # Amazon CloudFront Response Headers Policy
 # ===============================================================================
 resource "aws_cloudfront_response_headers_policy" "main" {
-  name = "${local.project}-${local.env}-cloudfront-response-header-policy"
+  name    = "${local.project}-${local.env}-cf-response-header-policy"
+  comment = "Amazon CloudFront Response Headers Policy for ${local.project}-${local.env}"
 
   security_headers_config {
     content_type_options {
@@ -168,7 +169,7 @@ resource "aws_cloudfront_response_headers_policy" "main" {
 # Amazon CloudFront Cache Policy
 # ===============================================================================
 resource "aws_cloudfront_cache_policy" "main" {
-  name        = "${local.project}-${local.env}-cloudfront-cache-policy"
+  name        = "${local.project}-${local.env}-cf-cache-policy"
   comment     = "Amazon CloudFront Cache Policy for ${local.project}-${local.env}"
   default_ttl = 86400
   max_ttl     = 259200
@@ -197,7 +198,7 @@ resource "aws_cloudfront_cache_policy" "main" {
 # Origin Access Control
 # ===============================================================================
 resource "aws_cloudfront_origin_access_control" "assets" {
-  name                              = "${local.project}-${local.env}-oac-assets"
+  name                              = "${local.project}-${local.env}-cf-oac-assets"
   description                       = "Origin Access Control for ${local.project}-${local.env} assets"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -205,7 +206,7 @@ resource "aws_cloudfront_origin_access_control" "assets" {
 }
 
 resource "aws_cloudfront_origin_access_control" "uploads" {
-  name                              = "${local.project}-${local.env}-oac-uploads"
+  name                              = "${local.project}-${local.env}-cf-oac-uploads"
   description                       = "Origin Access Control for ${local.project}-${local.env} uploads"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -213,13 +214,14 @@ resource "aws_cloudfront_origin_access_control" "uploads" {
 }
 
 
+# If you want to use CloudFront Functions, you can add the resource definition here. However, please note that CloudFront Functions are only supported in certain regions and may not be available in all AWS accounts. Make sure to check the AWS documentation for the latest information on CloudFront Functions availability and usage.
 # ===============================================================================
 # CloudFront Functions
 # ===============================================================================
-resource "aws_cloudfront_function" "basic_auth" {
-  name    = "${local.project}-${local.env}-cf-fnc-basic-auth"
-  runtime = "cloudfront-js-2.0"
-  comment = "${local.project}-${local.env} CloudFront Functions for basic authentication"
-  publish = true
-  code    = file("${path.module}/files/cloudfront_functions/basic_auth.js")
-}
+# resource "aws_cloudfront_function" "basic_auth" {
+#   name    = "${local.project}-${local.env}-cf-fnc-basic-auth"
+#   runtime = "cloudfront-js-2.0"
+#   comment = "${local.project}-${local.env} CloudFront Functions for basic authentication"
+#   publish = true
+#   code    = file("${path.module}/files/cloudfront_functions/basic_auth.js")
+# }

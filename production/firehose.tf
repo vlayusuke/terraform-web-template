@@ -1,0 +1,369 @@
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon Aurora log)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
+  name        = "${local.project}-${local.env}-adf-aurora-logs-audit-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.aurora_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "audit-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-aurora-logs-audit-to-s3"
+  }
+}
+
+resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_error" {
+  name        = "${local.project}-${local.env}-adf-aurora-logs-error-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.aurora_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "error-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-aurora-logs-error-to-s3"
+  }
+}
+
+resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_general" {
+  name        = "${local.project}-${local.env}-adf-aurora-logs-general-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.aurora_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "general-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-aurora-logs-general-to-s3"
+  }
+}
+
+resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_slowquery" {
+  name        = "${local.project}-${local.env}-adf-aurora-logs-slowquery-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.aurora_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "slowquery-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-aurora-logs-slowquery-to-s3"
+  }
+}
+
+resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" {
+  name        = "${local.project}-${local.env}-adf-aurora-logs-auth-error-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.aurora_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "auth-error-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-aurora-logs-auth-error-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon ECS logs App)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_app" {
+  for_each    = local.app_log_group
+  name        = "${local.project}-${local.env}-adf-ecs-logs-${each.key}-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.ecs_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "${each.key}-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-ecs-logs-${each.key}-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon ECS logs Nginx)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_nginx" {
+  for_each    = local.nginx_log_group
+  name        = "${local.project}-${local.env}-adf-ecs-logs-${each.key}-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.ecs_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "${each.key}-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-ecs-logs-${each.key}-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (AWS Lambda logs)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "lambda_logs" {
+  for_each    = local.lambda_functions
+  name        = "${local.project}-${local.env}-adf-lmd-logs-${each.key}-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.lambda_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "${each.key}-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-lmd-logs-${each.key}-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon SES logs)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "ses_logs" {
+  name        = "${local.project}-${local.env}-adf-ses-logs-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.ses_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "ses-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-ses-logs-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon SES event logs)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "ses_event_logs" {
+  name        = "${local.project}-${local.env}-adf-ses-event-logs-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.ses_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "ses-event-logs/"
+    compression_format = "GZIP"
+
+    cloudwatch_logging_options {
+      enabled         = true
+      log_group_name  = aws_cloudwatch_log_group.ses.name
+      log_stream_name = aws_cloudwatch_log_stream.ses.name
+    }
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-ses-event-logs-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon SNS logs)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "sns_logs" {
+  name        = "${local.project}-${local.env}-adf-sns-logs-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.sns_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "sns-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-sns-logs-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon SNS Event logs)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "sns_event_logs" {
+  name        = "${local.project}-${local.env}-adf-sns-event-logs-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.sns_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "sns-event-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-sns-event-logs-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon EC2 Bastion logs)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
+  name        = "${local.project}-${local.env}-adf-bastion-logs-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.bastion.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "bastion-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-bastion-logs-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Firelens logs)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "firelens_logs" {
+  name        = "${local.project}-${local.env}-adf-firelens-logs-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.ecs_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "firelens-logs/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-firelens-logs-to-s3"
+  }
+}
