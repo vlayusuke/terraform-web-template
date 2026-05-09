@@ -1,6 +1,24 @@
 # ===============================================================================
 # SSM Parameters for MySQL
 # ===============================================================================
+resource "aws_ssm_parameter" "mysql_username" {
+  name        = "/${local.project}/${local.env}/mysql-username"
+  description = "The parameter for MySQL username"
+  key_id      = aws_kms_key.application.key_id
+  type        = "SecureString"
+  value       = "PleaseChange!"
+
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ssm-mysql-username"
+  }
+}
+
 resource "aws_ssm_parameter" "mysql_password" {
   name        = "/${local.project}/${local.env}/mysql-password"
   description = "The parameter for MySQL password"
