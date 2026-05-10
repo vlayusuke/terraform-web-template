@@ -30,6 +30,9 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 このテンプレートで使用している、Terraformの各種Providerや、PythonのruntimeのVersionは、以下の通りです。
 
+- [hashicorp/aws Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest)
+- [hachicorp/awscc Terraform Registry](https://registry.terraform.io/providers/hashicorp/awscc/latest)
+
 ### Terraformや各種ProviderのVersion
 
 | Resources                  | Version  |
