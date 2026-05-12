@@ -36,7 +36,7 @@ def lambda_handler(event, context):
 
             with request.urlopen(req) as res:
                 content = res.read()
-                print(content)
+                logger.info(content)
 
         except:
             pass
