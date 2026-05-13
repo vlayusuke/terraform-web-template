@@ -1,5 +1,5 @@
 # ===============================================================================
-# AWS Lambda Function for CloudWatch log error alert
+# AWS Lambda Function for Amazon CloudWatch Logs Error Alert
 # ===============================================================================
 resource "aws_lambda_function" "lambda_log_error_alert" {
   function_name    = "lmd-cw-log-error-alert"
@@ -48,7 +48,7 @@ resource "aws_lambda_permission" "lambda_cloudwatch_app" {
 
 
 # ===============================================================================
-# AWS Lambda Function for Metric Alarm
+# AWS Lambda Function for Amazon CloudWatch Metric Alarm
 # ===============================================================================
 resource "aws_lambda_function" "lambda_metric_alarm" {
   function_name    = "lmd-metric-alarm"
