@@ -42,3 +42,17 @@ variable "dockerhub_password" {
   type      = string
   sensitive = true
 }
+
+
+# ================================================================================
+# Amazon CloudFront Key-Value Store Settings
+# ================================================================================
+variable "basic_auth_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "basic_auth_password" {
+  type      = string
+  sensitive = true
+}
