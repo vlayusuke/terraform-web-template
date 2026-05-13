@@ -28,7 +28,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 ## 各種ProviderやruntimeのVersion
 
-このテンプレートで使用している、Terraformの各種Providerや、PythonのruntimeのVersionは、以下の通りです。
+このテンプレートで使用している、Terraform、各種Provider及びPythonのruntimeのVersionは、以下の通りです。
 
 - [hashicorp/aws Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest)
 - [hachicorp/awscc Terraform Registry](https://registry.terraform.io/providers/hashicorp/awscc/latest)
@@ -37,9 +37,9 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 | Resources                  | Version  |
 | -------------------------- | -------- |
-| Terraform                  | 1.15.1   |
-| AWS Provider               | 6.44.0   |
-| AWS Cloud Control Provider | 1.83.0   |
+| Terraform                  | 1.15.3   |
+| AWS Provider               | 6.45.0   |
+| AWS Cloud Control Provider | 1.84.0   |
 
 ### AWS Lambda関数に使用しているPythonのruntimeのVersion
 
