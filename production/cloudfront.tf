@@ -226,9 +226,7 @@ resource "aws_cloudfront_function" "basic_auth" {
   code    = file("${path.module}/files/cloudfront_functions/basic_auth.js")
 
   key_value_store_associations = [
-    {
-      key_value_store_id = aws_cloudfront_key_value_store.basic_auth.id
-    }
+    aws_cloudfront_key_value_store.basic_auth.id,
   ]
 }
 

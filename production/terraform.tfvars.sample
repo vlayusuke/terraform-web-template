@@ -9,3 +9,7 @@ aws_key_pub_bastion = ""
 # AWS Secrets Manager Settings
 dockerhub_username = ""
 dockerhub_password = ""
+
+# Amazon CloudFront Key-Value Store Settings
+basic_auth_username = ""
+basic_auth_password = ""
