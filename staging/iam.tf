@@ -694,6 +694,7 @@ data "aws_iam_policy_document" "rds_iam_auth" {
     effect = "Allow"
     actions = [
       "rds-db:connect",
+      "rds-data:ExecuteStatement",
     ]
     resources = [
       "arn:aws:rds-db:${local.region}:${data.aws_caller_identity.current.account_id}:dbuser:*/*",
