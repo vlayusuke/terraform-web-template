@@ -8,25 +8,25 @@
 
 このテンプレートは以下のディレクトリで構成されています。
 
-### `audit`
+### `/audit`
 
 Web3レイヤ構成のWebアプリケーションのAWSリソースのうち、セキュリティ & コンプライアンス系のリソースと、それらに関連するリソースを集中管理して実装しています。
 
-なお、1つのAWSアカウントに対して、1つの`audit`ディレクトリ内で実装しているをセキュリティ & コンプライアンス系のAWSリソース構築することを想定して実装しています。
+なお、1つのAWSアカウントに対して、1つの`/audit`ディレクトリ内で実装しているをセキュリティ & コンプライアンス系のAWSリソース構築することを想定して実装しています。
 
-### `production`
+### `/production`
 
 Web3レイヤ構成のWebアプリケーション向けの本番環境を構築するためのAWSリソースを実装しています。
 
-### `staging`
+### `/staging`
 
 Web3レイヤ構成のWebアプリケーション向けのステージング環境を構築するためのAWSリソースを実装しています。
 
-### `develop`
+### `/develop`
 
 Web3レイヤ構成のWebアプリケーション向けの開発環境を構築するためのAWSリソースを実装しています。
 
-## terraform & 各種Provider & 各種runtimeのVersion
+## Terraform & 各種Provider & 各種runtimeのVersion
 
 このテンプレートで使用している、Terraform、各種Provider及びPythonのruntimeのVersionは、以下の通りです。
 
@@ -116,11 +116,11 @@ backend "s3" {
 }
 ```
 
-に指定されている`bucket`ディレクティブと同じ名称のS3バケットを作成します。さらに、作成したS3バケットには、`key`プレフィックスを作成してください。Terraformの実行時には、作成した`key`ディレクティブ内に`example-environment.terraform.tfstate`ファイルが作成されます。
+に指定されている`bucket`ディレクティブと同じ名称のS3バケットを作成します。さらに、作成したS3バケットには、`key`プレフィックスを作成してください。Terraformの実行時には、作成した`key`プレフィックス内に`example-environment.terraform.tfstate`ファイルが作成されます。
 
 #### Terraformコマンドを実行する際の注意点
 
-- Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。このリポジトリでは、サンプルとしてGitHubにCommitしない代表的な定数のみを実装していますが、利用方法に応じて適宜修正をしてください。
+- Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。このテンプレートでは、サンプルとして、GitHubリモートリポジトリ上での管理対象としない代表的な値のみを実装しています。利用方法に応じて適宜修正をしてください。
 - `base_locals.tf`の`# project info`に設定している、`project`、`author`、`email`の値を修正してください。
 
 #### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
@@ -156,4 +156,18 @@ terraform providers lock \
 
 ## リリース履歴
 
-本テンプレートのリリース履歴は、[Releases](https://github.com/vlayusuke/terraform-web-template/releases)を参照してください。
+このテンプレートのリリース履歴は、[Releases](https://github.com/vlayusuke/terraform-web-template/releases)を参照してください。
+
+## ライセンス
+
+このテンプレートは、GPL3のもとでライセンスされています。詳細は、[LICENSE](./LICENSE)を参照してください。
+
+## 参考: このテンプレートの実装環境
+
+- MacBook Air M2 (2022) 16GB Memory/512GB SSD
+- macOS Tahoe 26.5
+- Homebrew 5.1.11
+- Terraform CLI 1.15.3
+- AWS CLI 2.34.47
+- Python 3.14.5
+- Visual Studio Code
