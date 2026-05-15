@@ -29,7 +29,7 @@ resource "aws_elasticache_replication_group" "redis" {
 
 resource "aws_elasticache_subnet_group" "redis" {
   name        = "${local.project}-${local.env}-ec-redis-cluster-subg"
-  description = "Subnet group for ${local.project} Amazon ElastiCache Cluster"
+  description = "Subnet group for ${local.project}-${local.env} Amazon ElastiCache Cluster"
   subnet_ids = [
     for subnet in aws_subnet.main_private :
     subnet.id
@@ -46,7 +46,7 @@ resource "aws_elasticache_subnet_group" "redis" {
 # ===============================================================================
 resource "aws_elasticache_parameter_group" "redis" {
   name        = "${local.project}-${local.env}-ec-redis-cache-params-ecpg"
-  description = "Parameter group for ${local.project} Amazon ElastiCache Cluster"
+  description = "Parameter group for ${local.project}-${local.env} Amazon ElastiCache Cluster"
   family      = "redis7"
 
   parameter {
