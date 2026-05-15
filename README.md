@@ -166,6 +166,7 @@ terraform providers lock \
 
 - MacBook Air M2 (2022) 16GB Memory/512GB SSD
 - macOS Tahoe 26.5
+- Homebrew 5.1.11
 - Terraform CLI 1.15.3
 - AWS CLI 2.34.47
 - Python 3.14.5
