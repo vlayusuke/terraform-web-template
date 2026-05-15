@@ -4,14 +4,15 @@
 resource "aws_rds_cluster" "aurora" {
   cluster_identifier                    = "${local.project}-${local.env}-aurora-cluster"
   engine                                = "aurora-mysql"
-  engine_version                        = "8.0.mysql_aurora.3.09.0"
+  engine_version                        = local.aurora_mysql_version
   port                                  = 3306
   database_name                         = local.database_name
   master_username                       = local.database_master_user_name
   master_password                       = aws_ssm_parameter.mysql_password.value
+  iam_database_authentication_enabled   = true
   backup_retention_period               = 14
-  preferred_backup_window               = "20:00-20:30"
-  preferred_maintenance_window          = "sat:20:30-sat:21:00"
+  preferred_backup_window               = "20:00-20:10"
+  preferred_maintenance_window          = "sat:20:00-sat:21:00"
   performance_insights_enabled          = true
   performance_insights_kms_key_id       = aws_kms_key.aurora.arn
   performance_insights_retention_period = 7
@@ -23,6 +24,11 @@ resource "aws_rds_cluster" "aurora" {
   kms_key_id                            = aws_kms_key.aurora.arn
   enabled_cloudwatch_logs_exports       = local.enabled_cloudwatch_logs_exports
   apply_immediately                     = true
+
+  iam_roles = [
+    aws_iam_role.rds_iam_auth.arn,
+    aws_iam_role.rds_performance_insights.arn,
+  ]
 
   vpc_security_group_ids = [
     aws_security_group.aurora.id,
