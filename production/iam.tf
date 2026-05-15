@@ -528,6 +528,17 @@ data "aws_iam_policy_document" "ecs_task" {
   }
 
   statement {
+    sid    = "AuroraAccess"
+    effect = "Allow"
+    actions = [
+      "rds-db:connect",
+    ]
+    resources = [
+      "arn:aws:rds-db:${local.region}:${data.aws_caller_identity.current.account_id}:dbuser:*/*",
+    ]
+  }
+
+  statement {
     sid    = "S3Access"
     effect = "Allow"
     actions = [
@@ -635,6 +646,111 @@ resource "aws_iam_role_policy_attachment" "ecs_task" {
 resource "aws_iam_role_policy_attachment" "ecs_task_to_ecr_read_only" {
   role       = aws_iam_role.ecs_task.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+
+# ===============================================================================
+# AWS IAM for Aamazon Aurora
+# ===============================================================================
+resource "aws_iam_role" "rds_iam_auth" {
+  name               = "${local.project}-${local.env}-iam-rds-iam-auth-role"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.rds_iam_auth_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-rds-iam-auth-role"
+  }
+}
+
+data "aws_iam_policy_document" "rds_iam_auth_assume" {
+  statement {
+    sid    = "RDSAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "rds.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_policy" "rds_iam_auth" {
+  name   = "${local.project}-${local.env}-iam-rds-iam-auth-policy"
+  policy = data.aws_iam_policy_document.rds_iam_auth.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-rds-iam-auth-policy"
+  }
+}
+
+data "aws_iam_policy_document" "rds_iam_auth" {
+  statement {
+    sid    = "GetDatabases"
+    effect = "Allow"
+    actions = [
+      "rds-db:connect",
+    ]
+    resources = [
+      "arn:aws:rds-db:${local.region}:${data.aws_caller_identity.current.account_id}:dbuser:*/*",
+    ]
+  }
+}
+
+
+# ===============================================================================
+# AWS IAM for Aamazon Aurora Performance Insights
+# ===============================================================================
+resource "aws_iam_role" "rds_performance_insights" {
+  name               = "${local.project}-${local.env}-iam-rds-performance-insights-role"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.rds_performance_insights_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-rds-performance-insights-role"
+  }
+}
+
+data "aws_iam_policy_document" "rds_performance_insights_assume" {
+  statement {
+    sid    = "RDSPerformanceInsightsAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "rds.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_policy" "rds_performance_insights" {
+  name   = "${local.project}-${local.env}-iam-rds-performance-insights-policy"
+  policy = data.aws_iam_policy_document.rds_performance_insights.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-rds-performance-insights-policy"
+  }
+}
+
+data "aws_iam_policy_document" "rds_performance_insights" {
+  statement {
+    sid    = "GetPerformanceData"
+    effect = "Allow"
+    actions = [
+      "rds:DescribeDBInstances",
+      "rds:DescribeDBClusters",
+    ]
+    resources = [
+      "arn:aws:rds:${local.region}:${data.aws_caller_identity.current.account_id}:db:*",
+    ]
+  }
 }
 
 
