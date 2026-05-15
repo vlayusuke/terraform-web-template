@@ -24,7 +24,8 @@ locals {
 # Amazon Aurora
 # ================================================================================
 locals {
-  rds_max_connections = 512
+  aurora_mysql_version = "8.0.mysql_aurora.3.12.0"
+  rds_max_connections  = 512
 
   enabled_cloudwatch_logs_exports = toset([
     "audit",
@@ -33,6 +34,14 @@ locals {
     "slowquery",
     "iam-db-auth-error"
   ])
+}
+
+
+# ================================================================================
+# Amazon ElastiCache
+# ================================================================================
+locals {
+  elasticache_redis_version = "7.1"
 }
 
 
