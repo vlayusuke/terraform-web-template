@@ -55,6 +55,11 @@ resource "aws_ecs_service" "app" {
     weight            = 1
   }
 
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
   deployment_controller {
     type = "ECS"
   }
@@ -237,6 +242,11 @@ resource "aws_ecs_service" "cron" {
     weight            = 1
   }
 
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
   deployment_controller {
     type = "ECS"
   }
@@ -323,6 +333,11 @@ resource "aws_ecs_service" "queue" {
     base              = 1
     capacity_provider = "FARGATE"
     weight            = 1
+  }
+
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
   }
 
   deployment_controller {
