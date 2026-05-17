@@ -46,7 +46,7 @@ data "aws_ec2_managed_prefix_list" "cloudfront" {
 # ===============================================================================
 # Security Group for VPC Endpoint (Amazon ECR - Docker)
 # ===============================================================================
-resource "aws_security_group" "ecr_vpce" {
+resource "aws_security_group" "vpce_ecr" {
   name        = "${local.project}-${local.env}-vpce-ecr-sg"
   description = "Security Group for Amazon ECR VPC EndPoint"
   vpc_id      = aws_vpc.main.id
@@ -57,9 +57,9 @@ resource "aws_security_group" "ecr_vpce" {
     to_port     = 443
     protocol    = "tcp"
     security_groups = [
-      aws_security_group.app.id,
-      aws_security_group.cron.id,
-      aws_security_group.queue.id,
+      aws_security_group.fargate_app.id,
+      aws_security_group.fargate_cron.id,
+      aws_security_group.fargate_queue.id,
     ]
   }
 
@@ -81,7 +81,7 @@ resource "aws_security_group" "ecr_vpce" {
 # ===============================================================================
 # Security Group for VPC Endpoint (AWS Systems Manager)
 # ===============================================================================
-resource "aws_security_group" "ssm_vpce" {
+resource "aws_security_group" "vpce_ssm" {
   name        = "${local.project}-${local.env}-vpce-ssm-sg"
   description = "Security Group for AWS Systems Manager VPC EndPoint"
   vpc_id      = aws_vpc.main.id
@@ -114,7 +114,7 @@ resource "aws_security_group" "ssm_vpce" {
 # ===============================================================================
 # Security Group for VPC Endpoint (Amazon SNS)
 # ===============================================================================
-resource "aws_security_group" "sns_vpce" {
+resource "aws_security_group" "vpce_sns" {
   name        = "${local.project}-${local.env}-vpce-sns-sg"
   description = "Security Group for Amazon SNS VPC EndPoint"
   vpc_id      = aws_vpc.main.id
@@ -147,7 +147,7 @@ resource "aws_security_group" "sns_vpce" {
 # ===============================================================================
 # Security Group for AWS Fargate (app)
 # ===============================================================================
-resource "aws_security_group" "app" {
+resource "aws_security_group" "fargate_app" {
   name        = "${local.project}-${local.env}-fargate-app-sg"
   description = "Security Group for ${local.project}-${local.env} AWS Fargate app"
   vpc_id      = aws_vpc.main.id
@@ -180,7 +180,7 @@ resource "aws_security_group" "app" {
 # ===============================================================================
 # Security Group for AWS Fargate (cron)
 # ===============================================================================
-resource "aws_security_group" "cron" {
+resource "aws_security_group" "fargate_cron" {
   name        = "${local.project}-${local.env}-fargate-cron-sg"
   description = "Security Group for ${local.project}-${local.env} AWS Fargate cron"
   vpc_id      = aws_vpc.main.id
@@ -191,7 +191,7 @@ resource "aws_security_group" "cron" {
     from_port   = 80
     to_port     = 80
     security_groups = [
-      aws_security_group.app.id,
+      aws_security_group.fargate_app.id,
     ]
   }
 
@@ -213,7 +213,7 @@ resource "aws_security_group" "cron" {
 # ===============================================================================
 # Security Group for AWS Fargate (queue)
 # ===============================================================================
-resource "aws_security_group" "queue" {
+resource "aws_security_group" "fargate_queue" {
   name        = "${local.project}-${local.env}-fargate-queue-sg"
   description = "Security Group for ${local.project}-${local.env} AWS Fargate queue"
   vpc_id      = aws_vpc.main.id
@@ -224,7 +224,7 @@ resource "aws_security_group" "queue" {
     from_port   = 80
     to_port     = 80
     security_groups = [
-      aws_security_group.app.id,
+      aws_security_group.fargate_app.id,
     ]
   }
 
@@ -257,7 +257,7 @@ resource "aws_security_group" "aurora" {
     from_port   = 3306
     to_port     = 3306
     security_groups = [
-      aws_security_group.app.id,
+      aws_security_group.fargate_app.id,
     ]
   }
 
@@ -267,7 +267,7 @@ resource "aws_security_group" "aurora" {
     from_port   = 3306
     to_port     = 3306
     security_groups = [
-      aws_security_group.cron.id,
+      aws_security_group.fargate_cron.id,
     ]
   }
 
@@ -277,7 +277,7 @@ resource "aws_security_group" "aurora" {
     from_port   = 3306
     to_port     = 3306
     security_groups = [
-      aws_security_group.queue.id,
+      aws_security_group.fargate_queue.id,
     ]
   }
 
@@ -350,7 +350,7 @@ resource "aws_security_group" "redis" {
     from_port   = 6379
     to_port     = 6379
     security_groups = [
-      aws_security_group.app.id,
+      aws_security_group.fargate_app.id,
     ]
   }
 
@@ -360,7 +360,7 @@ resource "aws_security_group" "redis" {
     from_port   = 6379
     to_port     = 6379
     security_groups = [
-      aws_security_group.cron.id,
+      aws_security_group.fargate_cron.id,
     ]
   }
 
@@ -370,7 +370,7 @@ resource "aws_security_group" "redis" {
     from_port   = 6379
     to_port     = 6379
     security_groups = [
-      aws_security_group.queue.id,
+      aws_security_group.fargate_queue.id,
     ]
   }
 
@@ -423,7 +423,7 @@ resource "aws_security_group" "efs" {
     from_port   = 2049
     to_port     = 2049
     security_groups = [
-      aws_security_group.app.id,
+      aws_security_group.fargate_app.id,
     ]
   }
 

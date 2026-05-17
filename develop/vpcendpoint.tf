@@ -8,7 +8,7 @@ resource "aws_vpc_endpoint" "ecr_docker" {
   private_dns_enabled = true
 
   security_group_ids = [
-    aws_security_group.ecr_vpce.id,
+    aws_security_group.vpce_ecr.id,
   ]
 
   subnet_ids = [
@@ -32,7 +32,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
   private_dns_enabled = true
 
   security_group_ids = [
-    aws_security_group.ecr_vpce.id,
+    aws_security_group.vpce_ecr.id,
   ]
 
   subnet_ids = [
@@ -56,7 +56,7 @@ resource "aws_vpc_endpoint" "ssm" {
   private_dns_enabled = true
 
   security_group_ids = [
-    aws_security_group.ssm_vpce.id,
+    aws_security_group.vpce_ssm.id,
   ]
 
   subnet_ids = [
@@ -80,7 +80,7 @@ resource "aws_vpc_endpoint" "ssm_messages" {
   private_dns_enabled = true
 
   security_group_ids = [
-    aws_security_group.ssm_vpce.id,
+    aws_security_group.vpce_ssm.id,
   ]
 
   subnet_ids = [
@@ -104,7 +104,7 @@ resource "aws_vpc_endpoint" "ec2_messages" {
   private_dns_enabled = true
 
   security_group_ids = [
-    aws_security_group.ssm_vpce.id,
+    aws_security_group.vpce_ssm.id,
   ]
 
   subnet_ids = [
