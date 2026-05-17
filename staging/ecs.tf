@@ -71,7 +71,7 @@ resource "aws_ecs_service" "app" {
       subnet.id
     ]
     security_groups = [
-      aws_security_group.app.id,
+      aws_security_group.fargate_app.id,
     ]
   }
 
@@ -247,7 +247,7 @@ resource "aws_ecs_service" "cron" {
       subnet.id
     ]
     security_groups = [
-      aws_security_group.cron.id,
+      aws_security_group.fargate_cron.id,
     ]
   }
 
@@ -335,7 +335,7 @@ resource "aws_ecs_service" "queue" {
       subnet.id
     ]
     security_groups = [
-      aws_security_group.queue.id,
+      aws_security_group.fargate_queue.id,
     ]
   }
 
