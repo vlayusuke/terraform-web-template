@@ -92,6 +92,7 @@ resource "aws_cloudwatch_event_rule" "cloudtrail" {
         "s3.amazonaws.com",
         "ses.amazonaws.com",
         "sns.amazonaws.com",
+        "elasticache.amazonaws.com",
         "rds.amazonaws.com",
         "signin.amazonaws.com"
       ]

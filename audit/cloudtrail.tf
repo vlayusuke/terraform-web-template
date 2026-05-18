@@ -21,7 +21,7 @@ resource "aws_cloudtrail" "audit" {
     data_resource {
       type = "AWS::S3::Object"
       values = [
-        "${aws_s3_bucket.cloudtrail_logs.arn}/",
+        "${aws_s3_bucket.cloudtrail_logs.arn}/*",
       ]
     }
   }
@@ -41,7 +41,7 @@ resource "aws_cloudtrail" "audit" {
 # AWS CloudTrail (ap-northeast-3)
 # ===============================================================================
 resource "aws_cloudtrail" "audit_osaka" {
-  name                          = "${local.project}-${local.env}-ct-audit"
+  name                          = "${local.project}-${local.env}-ct-audit-osaka"
   provider                      = aws.osaka
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs_osaka.id
   enable_logging                = true
@@ -60,7 +60,7 @@ resource "aws_cloudtrail" "audit_osaka" {
     data_resource {
       type = "AWS::S3::Object"
       values = [
-        "${aws_s3_bucket.cloudtrail_logs_osaka.arn}/",
+        "${aws_s3_bucket.cloudtrail_logs_osaka.arn}/*",
       ]
     }
   }
@@ -71,7 +71,7 @@ resource "aws_cloudtrail" "audit_osaka" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-ct-audit"
+    Name = "${local.project}-${local.env}-ct-audit-osaka"
   }
 }
 
@@ -99,7 +99,7 @@ resource "aws_cloudtrail" "audit_global" {
     data_resource {
       type = "AWS::S3::Object"
       values = [
-        "${aws_s3_bucket.cloudtrail_logs_global.arn}/",
+        "${aws_s3_bucket.cloudtrail_logs_global.arn}/*",
       ]
     }
   }
