@@ -1404,7 +1404,7 @@ data "aws_iam_policy_document" "sns" {
       "logs:PutLogEvents",
     ]
     resources = [
-      aws_cloudwatch_log_group.sns.arn
+      aws_cloudwatch_log_group.sns.arn,
     ]
   }
 
