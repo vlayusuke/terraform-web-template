@@ -1430,7 +1430,8 @@ data "aws_iam_policy_document" "sns" {
       "firehose:PutRecordBatch",
     ]
     resources = [
-    aws_kinesis_firehose_delivery_stream.sns_logs.arn, ]
+      aws_kinesis_firehose_delivery_stream.sns_logs.arn,
+    ]
   }
 }
 
