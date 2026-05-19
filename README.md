@@ -36,7 +36,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 ### Terraformや各種ProviderのVersion
 
 | Resources                  | Version  |
-| -------------------------- | -------- |
+| :------------------------- | -------: |
 | Terraform                  | 1.15.3   |
 | AWS Provider               | 6.45.0   |
 | AWS Cloud Control Provider | 1.84.0   |
@@ -44,7 +44,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 ### AWS Lambda関数に使用しているPythonのruntimeのVersion
 
 | Resources                  | Version  |
-| -------------------------- | -------- |
+| :------------------------- | -------: |
 | Python                     | 3.14     |
 
 ## 構築されるAWSリソースの数
@@ -52,7 +52,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 このテンプレートを実行することにより構築されるAWSリソースの数は、以下の表の通りです。
 
 | Environmtnt | Resource | Notice           |
-| ----------- | -------- | ---------------- |
+| :---------- | -------: | :--------------- |
 | develop     |      531 | N/A              |
 | staging     |      531 | N/A              |
 | production  |      531 | N/A              |
@@ -80,7 +80,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 `~/.aws/config`:
 
-```bash
+```bash:~/.aws/config
 [profile terraform-web-template]
 region = ap-northeast-1
 output = json
@@ -91,7 +91,7 @@ mfa_serial=arn:aws:iam::{aws-account}:mfa/{mfa-device-name}
 
 `~/.aws/credentials`:
 
-```bash
+```bash:bash:~/.aws/credentials
 [terraform-web-template]
 aws_access_key_id = ********************
 aws_secret_access_key = ********************
@@ -105,7 +105,7 @@ aws_secret_access_key = ********************
 
 Terraformコマンドを実行する前に、AWS CLIやTerraform CLIなどの必要なツールをインストールしてください。また、`terraform.tf`で実装している`terraform.tfstate`ファイルはS3バックエンドで保管するという設定にしているため、事前に各環境のAWSアカウントに紐づくAWSマネージメントコンソールの、Amazon S3コンソール内で、
 
-```hcl
+```hcl:terraform.tf
 backend "s3" {
   bucket  = "example-profile-name"
   key     = "key/example-environment.terraform.tfstate
