@@ -651,7 +651,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_to_ecr_read_only" {
 
 
 # ===============================================================================
-# AWS IAM for Aamazon Aurora
+# AWS IAM for Amazon Aurora
 # ===============================================================================
 resource "aws_iam_role" "rds_iam_auth" {
   name               = "${local.project}-${local.env}-iam-rds-iam-auth-role"
@@ -704,7 +704,7 @@ data "aws_iam_policy_document" "rds_iam_auth" {
 
 
 # ===============================================================================
-# AWS IAM for Aamazon Aurora Performance Insights
+# AWS IAM for Amazon Aurora Performance Insights
 # ===============================================================================
 resource "aws_iam_role" "rds_performance_insights" {
   name               = "${local.project}-${local.env}-iam-rds-performance-insights-role"
@@ -1404,7 +1404,7 @@ data "aws_iam_policy_document" "sns" {
       "logs:PutLogEvents",
     ]
     resources = [
-      aws_cloudwatch_log_group.sns.arn
+      aws_cloudwatch_log_group.sns.arn,
     ]
   }
 
@@ -1430,7 +1430,8 @@ data "aws_iam_policy_document" "sns" {
       "firehose:PutRecordBatch",
     ]
     resources = [
-    aws_kinesis_firehose_delivery_stream.sns_logs.arn, ]
+      aws_kinesis_firehose_delivery_stream.sns_logs.arn,
+    ]
   }
 }
 
