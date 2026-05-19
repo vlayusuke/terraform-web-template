@@ -319,7 +319,7 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_event_logs" {
 # Amazon Data Firehose Stream (Amazon EC2 Bastion logs)
 # ===============================================================================
 resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
-  name        = "${local.project}-${local.env}-adf-bastion-logs-to-s3"
+  name        = "${local.project}-${local.env}-adf-ec2-bastion-logs-to-s3"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -327,7 +327,7 @@ resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
     bucket_arn         = aws_s3_bucket.bastion.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "bastion-logs/"
+    prefix             = "ec2-bastion-logs/"
     compression_format = "GZIP"
   }
 
@@ -337,7 +337,7 @@ resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-adf-bastion-logs-to-s3"
+    Name = "${local.project}-${local.env}-adf-ec2-bastion-logs-to-s3"
   }
 }
 
