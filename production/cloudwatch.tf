@@ -882,7 +882,7 @@ data "aws_servicequotas_service_quota" "lambda_concurrent_executions" {
 # Amazon CloudWatch Metrics for Amazon EC2 Bastion
 # ================================================================================
 resource "aws_cloudwatch_metric_alarm" "bastion_cpu_high" {
-  alarm_name          = "${local.project}-${local.env}-cw-bastion-cpu-high-alarm"
+  alarm_name          = "${local.project}-${local.env}-cw-ec2-bastion-cpu-high-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -897,12 +897,12 @@ resource "aws_cloudwatch_metric_alarm" "bastion_cpu_high" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-bastion-cpu-high-alarm"
+    Name = "${local.project}-${local.env}-cw-ec2-bastion-cpu-high-alarm"
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "bastion_memory_high" {
-  alarm_name          = "${local.project}-${local.env}-cw-bastion-memory-high-alarm"
+  alarm_name          = "${local.project}-${local.env}-cw-ec2-bastion-memory-high-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "MemoryUtilization"
@@ -917,12 +917,12 @@ resource "aws_cloudwatch_metric_alarm" "bastion_memory_high" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-bastion-memory-high-alarm"
+    Name = "${local.project}-${local.env}-cw-ec2-bastion-memory-high-alarm"
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "bastion_status_check_failed" {
-  alarm_name          = "${local.project}-${local.env}-cw-bastion-status-check-failed-alarm"
+  alarm_name          = "${local.project}-${local.env}-cw-ec2-bastion-status-check-failed-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "StatusCheckFailed"
@@ -945,7 +945,7 @@ resource "aws_cloudwatch_metric_alarm" "bastion_status_check_failed" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-bastion-status-check-failed-alarm"
+    Name = "${local.project}-${local.env}-cw-ec2-bastion-status-check-failed-alarm"
   }
 }
 
@@ -955,18 +955,18 @@ resource "aws_cloudwatch_metric_alarm" "bastion_status_check_failed" {
 # ================================================================================
 resource "aws_cloudwatch_log_delivery_source" "cloudfront_access_logs" {
   provider     = aws.virginia
-  name         = "${local.project}-${local.env}-cw-cloudfront-access-logs-source"
+  name         = "${local.project}-${local.env}-cw-cf-access-logs-source"
   log_type     = "ACCESS_LOGS"
   resource_arn = aws_cloudfront_distribution.main.arn
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-cloudfront-access-logs-source"
+    Name = "${local.project}-${local.env}-cw-cf-access-logs-source"
   }
 }
 
 resource "aws_cloudwatch_log_delivery_destination" "cloudfront_access_logs" {
   provider                  = aws.virginia
-  name                      = "${local.project}-${local.env}-cw-cloudfront-access-logs-destination"
+  name                      = "${local.project}-${local.env}-cw-cf-access-logs-destination"
   delivery_destination_type = "S3"
   output_format             = "parquet"
 
@@ -975,7 +975,7 @@ resource "aws_cloudwatch_log_delivery_destination" "cloudfront_access_logs" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-cloudfront-access-logs-destination"
+    Name = "${local.project}-${local.env}-cw-cf-access-logs-destination"
   }
 }
 
@@ -989,6 +989,6 @@ resource "aws_cloudwatch_log_delivery" "cloudfront_access_logs" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-cloudfront-access-logs-delivery"
+    Name = "${local.project}-${local.env}-cw-cf-access-logs-delivery"
   }
 }
