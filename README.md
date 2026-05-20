@@ -74,11 +74,11 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 #### プロファイルの設定
 
-構築に利用するAWSアカウントのプロファイルの設定を、 `~/.aws/config` と `~/.aws/credentials` に設定します。
+構築に利用するAWSアカウントのプロファイルの設定を、`~/.aws/config`と`~/.aws/credentials`に設定します。
 
-なお、IAMユーザーには多要素認証(MFA)の設定を必須化しているので、Terraform実行時にもMFAが適用されるように `mfa_serial` の値を設定しないと、Terraformの実行ができなくなるので、注意が必要です。
+なお、IAMユーザーには多要素認証(MFA)の設定を必須化しているので、Terraform実行時にもMFAが適用されるように`mfa_serial`の値を設定しないと、Terraformの実行ができなくなるので、注意が必要です。
 
-`~/.aws/config`:
+##### `~/.aws/config`
 
 ```bash:~/.aws/config
 [profile terraform-web-template]
@@ -89,9 +89,9 @@ mfa_serial=arn:aws:iam::{aws-account}:mfa/{mfa-device-name}
 
 - {mfa-device-name}には、IAMコンソールのご自身のIAMユーザーの「多要素認証(MFA)」セクションに表示されている識別子の仮装MFAデバイス名を設定してください。
 
-`~/.aws/credentials`:
+##### `~/.aws/credentials`
 
-```bash:bash:~/.aws/credentials
+```bash:~/.aws/credentials
 [terraform-web-template]
 aws_access_key_id = ********************
 aws_secret_access_key = ********************
