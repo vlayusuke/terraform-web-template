@@ -3,6 +3,7 @@
 # ===============================================================================
 resource "aws_secretsmanager_secret" "dockerhub" {
   name                    = "${local.project}-${local.env}-smg-dockerhub-credentials"
+  description             = "Docker Hub credentials for ${local.project}-${local.env}"
   kms_key_id              = aws_kms_key.application.arn
   recovery_window_in_days = 7
 
