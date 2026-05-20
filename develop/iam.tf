@@ -1223,6 +1223,33 @@ data "aws_iam_policy_document" "eventbridge_scheduler_maintenance_ecs" {
       aws_lambda_function.lambda_execute_ecs_force_deployment.arn,
     ]
   }
+
+  statement {
+    sid    = "SNSPublish"
+    effect = "Allow"
+    actions = [
+      "sns:Publish",
+    ]
+    resources = [
+      aws_sns_topic.event_alarm.arn,
+    ]
+  }
+
+  statement {
+    sid    = "ADFAccess"
+    effect = "Allow"
+    actions = [
+      "firehose:PutRecord",
+      "firehose:PutRecordBatch",
+    ]
+    resources = [
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
+    ]
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "eventbridge_scheduler_maintenance_ecs" {
