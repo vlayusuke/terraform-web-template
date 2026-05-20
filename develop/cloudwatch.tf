@@ -921,6 +921,26 @@ resource "aws_cloudwatch_metric_alarm" "bastion_memory_high" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "bastion_disk_high" {
+  alarm_name          = "${local.project}-${local.env}-cw-ec2-bastion-disk-high-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  metric_name         = "DiskUtilization"
+  namespace           = "AWS/EC2"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 80
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    InstanceId = aws_instance.ec2_bastion.id
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-cw-ec2-bastion-disk-high-alarm"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "bastion_status_check_failed" {
   alarm_name          = "${local.project}-${local.env}-cw-ec2-bastion-status-check-failed-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"

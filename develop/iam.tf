@@ -746,8 +746,10 @@ data "aws_iam_policy_document" "rds_performance_insights" {
     sid    = "GetPerformanceData"
     effect = "Allow"
     actions = [
-      "rds:DescribeDBInstances",
       "rds:DescribeDBClusters",
+      "rds:DescribeDBInstances",
+      "rds:DescribeDBPerformanceInsights",
+      "rds:GetDBPerformanceInsights",
     ]
     resources = [
       "arn:aws:rds:${local.region}:${data.aws_caller_identity.current.account_id}:db:*",
@@ -1037,6 +1039,33 @@ data "aws_iam_policy_document" "lambda_schedule_ecs_maintenance" {
       ]
     }
   }
+
+  statement {
+    sid    = "SNSPublish"
+    effect = "Allow"
+    actions = [
+      "sns:Publish",
+    ]
+    resources = [
+      aws_sns_topic.event_alarm.arn,
+    ]
+  }
+
+  statement {
+    sid    = "ADFAccess"
+    effect = "Allow"
+    actions = [
+      "firehose:PutRecord",
+      "firehose:PutRecordBatch",
+    ]
+    resources = [
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
+    ]
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_schedule_ecs_maintenance" {
@@ -1110,6 +1139,33 @@ data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment" {
       aws_ecs_service.queue.arn,
     ]
   }
+
+  statement {
+    sid    = "SNSPublish"
+    effect = "Allow"
+    actions = [
+      "sns:Publish",
+    ]
+    resources = [
+      aws_sns_topic.event_alarm.arn,
+    ]
+  }
+
+  statement {
+    sid    = "ADFAccess"
+    effect = "Allow"
+    actions = [
+      "firehose:PutRecord",
+      "firehose:PutRecordBatch",
+    ]
+    resources = [
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
+    ]
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_execute_ecs_force_deployment" {
@@ -1165,6 +1221,33 @@ data "aws_iam_policy_document" "eventbridge_scheduler_maintenance_ecs" {
     ]
     resources = [
       aws_lambda_function.lambda_execute_ecs_force_deployment.arn,
+    ]
+  }
+
+  statement {
+    sid    = "SNSPublish"
+    effect = "Allow"
+    actions = [
+      "sns:Publish",
+    ]
+    resources = [
+      aws_sns_topic.event_alarm.arn,
+    ]
+  }
+
+  statement {
+    sid    = "ADFAccess"
+    effect = "Allow"
+    actions = [
+      "firehose:PutRecord",
+      "firehose:PutRecordBatch",
+    ]
+    resources = [
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
   }
 }
@@ -1772,7 +1855,7 @@ resource "aws_iam_policy" "cloudwatch_logs_to_amazon_data_firehose" {
 
 data "aws_iam_policy_document" "cloudwatch_logs_to_amazon_data_firehose" {
   statement {
-    sid    = "AmazonDataFirehoseAccess"
+    sid    = "ADFAccess"
     effect = "Allow"
     actions = [
       "firehose:PutRecord",
@@ -1816,16 +1899,16 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_logs_to_amazon_data_fireho
 # Amazon EC2 Instance Profile for Bastion
 # ================================================================================
 resource "aws_iam_instance_profile" "bastion" {
-  name = "${local.project}-${local.env}-iam-bastion-profile"
+  name = "${local.project}-${local.env}-iam-ec2-bastion-profile"
   role = aws_iam_role.bastion.name
 }
 
 resource "aws_iam_role" "bastion" {
-  name               = "${local.project}-${local.env}-iam-bastion-role"
+  name               = "${local.project}-${local.env}-iam-ec2-bastion-role"
   assume_role_policy = data.aws_iam_policy_document.bastion_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-bastion-role"
+    Name = "${local.project}-${local.env}-iam-ec2-bastion-role"
   }
 }
 
@@ -1847,11 +1930,11 @@ data "aws_iam_policy_document" "bastion_assume" {
 }
 
 resource "aws_iam_policy" "bastion" {
-  name   = "${local.project}-${local.env}-iam-bastion-policy"
+  name   = "${local.project}-${local.env}-iam-ec2-bastion-policy"
   policy = data.aws_iam_policy_document.bastion.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-bastion-policy"
+    Name = "${local.project}-${local.env}-iam-ec2-bastion-policy"
   }
 }
 
@@ -1860,7 +1943,8 @@ data "aws_iam_policy_document" "bastion" {
     sid    = "GetConfigFromS3"
     effect = "Allow"
     actions = [
-      "s3:Get*",
+      "s3:ListBucket",
+      "s3:GetObject",
     ]
     resources = [
       "${aws_s3_bucket.bastion.arn}/*",
@@ -1868,10 +1952,13 @@ data "aws_iam_policy_document" "bastion" {
   }
 
   statement {
-    sid    = "S3FullAccess"
+    sid    = "S3Access"
     effect = "Allow"
     actions = [
-      "s3:*",
+      "s3:ListAllMyBuckets",
+      "s3:ListBucket",
+      "s3:GetObject",
+      "s3:PutObject",
     ]
     resources = [
       "arn:aws:s3:::*",
@@ -1901,7 +1988,10 @@ data "aws_iam_policy_document" "bastion" {
       "cloudwatch:PutMetricData",
     ]
     resources = [
-      "*",
+      aws_cloudwatch_metric_alarm.bastion_cpu_high.arn,
+      aws_cloudwatch_metric_alarm.bastion_memory_high.arn,
+      aws_cloudwatch_metric_alarm.bastion_disk_high.arn,
+      aws_cloudwatch_metric_alarm.bastion_status_check_failed.arn,
     ]
   }
 }
