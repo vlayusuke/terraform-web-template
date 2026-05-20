@@ -114,7 +114,7 @@ resource "aws_rds_cluster_instance" "aurora" {
 resource "aws_rds_cluster_parameter_group" "aurora" {
   name        = "${local.project}-${local.env}-aurora-cluster-dbpg"
   family      = "aurora-mysql8.0"
-  description = "Amazon Aurora Cluster Parameter Group for ${local.project}"
+  description = "Amazon Aurora Cluster Parameter Group for ${local.project}-${local.env}"
 
   parameter {
     name  = "character_set_server"
@@ -178,7 +178,7 @@ resource "aws_rds_cluster_parameter_group" "aurora" {
 resource "aws_db_parameter_group" "aurora" {
   name        = "${local.project}-${local.env}-aurora-instance-dbpg"
   family      = "aurora-mysql8.0"
-  description = "Amazon Aurora DB Parameter Group for ${local.project}"
+  description = "Amazon Aurora DB Parameter Group for ${local.project}-${local.env}"
 
   parameter {
     name  = "max_connections"
