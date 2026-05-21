@@ -702,6 +702,11 @@ data "aws_iam_policy_document" "rds_iam_auth" {
   }
 }
 
+resource "aws_iam_role_policy_attachment" "rds_iam_auth" {
+  role       = aws_iam_role.rds_iam_auth.name
+  policy_arn = aws_iam_policy.rds_iam_auth.arn
+}
+
 
 # ===============================================================================
 # AWS IAM for Amazon Aurora Performance Insights
@@ -755,6 +760,11 @@ data "aws_iam_policy_document" "rds_performance_insights" {
       "arn:aws:rds:${local.region}:${data.aws_caller_identity.current.account_id}:db:*",
     ]
   }
+}
+
+resource "aws_iam_role_policy_attachment" "rds_performance_insights" {
+  role       = aws_iam_role.rds_performance_insights.name
+  policy_arn = aws_iam_policy.rds_performance_insights.arn
 }
 
 
