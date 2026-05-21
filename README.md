@@ -2,7 +2,7 @@
 
 このテンプレートは、Amazon Web ServicesとTerraformによる、Web3レイヤ構成のWebアプリケーション向けのリソースを構築するために使用するものです。AWS Fargateを用いたコンテナを用いてWebアプリケーションを構築することを想定しています。
 
-また、標準的な3ステージ構成としていますが、1つのAWSアカウントに対して、1つの環境を構築することを前提としています。
+また、標準的な3ステージ構成としており、1つのAWSアカウントに対して、1つの環境を構築することを前提としています。
 
 ## ディレクトリ構成
 
@@ -10,7 +10,7 @@
 
 ### `/audit`
 
-Web3レイヤ構成のWebアプリケーションのAWSリソースのうち、セキュリティ & コンプライアンス系のリソースと、それらに関連するリソースを集中管理して実装しています。
+Web3レイヤ構成のWebアプリケーション向けのAWSリソースのうち、セキュリティ & コンプライアンス系のリソースと、それらに関連するリソースを集中管理して実装しています。
 
 なお、1つのAWSアカウントに対して、1つの`/audit`ディレクトリ内で実装しているをセキュリティ & コンプライアンス系のAWSリソース構築することを想定して実装しています。
 
@@ -64,19 +64,17 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 ### コードを修正する際の注意点
 
-このリポジトリでは、GitHubユーザーに対してGPGキーによる認証を必須としています。この認証設定を有効にしていない場合はコミットやPull Requestの作成等が行えません。GPGキーによる認証を有効化する方法については、以下のGitHub公式ドキュメントを参考にしてください。
+このテンプレートを格納しているGitHubリポジトリでは、GitHubユーザーに対してGPGキーによる認証を必須としています。この認証設定を有効にしていない場合はコミットやPull Requestの作成等を行うことができません。GPGキーによる認証を有効化する方法については、以下のGitHub公式ドキュメントを参考にしてください。
 
 [新しいGPGキーを生成する - GitHubドキュメント](https://docs.github.com/ja/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
 
 ### 環境構築準備手順
 
-環境構築準備手順は以下の通りです。(macOS上での実行を前提としています)
+環境構築準備手順は以下の通りです。(macOS上でTerraformコマンドを実行することを前提としています)
 
 #### プロファイルの設定
 
-構築に利用するAWSアカウントのプロファイルの設定を、`~/.aws/config`と`~/.aws/credentials`に設定します。
-
-なお、IAMユーザーには多要素認証(MFA)の設定を必須化しているので、Terraform実行時にもMFAが適用されるように`mfa_serial`の値を設定しないと、Terraformの実行ができなくなるので、注意が必要です。
+環境構築に利用するAWSアカウントのプロファイルの設定を、`~/.aws/config`と`~/.aws/credentials`に設定します。
 
 ##### `~/.aws/config`
 
@@ -97,7 +95,7 @@ aws_access_key_id = ********************
 aws_secret_access_key = ********************
 ```
 
-なお、環境構築にあたっては、`aws-vault`の利用もご検討ください。
+なお、Terraformコマンド実行時に利用するクレデンシャル情報の管理については、`aws-vault`の利用もご検討ください。
 
 - [aws-vaultの使い方と仕組み](https://qiita.com/takuzo8679/items/6727f46b0aaf6df0a864)
 
@@ -125,7 +123,7 @@ backend "s3" {
 
 #### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
 
-Terraformや各種Providerのバージョンのアップデートを行なってから`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるproviderのチェックサムの値がずれてしまうことを防止するため、`terraform plan`コマンドを実行する前に、ターミナル上で以下のコマンドを実行してください。
+Terraformや各種Providerのバージョンのアップデートを行なうため、`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるProviderのチェックサムの値がずれてしまうことを防止する目的で、`terraform plan`コマンドを実行する前に、ターミナル上で必ず、以下のコマンドを実行してください。
 
 ```bash
 terraform providers lock \
