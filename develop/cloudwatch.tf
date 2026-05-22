@@ -109,11 +109,11 @@ resource "aws_cloudwatch_log_subscription_filter" "rds_to_firehose" {
 # Amazon CloudWatch Log group for Amazon ElastiCache
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "elasticache" {
-  name              = "/aws/elasticache/${aws_elasticache_replication_group.redis.replication_group_id}/redis"
+  name              = "/aws/elasticache/${local.project}-${local.env}-ec-redis-cluster"
   retention_in_days = local.retention_in_days
 
   tags = {
-    Name = "/aws/elasticache/${aws_elasticache_replication_group.redis.replication_group_id}/redis"
+    Name = "/aws/elasticache/${local.project}-${local.env}-ec-redis-cluster"
   }
 }
 
