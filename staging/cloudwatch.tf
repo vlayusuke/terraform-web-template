@@ -106,6 +106,39 @@ resource "aws_cloudwatch_log_subscription_filter" "rds_to_firehose" {
 
 
 # ===============================================================================
+# Amazon CloudWatch Log group for Amazon ElastiCache
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "elasticache" {
+  name              = "/aws/elasticache/${aws_elasticache_replication_group.redis.replication_group_id}/redis"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "/aws/elasticache/${aws_elasticache_replication_group.redis.replication_group_id}/redis"
+  }
+}
+
+resource "aws_cloudwatch_log_stream" "elasticache" {
+  name           = "${local.project}-${local.env}-cw-ec-redis-cwstream"
+  log_group_name = aws_cloudwatch_log_group.elasticache.name
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "elasticache_to_lambda" {
+  name            = "${local.project}-${local.env}-cw-ec-redis-to-lmd"
+  log_group_name  = aws_cloudwatch_log_group.elasticache.name
+  filter_pattern  = ""
+  destination_arn = aws_lambda_function.lambda_log_error_alert.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "elasticache_to_firehose" {
+  name            = "${local.project}-${local.env}-cw-ec-redis-to-adf"
+  log_group_name  = aws_cloudwatch_log_group.elasticache.name
+  filter_pattern  = ""
+  destination_arn = aws_kinesis_firehose_delivery_stream.elasticache_logs.arn
+  role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+}
+
+
+# ===============================================================================
 # Amazon CloudWatch Log group for AWS Lambda Functions
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "lambda_functions" {
