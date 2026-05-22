@@ -1,5 +1,5 @@
 # ===============================================================================
-# Amazon Data Firehose Stream (Amazon Aurora log)
+# Amazon Data Firehose Stream (Amazon Aurora logs)
 # ===============================================================================
 resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
   name        = "${local.project}-${local.env}-adf-aurora-logs-audit-to-s3"
@@ -113,6 +113,33 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" 
 
   tags = {
     Name = "${local.project}-${local.env}-adf-aurora-logs-auth-error-to-s3"
+  }
+}
+
+
+# ===============================================================================
+# Amazon Data Firehose Stream (Amazon ElastiCache logs)
+# ===============================================================================
+resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
+  name        = "${local.project}-${local.env}-adf-ec-logs-redis-to-s3"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.amazon_data_firehose.arn
+    bucket_arn         = aws_s3_bucket.elasticache_logs.arn
+    buffering_size     = 64
+    buffering_interval = 300
+    prefix             = "/"
+    compression_format = "GZIP"
+  }
+
+  server_side_encryption {
+    enabled  = true
+    key_type = "AWS_OWNED_CMK"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-adf-ec-logs-redis-to-s3"
   }
 }
 
