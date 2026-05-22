@@ -159,13 +159,3 @@ terraform providers lock \
 ## ライセンス
 
 このテンプレートは、GPL3のもとでライセンスされています。詳細は、[LICENSE](./LICENSE)を参照してください。
-
-## 参考: このテンプレートの実装環境
-
-- MacBook Air M2 (2022) 16GB Memory/512GB SSD
-- macOS Tahoe 26.5
-- Homebrew 5.1.11
-- Terraform CLI 1.15.3
-- AWS CLI 2.34.47
-- Python 3.14.5
-- Visual Studio Code
