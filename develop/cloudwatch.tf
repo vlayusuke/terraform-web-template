@@ -929,6 +929,14 @@ resource "aws_cloudwatch_metric_alarm" "bastion_cpu_high" {
     InstanceId = aws_instance.ec2_bastion.id
   }
 
+  alarm_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  ok_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-cw-ec2-bastion-cpu-high-alarm"
   }
@@ -949,6 +957,14 @@ resource "aws_cloudwatch_metric_alarm" "bastion_memory_high" {
     InstanceId = aws_instance.ec2_bastion.id
   }
 
+  alarm_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  ok_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-cw-ec2-bastion-memory-high-alarm"
   }
@@ -968,6 +984,14 @@ resource "aws_cloudwatch_metric_alarm" "bastion_disk_high" {
   dimensions = {
     InstanceId = aws_instance.ec2_bastion.id
   }
+
+  alarm_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  ok_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-cw-ec2-bastion-disk-high-alarm"
