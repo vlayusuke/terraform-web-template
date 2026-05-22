@@ -18,6 +18,13 @@ resource "aws_elasticache_replication_group" "redis" {
   snapshot_window            = "15:00-16:00"
   notification_topic_arn     = aws_sns_topic.event_notification.arn
 
+  log_delivery_configuration {
+    log_format       = "json"
+    log_type         = "engine-log"
+    destination_type = "cloudwatch-logs"
+    destination      = aws_cloudwatch_log_group.elasticache.name
+  }
+
   security_group_ids = [
     aws_security_group.redis.id,
   ]
