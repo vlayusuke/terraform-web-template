@@ -1893,12 +1893,12 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_amazon_data_firehose" {
       [for key in local.app_log_group : aws_cloudwatch_log_group.app[key].arn],
       [for key in local.nginx_log_group : aws_cloudwatch_log_group.nginx[key].arn],
       [for key in local.enabled_cloudwatch_logs_exports : aws_cloudwatch_log_group.rds[key].arn],
-      [aws_cloudwatch_log_stream.elasticache.arn],
+      [aws_cloudwatch_log_group.elasticache.arn],
       [for key in local.lambda_functions : aws_cloudwatch_log_group.lambda_functions[key].arn],
-      [aws_cloudwatch_log_stream.ses.arn],
-      [aws_cloudwatch_log_stream.sns.arn],
-      [aws_cloudwatch_log_stream.adf.arn],
-      [aws_cloudwatch_log_stream.bastion.arn],
+      [aws_cloudwatch_log_group.ses.arn],
+      [aws_cloudwatch_log_group.sns.arn],
+      [aws_cloudwatch_log_group.adf.arn],
+      [aws_cloudwatch_log_group.bastion.arn],
     )
   }
 }
