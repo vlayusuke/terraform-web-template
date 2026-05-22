@@ -26,7 +26,7 @@ Web3レイヤ構成のWebアプリケーション向けのステージング環�
 
 Web3レイヤ構成のWebアプリケーション向けの開発環境を構築するためのAWSリソースを実装しています。
 
-## Terraform & 各種Provider & 各種runtimeのVersion
+## Terraform & 各種Provider & PythonのruntimeのVersion
 
 このテンプレートで使用している、Terraform、各種Provider及びPythonのruntimeのVersionは、以下の通りです。
 
@@ -53,9 +53,9 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 | Environmtnt | Resource | Notice           |
 | :---------- | -------: | :--------------- |
-| develop     |      533 | N/A              |
-| staging     |      533 | N/A              |
-| production  |      533 | N/A              |
+| develop     |      548 | N/A              |
+| staging     |      548 | N/A              |
+| production  |      548 | N/A              |
 | audit       |      150 | Each AWS account |
 
 ## 環境構築をする際の注意事項
