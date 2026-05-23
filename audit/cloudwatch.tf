@@ -10,8 +10,13 @@ resource "aws_cloudwatch_log_group" "root_login_monitoring" {
   }
 }
 
+resource "aws_cloudwatch_log_stream" "lambda_functions" {
+  name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.root_login_monitoring.function_name}-cwstream"
+  log_group_name = aws_cloudwatch_log_group.root_login_monitoring.name
+}
+
 resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring_lambda" {
-  name            = "${local.project}-${local.env}-cw-root-login-monitoring-lambda"
+  name            = "${local.project}-${local.env}-cw-lmd-root-login-monitoring-to-lmd-audit"
   log_group_name  = aws_cloudwatch_log_group.root_login_monitoring.name
   filter_pattern  = "{ $.responseElements.ConsoleLogin = \"Success\" && $.userIdentity.type = \"Root\" }"
   destination_arn = aws_lambda_function.root_login_monitoring.arn
@@ -30,8 +35,13 @@ resource "aws_cloudwatch_log_group" "lambda_error" {
   }
 }
 
+resource "aws_cloudwatch_log_stream" "lambda_functions" {
+  name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.lambda_error.function_name}-cwstream"
+  log_group_name = aws_cloudwatch_log_group.lambda_error.name
+}
+
 resource "aws_cloudwatch_log_subscription_filter" "lambda_error" {
-  name            = "${local.project}-${local.env}-cw-lmd-error-audit"
+  name            = "${local.project}-${local.env}-cw-lmd-error-to-lmd-audit"
   log_group_name  = aws_cloudwatch_log_group.lambda_error.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_error.arn
@@ -50,8 +60,13 @@ resource "aws_cloudwatch_log_group" "security_notice" {
   }
 }
 
+resource "aws_cloudwatch_log_stream" "lambda_functions" {
+  name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.security_notice.function_name}-cwstream"
+  log_group_name = aws_cloudwatch_log_group.security_notice.name
+}
+
 resource "aws_cloudwatch_log_subscription_filter" "security_notice" {
-  name            = "${local.project}-${local.env}-cw-lmd-security-notice-audit"
+  name            = "${local.project}-${local.env}-cw-lmd-security-notice-to-lmd-audit"
   log_group_name  = aws_cloudwatch_log_group.security_notice.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.security_notice.arn
@@ -70,8 +85,13 @@ resource "aws_cloudwatch_log_group" "lambda_log_error_alert_audit" {
   }
 }
 
+resource "aws_cloudwatch_log_stream" "lambda_functions" {
+  name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.lambda_log_error_alert_audit.function_name}-cwstream"
+  log_group_name = aws_cloudwatch_log_group.lambda_log_error_alert_audit.name
+}
+
 resource "aws_cloudwatch_log_subscription_filter" "lambda_log_error_alert_audit" {
-  name            = "${local.project}-${local.env}-cw-lmd-log-error-alert-audit"
+  name            = "${local.project}-${local.env}-cw-lmd-log-error-alert-to-lmd-audit"
   log_group_name  = aws_cloudwatch_log_group.lambda_log_error_alert_audit.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
@@ -79,7 +99,7 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_log_error_alert_audit"
 
 
 # ===============================================================================
-# Amazon CloudWatch Log group for AWS CloudTrail
+# Amazon CloudWatch Log group for AWS CloudTrail (ap-northeast-1)
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "cloudtrail" {
   name              = "${local.project}-${local.env}-cw-ct-cwlog"
@@ -100,6 +120,73 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudtrail" {
   log_group_name  = aws_cloudwatch_log_group.cloudtrail.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
+}
+
+
+# ===============================================================================
+# Amazon CloudWatch Log group for AWS CloudTrail (ap-northeast-3)
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "cloudtrail_osaka" {
+  provider          = aws.osaka1
+  name              = "${local.project}-${local.env}-cw-ct-cwlog-osaka"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "${local.project}-${local.env}-cw-ct-cwlog-osaka"
+  }
+}
+
+
+# ===============================================================================
+# Amazon CloudWatch Log group for AWS CloudTrail (us-east-1)
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "cloudtrail_global" {
+  provider          = aws.virginia
+  name              = "${local.project}-${local.env}-cw-ct-cwlog-global"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "${local.project}-${local.env}-cw-ct-cwlog-global"
+  }
+}
+
+
+# ===============================================================================
+# Amazon CloudWatch Log group for AWS Config (ap-northeast-1)
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "config" {
+  name              = "${local.project}-${local.env}-cw-cfg-cwlog"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "${local.project}-${local.env}-cw-cfg-cwlog"
+  }
+}
+
+resource "aws_cloudwatch_log_stream" "config" {
+  name           = "${local.project}-${local.env}-cw-cfg-cwstream"
+  log_group_name = aws_cloudwatch_log_group.config.name
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "config" {
+  name            = "${local.project}-${local.env}-cw-cfg-subscription-filter"
+  log_group_name  = aws_cloudwatch_log_group.config.name
+  filter_pattern  = ""
+  destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
+}
+
+
+# ===============================================================================
+# Amazon CloudWatch Log group for AWS Config (us-east-1)
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "config_global" {
+  provider          = aws.virginia
+  name              = "${local.project}-${local.env}-cw-cfg-cwlog-global"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "${local.project}-${local.env}-cw-cfg-cwlog-global"
+  }
 }
 
 
