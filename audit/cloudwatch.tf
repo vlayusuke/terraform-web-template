@@ -10,7 +10,7 @@ resource "aws_cloudwatch_log_group" "root_login_monitoring" {
   }
 }
 
-resource "aws_cloudwatch_log_stream" "lambda_functions" {
+resource "aws_cloudwatch_log_stream" "root_login_monitoring" {
   name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.root_login_monitoring.function_name}-cwstream"
   log_group_name = aws_cloudwatch_log_group.root_login_monitoring.name
 }
@@ -35,7 +35,7 @@ resource "aws_cloudwatch_log_group" "lambda_error" {
   }
 }
 
-resource "aws_cloudwatch_log_stream" "lambda_functions" {
+resource "aws_cloudwatch_log_stream" "lambda_error" {
   name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.lambda_error.function_name}-cwstream"
   log_group_name = aws_cloudwatch_log_group.lambda_error.name
 }
@@ -60,7 +60,7 @@ resource "aws_cloudwatch_log_group" "security_notice" {
   }
 }
 
-resource "aws_cloudwatch_log_stream" "lambda_functions" {
+resource "aws_cloudwatch_log_stream" "security_notice" {
   name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.security_notice.function_name}-cwstream"
   log_group_name = aws_cloudwatch_log_group.security_notice.name
 }
@@ -85,7 +85,7 @@ resource "aws_cloudwatch_log_group" "lambda_log_error_alert_audit" {
   }
 }
 
-resource "aws_cloudwatch_log_stream" "lambda_functions" {
+resource "aws_cloudwatch_log_stream" "lambda_log_error_alert_audit" {
   name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.lambda_log_error_alert_audit.function_name}-cwstream"
   log_group_name = aws_cloudwatch_log_group.lambda_log_error_alert_audit.name
 }
@@ -127,7 +127,7 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudtrail" {
 # Amazon CloudWatch Log group for AWS CloudTrail (ap-northeast-3)
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "cloudtrail_osaka" {
-  provider          = aws.osaka1
+  provider          = aws.osaka
   name              = "${local.project}-${local.env}-cw-ct-cwlog-osaka"
   retention_in_days = local.retention_in_days
 
