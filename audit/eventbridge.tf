@@ -83,18 +83,23 @@ resource "aws_cloudwatch_event_rule" "cloudtrail" {
     ],
     "detail" : {
       "eventSource" : [
+        "signin.amazonaws.com",
         "monitoring.amazonaws.com",
-        "log.amazonaws.com",
-        "ec2.amazonaws.com",
-        "elasticloadbalancing.amazonaws.com",
         "iam.amazonaws.com",
+        "ec2.amazonaws.com",
+        "ecr.amazonaws.com",
+        "ecs.amazonaws.com",
+        "ecs-tasks.amazonaws.com",
+        "elasticloadbalancing.amazonaws.com",
+        "elasticache.amazonaws.com",
+        "rds.amazonaws.com",
         "lambda.amazonaws.com",
         "s3.amazonaws.com",
         "ses.amazonaws.com",
         "sns.amazonaws.com",
-        "elasticache.amazonaws.com",
-        "rds.amazonaws.com",
-        "signin.amazonaws.com"
+        "ssm.amazonaws.com",
+        "secretsmanager.amazonaws.com",
+        "log.amazonaws.com",
       ]
     }
   })
