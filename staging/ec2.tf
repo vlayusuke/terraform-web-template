@@ -59,9 +59,8 @@ resource "aws_instance" "ec2_bastion" {
   }
 
   tags = {
-    Name      = "${local.project}-${local.env}-ec2-bastion"
-    inspector = "true"
-    Backup    = "true"
+    Name   = "${local.project}-${local.env}-ec2-bastion"
+    Backup = "true"
   }
 }
 
