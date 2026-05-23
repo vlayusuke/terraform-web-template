@@ -1,5 +1,5 @@
 # ===============================================================================
-# Amazon ECR for Nginx (Base Image)
+# Amazon ECR Repository for Nginx (Base Image)
 # ===============================================================================
 resource "aws_ecr_repository" "nginx_base" {
   name                 = "${local.project}/${local.env}/base/nginx"
@@ -10,8 +10,7 @@ resource "aws_ecr_repository" "nginx_base" {
   }
 
   tags = {
-    Name      = "${local.project}-${local.env}-ecr-nginx-base"
-    inspector = "true"
+    Name = "${local.project}-${local.env}-ecr-nginx-base"
   }
 }
 
@@ -38,7 +37,7 @@ resource "aws_ecr_lifecycle_policy" "nginx_base" {
 
 
 # ===============================================================================
-# Amazon ECR for App (Base Image)
+# Amazon ECR Repository for App (Base Image)
 # ===============================================================================
 resource "aws_ecr_repository" "app_base" {
   name                 = "${local.project}/${local.env}/base/app"
@@ -49,8 +48,7 @@ resource "aws_ecr_repository" "app_base" {
   }
 
   tags = {
-    Name      = "${local.project}-${local.env}-ecr-app-base"
-    inspector = "true"
+    Name = "${local.project}-${local.env}-ecr-app-base"
   }
 }
 
@@ -77,7 +75,7 @@ resource "aws_ecr_lifecycle_policy" "app_base" {
 
 
 # ===============================================================================
-# Amazon ECR for Nginx
+# Amazon ECR Repository for Nginx
 # ===============================================================================
 resource "aws_ecr_repository" "nginx" {
   name                 = "${local.project}/${local.env}/nginx"
@@ -88,8 +86,7 @@ resource "aws_ecr_repository" "nginx" {
   }
 
   tags = {
-    Name      = "${local.project}-${local.env}-ecr-nginx"
-    inspector = "true"
+    Name = "${local.project}-${local.env}-ecr-nginx"
   }
 }
 
@@ -116,7 +113,7 @@ resource "aws_ecr_lifecycle_policy" "nginx" {
 
 
 # ===============================================================================
-# Amazon ECR for App
+# Amazon ECR Repository for App
 # ===============================================================================
 resource "aws_ecr_repository" "app" {
   name                 = "${local.project}/${local.env}/app"
@@ -127,8 +124,7 @@ resource "aws_ecr_repository" "app" {
   }
 
   tags = {
-    Name      = "${local.project}-${local.env}-ecr-app"
-    inspector = "true"
+    Name = "${local.project}-${local.env}-ecr-app"
   }
 }
 
@@ -155,7 +151,7 @@ resource "aws_ecr_lifecycle_policy" "app" {
 
 
 # ===============================================================================
-# Amazon ECR for Fluent Bit
+# Amazon ECR Repository for Fluent Bit
 # ===============================================================================
 resource "aws_ecr_repository" "fluent_bit" {
   name                 = "${local.project}/${local.env}/fluent-bit"
@@ -166,8 +162,7 @@ resource "aws_ecr_repository" "fluent_bit" {
   }
 
   tags = {
-    Name      = "${local.project}-${local.env}-ecr-fluent-bit"
-    inspector = "true"
+    Name = "${local.project}-${local.env}-ecr-fluent-bit"
   }
 }
 
