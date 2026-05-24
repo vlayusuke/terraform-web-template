@@ -1,5 +1,5 @@
-
-# Amazon CloudWatch Log group for Login root monitoring
+# ===============================================================================
+# Amazon CloudWatch Log group for Login root monitoring (ap-northeast-1)
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "root_login_monitoring" {
   name              = "/aws/lambda/${aws_lambda_function.root_login_monitoring.function_name}-cwlog"
@@ -20,6 +20,34 @@ resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring_lambda"
   log_group_name  = aws_cloudwatch_log_group.root_login_monitoring.name
   filter_pattern  = "{ $.responseElements.ConsoleLogin = \"Success\" && $.userIdentity.type = \"Root\" }"
   destination_arn = aws_lambda_function.root_login_monitoring.arn
+}
+
+
+# ===============================================================================
+# Amazon CloudWatch Log group for Login root monitoring (us-east-1)
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "root_login_monitoring_global" {
+  provider          = aws.virginia
+  name              = "/aws/lambda/${aws_lambda_function.root_login_monitoring_global.function_name}-cwlog-global"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "/aws/lambda/${aws_lambda_function.root_login_monitoring_global.function_name}-cwlog-global"
+  }
+}
+
+resource "aws_cloudwatch_log_stream" "root_login_monitoring_global" {
+  provider       = aws.virginia
+  name           = "${local.project}-${local.env}-cw-lmd-${aws_lambda_function.root_login_monitoring_global.function_name}-cwstream-global"
+  log_group_name = aws_cloudwatch_log_group.root_login_monitoring_global.name
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring_lambda_global" {
+  provider        = aws.virginia
+  name            = "${local.project}-${local.env}-cw-lmd-root-login-monitoring-to-lmd-audit-global"
+  log_group_name  = aws_cloudwatch_log_group.root_login_monitoring_global.name
+  filter_pattern  = "{ $.responseElements.ConsoleLogin = \"Success\" && $.userIdentity.type = \"Root\" }"
+  destination_arn = aws_lambda_function.root_login_monitoring_global.arn
 }
 
 
@@ -177,6 +205,20 @@ resource "aws_cloudwatch_log_subscription_filter" "config" {
 
 
 # ===============================================================================
+# Amazon CloudWatch Log group for AWS Config (ap-northeast-3)
+# ===============================================================================
+resource "aws_cloudwatch_log_group" "config_osaka" {
+  provider          = aws.osaka
+  name              = "${local.project}-${local.env}-cw-cfg-cwlog-osaka"
+  retention_in_days = local.retention_in_days
+
+  tags = {
+    Name = "${local.project}-${local.env}-cw-cfg-cwlog-osaka"
+  }
+}
+
+
+# ===============================================================================
 # Amazon CloudWatch Log group for AWS Config (us-east-1)
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "config_global" {
@@ -219,7 +261,7 @@ resource "aws_cloudwatch_log_subscription_filter" "sns" {
 # Amazon CloudWatch Metrics for AWS Lambda
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
-  alarm_name          = "${local.project}-${local.env}-cw-lambda-errors-alarm"
+  alarm_name          = "${local.project}-${local.env}-cw-lmd-errors-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Errors"
@@ -238,12 +280,12 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-lambda-errors-alarm"
+    Name = "${local.project}-${local.env}-cw-lmd-errors-alarm"
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
-  alarm_name          = "${local.project}-${local.env}-cw-lambda-throttles-alarm"
+  alarm_name          = "${local.project}-${local.env}-cw-lmd-throttles-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Throttles"
@@ -262,12 +304,12 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-lambda-throttles-alarm"
+    Name = "${local.project}-${local.env}-cw-lmd-throttles-alarm"
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
-  alarm_name          = "${local.project}-${local.env}-cw-lambda-concurrent-executions-alarm"
+  alarm_name          = "${local.project}-${local.env}-cw-lmd-concurrent-executions-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "ConcurrentExecutions"
@@ -286,7 +328,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cw-lambda-concurrent-executions-alarm"
+    Name = "${local.project}-${local.env}-cw-lmd-concurrent-executions-alarm"
   }
 }
 
