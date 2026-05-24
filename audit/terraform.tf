@@ -5,7 +5,7 @@ terraform {
   required_version = ">= 1.10.0, < 2.0.0"
 
   backend "s3" {
-    bucket  = "v-terraform-web-template-aud-634989770450"
+    # bucket is supplied at terraform init time with -backend-config
     key     = "state/audit.terraform.tfstate"
     region  = "ap-northeast-1"
     profile = "terraform-template"
