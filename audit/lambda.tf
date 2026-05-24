@@ -2,7 +2,7 @@
 # AWS Lambda Function for CloudWatch log error alert audit
 # ===============================================================================
 resource "aws_lambda_function" "lambda_log_error_alert_audit" {
-  function_name    = "lmd-cw-log-error-alert-audit"
+  function_name    = "aud-lmd-cw-log-error-alert"
   role             = aws_iam_role.lambda_cloudwatch_audit.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.log_error_alert_audit.output_path
@@ -48,7 +48,7 @@ resource "aws_lambda_permission" "lambda_cloudwatch_audit" {
 
 
 # ===============================================================================
-# AWS Lambda Function for Root Login
+# AWS Lambda Function for Root Login (ap-northeast-1)
 # ===============================================================================
 resource "aws_lambda_function" "root_login_monitoring" {
   function_name    = "aud-lmd-root-login-monitoring"
@@ -94,6 +94,58 @@ resource "aws_lambda_permission" "root_login_monitoring" {
   function_name = aws_lambda_function.root_login_monitoring.function_name
   principal     = "logs.${local.region}.amazonaws.com"
   source_arn    = "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:*"
+}
+
+
+# ===============================================================================
+# AWS Lambda Function for Root Login (us-east-1)
+# ===============================================================================
+resource "aws_lambda_function" "root_login_monitoring_global" {
+  provider         = aws.virginia
+  function_name    = "aud-lmd-root-login-monitoring-global"
+  role             = aws_iam_role.lambda_root_login_monitoring.arn
+  handler          = "lambda_function.lambda_handler"
+  filename         = data.archive_file.root_login_monitoring_global.output_path
+  source_code_hash = data.archive_file.root_login_monitoring_global.output_base64sha256
+  runtime          = "python3.14"
+  timeout          = 10
+  memory_size      = 128
+
+  architectures = [
+    "arm64",
+  ]
+
+  environment {
+    variables = {
+      account_name = local.project
+      hook_url     = var.audit_hook_url
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      source_code_hash,
+    ]
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-lmd-root-login-monitoring-global"
+  }
+}
+
+data "archive_file" "root_login_monitoring_global" {
+  type        = "zip"
+  source_dir  = "${path.cwd}/files/lambda/root-login-monitoring"
+  output_path = "${path.module}/artifacts/aud-lmd-root-login-monitoring-global.zip"
+}
+
+resource "aws_lambda_permission" "root_login_monitoring_global" {
+  provider      = aws.virginia
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.root_login_monitoring_global.function_name
+  principal     = "logs.${local.global_region}.amazonaws.com"
+  source_arn    = "arn:aws:logs:${local.global_region}:${data.aws_caller_identity.current.account_id}:log-group:*"
 }
 
 

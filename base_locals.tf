@@ -18,7 +18,8 @@ locals {
   root_state_file        = "terraform.tfstate"
 
   # region
-  region = "ap-northeast-1"
+  region        = "ap-northeast-1"
+  global_region = "us-east-1"
 
   # availability zones
   availability_zones = [
