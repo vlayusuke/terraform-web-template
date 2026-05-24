@@ -152,15 +152,15 @@ terraform providers lock \
 
 ### 本番環境
 
-![本番環境](./terraform-web-template-v1.0-en-prd.svg)
+![本番環境](./terraform-web-template-v1.1-en-prd.svg)
 
 ### ステージング環境
 
-![ステージング環境](./terraform-web-template-v1.0-en-stg.svg)
+![ステージング環境](./terraform-web-template-v1.1-en-stg.svg)
 
 ### 開発環境
 
-![開発環境](./terraform-web-template-v1.0-en-dev.svg)
+![開発環境](./terraform-web-template-v1.1-en-dev.svg)
 
 ## リリース履歴
 
