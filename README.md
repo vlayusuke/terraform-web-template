@@ -106,15 +106,25 @@ Terraformコマンドを実行する前に、AWS CLIやTerraform CLIなどの必
 ```hcl:terraform.tf
 backend "s3" {
   bucket  = "example-profile-name"
-  key     = "key/example-environment.terraform.tfstate
+  key     = "key/example-environment.terraform.tfstate"
   region  = "ap-northeast-1"
   profile = "example-profile-name"
-...
-
 }
 ```
 
 に指定されている`bucket`ディレクティブと同じ名称のS3バケットを作成します。さらに、作成したS3バケットには、`key`プレフィックスを作成してください。Terraformの実行時には、作成した`key`プレフィックス内に`example-environment.terraform.tfstate`ファイルが作成されます。
+
+> 注意: `audit/terraform.tf`のバックエンド設定では、Terraformの`data`や`output`を使って`bucket`名を動的に解決できません。`terraform init`コマンド実行時に`-backend-config="bucket=..."`引数を用いて、明示的にS3バケット名を指定してください。
+
+バックエンド設定を動的に扱う例:
+
+```bash
+terraform init \
+  -backend-config="bucket=v-terraform-web-template-aud-$(aws sts get-caller-identity --query Account --output text)" \
+  -backend-config="region=ap-northeast-1" \
+  -backend-config="profile=terraform-template" \
+  -backend-config="key=state/audit.terraform.tfstate"
+```
 
 #### Terraformコマンドを実行する際の注意点
 
