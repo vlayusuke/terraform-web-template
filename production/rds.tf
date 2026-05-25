@@ -4,6 +4,7 @@
 resource "aws_rds_cluster" "aurora" {
   cluster_identifier                    = "${local.project}-${local.env}-aurora-cluster"
   engine                                = "aurora-mysql"
+  engine_mode                           = "provisioned"
   engine_version                        = local.aurora_mysql_version
   port                                  = 3306
   database_name                         = local.database_name
@@ -13,11 +14,13 @@ resource "aws_rds_cluster" "aurora" {
   backup_retention_period               = 14
   preferred_backup_window               = "20:00-21:00"
   preferred_maintenance_window          = "sat:20:00-sat:21:00"
+  database_insights_mode                = "standard"
   performance_insights_enabled          = true
   performance_insights_kms_key_id       = aws_kms_key.aurora.arn
   performance_insights_retention_period = 7
   db_subnet_group_name                  = aws_db_subnet_group.aurora.id
   db_cluster_parameter_group_name       = aws_rds_cluster_parameter_group.aurora.name
+  backtrack_window                      = 86400
   final_snapshot_identifier             = "${local.project}-${local.env}-aurora-cluster-snapshot"
   deletion_protection                   = true
   storage_encrypted                     = true
@@ -45,6 +48,7 @@ resource "aws_rds_cluster" "aurora" {
   }
 
   depends_on = [
+    aws_kms_key.aurora,
     aws_ssm_parameter.mysql_password,
     aws_rds_cluster_parameter_group.aurora,
   ]
@@ -55,8 +59,14 @@ resource "aws_rds_cluster" "aurora" {
   }
 }
 
+
+# ===============================================================================
+# Subnet Group
+# ===============================================================================
 resource "aws_db_subnet_group" "aurora" {
-  name = "${local.project}-${local.env}-aurora-cluster-subg"
+  name        = "${local.project}-${local.env}-aurora-cluster-subg"
+  description = "Subnet group for ${local.project}-${local.env} Amazon Aurora Cluster"
+
   subnet_ids = [
     for subnet in aws_subnet.main_private :
     subnet.id
@@ -82,12 +92,15 @@ resource "aws_rds_cluster_instance" "aurora" {
   db_parameter_group_name               = aws_db_parameter_group.aurora.name
   publicly_accessible                   = false
   auto_minor_version_upgrade            = true
+  preferred_backup_window               = aws_rds_cluster.aurora.preferred_backup_window
+  preferred_maintenance_window          = aws_rds_cluster.aurora.preferred_maintenance_window
   performance_insights_enabled          = true
   performance_insights_kms_key_id       = aws_kms_key.aurora.arn
   performance_insights_retention_period = 7
   ca_cert_identifier                    = "rds-ca-rsa2048-g1"
   promotion_tier                        = count.index
   apply_immediately                     = true
+  force_destroy                         = true
 
   lifecycle {
     create_before_destroy = true
@@ -97,6 +110,7 @@ resource "aws_rds_cluster_instance" "aurora" {
   }
 
   depends_on = [
+    aws_kms_key.aurora,
     aws_rds_cluster.aurora,
     aws_db_parameter_group.aurora,
   ]
