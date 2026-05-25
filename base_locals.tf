@@ -11,14 +11,15 @@ locals {
   email   = "vlayusuke@gmail.com"
 
   # state files
-  production_state_file  = "production.terraform.tfstate"
-  staging_state_file     = "staging.terraform.tfstate"
-  development_state_file = "development.terraform.tfstate"
-  audit_state_file       = "audit.terraform.tfstate"
-  root_state_file        = "terraform.tfstate"
+  production_state_file = "production.terraform.tfstate"
+  staging_state_file    = "staging.terraform.tfstate"
+  develop_state_file    = "develop.terraform.tfstate"
+  audit_state_file      = "audit.terraform.tfstate"
+  root_state_file       = "terraform.tfstate"
 
   # region
   region        = "ap-northeast-1"
+  dr_region     = "ap-northeast-3"
   global_region = "us-east-1"
 
   # availability zones
