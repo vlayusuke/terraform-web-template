@@ -1,8 +1,8 @@
 # ===============================================================================
 # Amazon SNS Topic for Audit Event Notification
 # ===============================================================================
-resource "aws_sns_topic" "event_notification_audit" {
-  name = "${local.project}-${local.env}-sns-event-notification-audit"
+resource "aws_sns_topic" "event_notifications_audit" {
+  name = "${local.project}-${local.env}-sns-event-notifications-audit"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -20,17 +20,17 @@ resource "aws_sns_topic" "event_notification_audit" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-sns-event-notification-audit"
+    Name = "${local.project}-${local.env}-sns-event-notifications-audit"
   }
 }
 
-resource "aws_sns_topic_policy" "event_notification_audit" {
-  arn = aws_sns_topic.event_notification_audit.arn
+resource "aws_sns_topic_policy" "event_notifications_audit" {
+  arn = aws_sns_topic.event_notifications_audit.arn
 
-  policy = data.aws_iam_policy_document.event_notification_audit.json
+  policy = data.aws_iam_policy_document.event_notifications_audit.json
 }
 
-data "aws_iam_policy_document" "event_notification_audit" {
+data "aws_iam_policy_document" "event_notifications_audit" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "event_notification_audit" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
 
     condition {
@@ -71,7 +71,7 @@ data "aws_iam_policy_document" "event_notification_audit" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
     principals {
       type = "Service"
