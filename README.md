@@ -56,7 +56,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 | develop     |      548 | N/A              |
 | staging     |      548 | N/A              |
 | production  |      548 | N/A              |
-| audit       |      160 | Each AWS account |
+| audit       |      166 | Each AWS account |
 
 ## 環境構築をする際の注意事項
 
@@ -120,7 +120,7 @@ backend "s3" {
 
 ```bash
 terraform init \
-  -backend-config="bucket=v-terraform-web-template-aud-$(aws sts get-caller-identity --query Account --output text)" \
+  -backend-config="bucket=v-terraform-web-template-aud-$(aws sts get-caller-identity --profile terraform-template --query Account --output text)" \
   -backend-config="region=ap-northeast-1" \
   -backend-config="profile=terraform-template" \
   -backend-config="key=state/audit.terraform.tfstate"
