@@ -53,9 +53,9 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 | Environmtnt | Resource | Notice           |
 | :---------- | -------: | :--------------- |
-| develop     |      548 | N/A              |
-| staging     |      548 | N/A              |
-| production  |      548 | N/A              |
+| develop     |      555 | N/A              |
+| staging     |      555 | N/A              |
+| production  |      555 | N/A              |
 | audit       |      166 | Each AWS account |
 
 ## 環境構築をする際の注意事項
