@@ -31,7 +31,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 このテンプレートで使用している、Terraform、各種Provider及びPythonのruntimeのVersionは、以下の通りです。
 
 - [hashicorp/aws Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest)
-- [hachicorp/awscc Terraform Registry](https://registry.terraform.io/providers/hashicorp/awscc/latest)
+- [hashicorp/awscc Terraform Registry](https://registry.terraform.io/providers/hashicorp/awscc/latest)
 
 ### Terraformや各種ProviderのVersion
 
@@ -64,17 +64,17 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 ### コードを修正する際の注意点
 
-このテンプレートを格納しているGitHubリポジトリでは、GitHubユーザーに対してGPGキーによる認証を必須としています。この認証設定を有効にしていない場合はコミットやPull Requestの作成等を行うことができません。GPGキーによる認証を有効化する方法については、以下のGitHub公式ドキュメントを参考にしてください。
+このテンプレートを格納しているGitHubリポジトリでは、GitHubユーザーに対してGPGキーによる認証を必須としています。この認証設定を有効にしていない場合はコミットやPull Requestの作成等を行うことができません。GPGキーによる認証を有効化する方法については、以下のGitHubドキュメントを参考にしてください。
 
 [新しいGPGキーを生成する - GitHubドキュメント](https://docs.github.com/ja/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
 
 ### 環境構築準備手順
 
-環境構築準備手順は以下の通りです。(macOS上でTerraformコマンドを実行することを前提としています)
+環境構築準備手順は以下の通りです。(macOSのTerminal上でTerraformコマンドを実行することを前提としています)
 
 #### プロファイルの設定
 
-環境構築に利用するAWSアカウントのプロファイルの設定を、`~/.aws/config`と`~/.aws/credentials`に設定します。
+環境構築に利用するAWSアカウントのプロファイルの情報を、`~/.aws/config`と`~/.aws/credentials`に設定します。
 
 ##### `~/.aws/config`
 
