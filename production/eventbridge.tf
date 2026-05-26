@@ -10,9 +10,10 @@ resource "aws_scheduler_schedule_group" "rds_control" {
 }
 
 resource "aws_scheduler_schedule" "rds_control_start" {
-  name       = "${local.project}-${local.env}-eb-scheduler-rds-control-start"
-  group_name = aws_scheduler_schedule_group.rds_control.name
-  state      = "ENABLED"
+  name        = "${local.project}-${local.env}-eb-scheduler-rds-control-start"
+  description = "Amazon RDS Control Start Schedule"
+  group_name  = aws_scheduler_schedule_group.rds_control.name
+  state       = "ENABLED"
 
   schedule_expression          = "cron(0 9 ? * MON-FRI *)"
   schedule_expression_timezone = "Asia/Tokyo"
@@ -32,9 +33,10 @@ resource "aws_scheduler_schedule" "rds_control_start" {
 }
 
 resource "aws_scheduler_schedule" "rds_control_stop" {
-  name       = "${local.project}-${local.env}-eb-scheduler-rds-control-stop"
-  group_name = aws_scheduler_schedule_group.rds_control.name
-  state      = "ENABLED"
+  name        = "${local.project}-${local.env}-eb-scheduler-rds-control-stop"
+  description = "Amazon RDS Control Stop Schedule"
+  group_name  = aws_scheduler_schedule_group.rds_control.name
+  state       = "ENABLED"
 
   schedule_expression          = "cron(0 18 ? * MON-FRI *)"
   schedule_expression_timezone = "Asia/Tokyo"
