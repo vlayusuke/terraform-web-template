@@ -1,6 +1,3 @@
-data "aws_partition" "current" {}
-
-
 # ===============================================================================
 # Amazon S3 Bucket for AWS CloudTrail (ap-northeast-1)
 # ===============================================================================
@@ -353,7 +350,7 @@ data "aws_iam_policy_document" "cloudtrail_logs_osaka" {
 
 
 # ===============================================================================
-# Amazon S3 Bucket for AWS CloudTrail (Global / us-east-1)
+# Amazon S3 Bucket for AWS CloudTrail (us-east-1)
 # ===============================================================================
 resource "aws_s3_bucket" "cloudtrail_logs_global" {
   provider = aws.virginia
@@ -713,7 +710,7 @@ data "aws_iam_policy_document" "config_logs" {
 
 
 # ===============================================================================
-# Amazon S3 Bucket for AWS Config (Global / us-east-1)
+# Amazon S3 Bucket for AWS Config (us-east-1)
 # ===============================================================================
 resource "aws_s3_bucket" "config_logs_global" {
   provider = aws.virginia
