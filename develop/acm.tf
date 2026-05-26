@@ -21,10 +21,10 @@ resource "aws_acm_certificate" "main_alb" {
 
 resource "aws_route53_record" "main_alb" {
   for_each = {
-    for dvo in aws_acm_certificate.main_alb.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
+    for dvoalb in aws_acm_certificate.main_alb.domain_validation_options : dvoalb.domain_name => {
+      name   = dvoalb.resource_record_name
+      record = dvoalb.resource_record_value
+      type   = dvoalb.resource_record_type
     }
   }
 
@@ -41,6 +41,7 @@ resource "aws_route53_record" "main_alb" {
 
 resource "aws_acm_certificate_validation" "main_alb" {
   certificate_arn = aws_acm_certificate.main_alb.arn
+
   validation_record_fqdns = [
     for record in aws_route53_record.main_alb :
     record.fqdn
@@ -52,9 +53,9 @@ resource "aws_acm_certificate_validation" "main_alb" {
 # AWS Certificate Manager for Amazon CloudFront
 # ===============================================================================
 resource "aws_acm_certificate" "main_cloudfront" {
+  provider          = aws.virginia
   domain_name       = "${local.env}.${local.domain}"
   validation_method = "DNS"
-  provider          = aws.virginia
 
   validation_option {
     domain_name       = "${local.env}.${local.domain}"
@@ -93,6 +94,7 @@ resource "aws_route53_record" "main_cloudfront" {
 resource "aws_acm_certificate_validation" "main_cloudfront" {
   provider        = aws.virginia
   certificate_arn = aws_acm_certificate.main_cloudfront.arn
+
   validation_record_fqdns = [
     for record in aws_route53_record.main_cloudfront :
     record.fqdn
