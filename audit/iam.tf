@@ -1,72 +1,4 @@
 # ===============================================================================
-# AWS IAM for Source Code Backup
-# ===============================================================================
-resource "aws_iam_role" "github_actions_backup" {
-  name               = "${local.project}-${local.env}-iam-github-actions-backup-role"
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.github_actions_backup_assume.json
-
-  tags = {
-    Name = "${local.project}-${local.env}-iam-github-actions-backup-role"
-  }
-}
-
-data "aws_iam_policy_document" "github_actions_backup_assume" {
-  statement {
-    sid    = "OIDCFederate"
-    effect = "Allow"
-    actions = [
-      "sts:AssumeRoleWithWebIdentity",
-    ]
-    principals {
-      type = "Federated"
-      identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com",
-      ]
-    }
-    condition {
-      test     = "StringLike"
-      variable = "token.actions.githubusercontent.com:sub"
-      values = [
-        "repo:${local.repository_name}/*",
-      ]
-    }
-  }
-}
-
-resource "aws_iam_policy" "github_actions_backup" {
-  name   = "${local.project}-${local.env}-iam-github-actions-backup-policy"
-  policy = data.aws_iam_policy_document.github_actions_backup.json
-
-  tags = {
-    Name = "${local.project}-${local.env}-iam-github-actions-backup-policy"
-  }
-}
-
-data "aws_iam_policy_document" "github_actions_backup" {
-  statement {
-    sid    = "S3Access"
-    effect = "Allow"
-    actions = [
-      "s3:ListBucket",
-      "s3:PutObject",
-      "s3:GetObject",
-      "s3:DeleteObject",
-    ]
-    resources = [
-      "arn:aws:s3:::${local.project}-${local.env}-${local.account_id}-*",
-      "arn:aws:s3:::${local.project}-${local.env}-${local.account_id}-*/*",
-    ]
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "github_actions_backup" {
-  role       = aws_iam_role.github_actions_backup.name
-  policy_arn = aws_iam_policy.github_actions_backup.arn
-}
-
-
-# ===============================================================================
 # AWS IAM for AWS Lambda (CloudWatch Error Alert)
 # ===============================================================================
 resource "aws_iam_role" "lambda_cloudwatch_audit" {
@@ -124,7 +56,7 @@ data "aws_iam_policy_document" "lambda_cloudwatch_audit" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
   }
 }
@@ -193,7 +125,7 @@ data "aws_iam_policy_document" "lambda_root_login_monitoring" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
   }
 }
@@ -262,7 +194,7 @@ data "aws_iam_policy_document" "lambda_error" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
   }
 }
@@ -331,7 +263,7 @@ data "aws_iam_policy_document" "lambda_security_notice" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
   }
 }
@@ -425,7 +357,7 @@ data "aws_iam_policy_document" "chatbot_audit" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
   }
 
@@ -569,7 +501,7 @@ data "aws_iam_policy_document" "config" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
   }
 }
@@ -654,6 +586,10 @@ data "aws_iam_policy_document" "cloudtrail" {
     resources = [
       aws_cloudwatch_log_group.cloudtrail.arn,
       "${aws_cloudwatch_log_group.cloudtrail.arn}:*",
+      aws_cloudwatch_log_group.cloudtrail_osaka.arn,
+      "${aws_cloudwatch_log_group.cloudtrail_osaka.arn}:*",
+      aws_cloudwatch_log_group.cloudtrail_global.arn,
+      "${aws_cloudwatch_log_group.cloudtrail_global.arn}:*",
     ]
   }
 }
@@ -713,6 +649,7 @@ data "aws_iam_policy_document" "sns" {
     ]
     resources = [
       aws_cloudwatch_log_group.sns.arn,
+      "${aws_cloudwatch_log_group.sns.arn}:*",
     ]
   }
 
@@ -723,7 +660,7 @@ data "aws_iam_policy_document" "sns" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.event_notification_audit.arn,
+      aws_sns_topic.event_notifications_audit.arn,
     ]
   }
 }
