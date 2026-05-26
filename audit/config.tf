@@ -38,35 +38,43 @@ resource "aws_config_configuration_recorder" "default" {
       "AWS::ECS::TaskDefinition",
       "AWS::ECS::Service",
       "AWS::ECS::CapacityProvider",
+      "AWS::Lambda::Function",
       "AWS::EFS::FileSystem",
       "AWS::KinesisFirehose::DeliveryStream",
       "AWS::Elasticache::CacheCluster",
       "AWS::Elasticache::ReplicationGroup",
       "AWS::Elasticache::CacheSubnetGroup",
+      "AWS::ElastiCache::ParameterGroup",
       "AWS::RDS::DBCluster",
       "AWS::RDS::DBInstance",
       "AWS::RDS::DBSnapshot",
       "AWS::RDS::DBSubnetGroup",
-      "AWS::Route53::HostedZone",
-      "AWS::Route53::HealthCheck",
+      "AWS::RDS::DBClusterParameterGroup",
+      "AWS::RDS::DBParameterGroup",
       "AWS::SES::ConfigurationSet",
       "AWS::SNS::Topic",
+      "AWS::SNS::Subscription",
       "AWS::S3::Bucket",
+      "AWS::S3::BucketPolicy",
       "AWS::S3::AccountPublicAccessBlock",
       "AWS::IAM::User",
       "AWS::IAM::Group",
       "AWS::IAM::Role",
       "AWS::IAM::Policy",
+      "AWS::IAM::RolePolicyAttachment",
       "AWS::IAM::InstanceProfile",
       "AWS::IAM::OIDCProvider",
       "AWS::KMS::Key",
-      "AWS::Lambda::Function",
       "AWS::SecretsManager::Secret",
+      "AWS::SSM::Parameter",
       "AWS::WAFv2::WebACL",
       "AWS::WAFv2::ManagedRuleSet",
       "AWS::WAFv2::IPSet",
+      "AWS::WAFv2::IPWhitelist",
       "AWS::ElasticLoadBalancingV2::LoadBalancer",
       "AWS::ElasticLoadBalancingV2::Listener",
+      "AWS::ElasticLoadBalancingV2::ListenerRule",
+      "AWS::ElasticLoadBalancingV2::TargetGroup",
       "AWS::CloudTrail::Trail",
       "AWS::GuardDuty::Detector",
       "AWS::InspectorV2::Filter",
@@ -81,7 +89,7 @@ resource "aws_config_configuration_recorder" "default" {
 resource "aws_config_delivery_channel" "default" {
   name           = "default"
   s3_bucket_name = aws_s3_bucket.config_logs.bucket
-  sns_topic_arn  = aws_sns_topic.event_notification_audit.arn
+  sns_topic_arn  = aws_sns_topic.event_notifications_audit.arn
 
   depends_on = [
     aws_config_configuration_recorder.default,
@@ -153,7 +161,7 @@ resource "aws_config_config_rule" "rds_instance_public_access_check" {
 
 
 # ===============================================================================
-# AWS Config (Global / us-east-1)
+# AWS Config (us-east-1)
 # Reference: https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/resource-config-reference.html
 # ===============================================================================
 resource "aws_config_configuration_recorder" "default_global" {
@@ -171,27 +179,30 @@ resource "aws_config_configuration_recorder" "default_global" {
       "AWS::CloudFront::PublicKey",
       "AWS::CloudFront::StreamingDistribution",
       "AWS::CloudFront::RealtimeLogConfig",
+      "AWS::CloudFront:Function",
+      "AWS:CloudFront::KeyValueStore",
       "AWS::CloudWatch::Alarm",
       "AWS::CloudWatch::MetricStream",
       "AWS::Logs::Destination",
-      "AWS::KinesisFirehose::DeliveryStream",
       "AWS::Route53::HostedZone",
       "AWS::Route53::HealthCheck",
       "AWS::SNS::Topic",
+      "AWS::SNS::Subscription",
       "AWS::S3::Bucket",
+      "AWS::S3::BucketPolicy",
       "AWS::S3::AccountPublicAccessBlock",
       "AWS::IAM::User",
       "AWS::IAM::Group",
       "AWS::IAM::Role",
       "AWS::IAM::Policy",
+      "AWS::IAM::RolePolicyAttachment",
       "AWS::IAM::InstanceProfile",
       "AWS::IAM::OIDCProvider",
-      "AWS::KMS::Key",
       "AWS::Lambda::Function",
-      "AWS::SecretsManager::Secret",
       "AWS::WAFv2::WebACL",
       "AWS::WAFv2::ManagedRuleSet",
       "AWS::WAFv2::IPSet",
+      "AWS::WAFv2::IPWhitelist",
       "AWS::CloudTrail::Trail",
       "AWS::GuardDuty::Detector",
       "AWS::InspectorV2::Filter",
@@ -207,7 +218,7 @@ resource "aws_config_delivery_channel" "default_global" {
   provider       = aws.virginia
   name           = "${local.project}-${local.env}-aws-cfg-delivery-channel-global"
   s3_bucket_name = aws_s3_bucket.config_logs_global.bucket
-  sns_topic_arn  = aws_sns_topic.event_notification_audit.arn
+  sns_topic_arn  = aws_sns_topic.event_notifications_audit_global.arn
 
   depends_on = [
     aws_config_configuration_recorder.default_global,
