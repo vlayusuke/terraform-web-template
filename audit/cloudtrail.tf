@@ -12,7 +12,7 @@ resource "aws_cloudtrail" "audit" {
   kms_key_id                    = aws_kms_key.cloudtrail.arn
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail.arn
   cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
-  sns_topic_name                = aws_sns_topic.event_notification_audit.name
+  sns_topic_name                = aws_sns_topic.event_notifications_audit.name
 
   event_selector {
     read_write_type           = "All"
@@ -51,7 +51,7 @@ resource "aws_cloudtrail" "audit_osaka" {
   kms_key_id                    = aws_kms_key.cloudtrail.arn
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail.arn
   cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
-  sns_topic_name                = aws_sns_topic.event_notification_audit.name
+  sns_topic_name                = aws_sns_topic.event_notifications_audit.name
 
   event_selector {
     read_write_type           = "All"
@@ -77,7 +77,7 @@ resource "aws_cloudtrail" "audit_osaka" {
 
 
 # ===============================================================================
-# AWS CloudTrail (Global / us-east-1)
+# AWS CloudTrail (us-east-1)
 # ===============================================================================
 resource "aws_cloudtrail" "audit_global" {
   name                          = "${local.project}-${local.env}-ct-audit-global"
@@ -90,7 +90,7 @@ resource "aws_cloudtrail" "audit_global" {
   kms_key_id                    = aws_kms_key.cloudtrail.arn
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail.arn
   cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
-  sns_topic_name                = aws_sns_topic.event_notification_audit.name
+  sns_topic_name                = aws_sns_topic.event_notifications_audit.name
 
   event_selector {
     read_write_type           = "All"
