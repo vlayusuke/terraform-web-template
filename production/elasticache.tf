@@ -17,6 +17,8 @@ resource "aws_elasticache_replication_group" "redis" {
   snapshot_retention_limit   = 14
   snapshot_window            = "20:00-21:00"
   notification_topic_arn     = aws_sns_topic.event_notification.arn
+  auto_minor_version_upgrade = true
+  apply_immediately          = true
 
   log_delivery_configuration {
     log_format       = "json"
@@ -34,9 +36,14 @@ resource "aws_elasticache_replication_group" "redis" {
   }
 }
 
+
+# ===============================================================================
+# Subnet Group
+# ===============================================================================
 resource "aws_elasticache_subnet_group" "redis" {
   name        = "${local.project}-${local.env}-ec-redis-cluster-subg"
   description = "Subnet group for ${local.project}-${local.env} Amazon ElastiCache Cluster"
+
   subnet_ids = [
     for subnet in aws_subnet.main_private :
     subnet.id
