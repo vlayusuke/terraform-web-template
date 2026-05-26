@@ -10,9 +10,9 @@
 
 ### `/audit`
 
-Web3レイヤ構成のWebアプリケーション向けのAWSリソースのうち、セキュリティ & コンプライアンス系のリソースと、それらに関連するリソースを集中管理して実装しています。
+Web3レイヤ構成のWebアプリケーション向けのAWSリソースのうち、セキュリティ & コンプライアンス系のリソースと、それらに関連するリソースを、集約して実装しています。
 
-なお、1つのAWSアカウントに対して、1つの`/audit`ディレクトリ内で実装しているをセキュリティ & コンプライアンス系のAWSリソース構築することを想定して実装しています。
+なお、1つのAWSアカウントに対して、1つの`/audit`ディレクトリ内で実装しているセキュリティ & コンプライアンス系のAWSリソース等を構築することを想定して実装しています。
 
 ### `/production`
 
@@ -56,7 +56,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 | develop     |      555 | N/A              |
 | staging     |      555 | N/A              |
 | production  |      555 | N/A              |
-| audit       |      166 | Each AWS account |
+| audit       |      168 | Each AWS account |
 
 ## 環境構築をする際の注意事項
 
@@ -68,15 +68,35 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 [新しいGPGキーを生成する - GitHubドキュメント](https://docs.github.com/ja/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
 
-### 環境構築準備手順
+### Terraformコマンドを実行する際の注意点
+
+- Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。このテンプレートでは、サンプルとして、GitHubリモートリポジトリ上での管理対象としない代表的な値のみを実装しています。利用方法に応じて適宜修正をしてください。
+- `base_locals.tf`の`# project info`に設定している、`project`、`author`、`email`の値を修正してください。
+
+### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
+
+Terraformや各種Providerのバージョンのアップデートを行なうため、`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるProviderのチェックサムの値がずれてしまうことを防止する目的で、`terraform plan`コマンドを実行する前に、ターミナル上で必ず、以下のコマンドを実行してください。
+
+```bash
+terraform providers lock \
+  -platform=windows_amd64 \
+  -platform=darwin_amd64 \
+  -platform=linux_amd64  \
+  -platform=darwin_arm64 \
+  -platform=linux_arm64
+```
+
+- 出典: [複数のプラットフォームで terraform initする際の注意点](https://dev.classmethod.jp/articles/multiplatform-terraform-init-lock/)
+
+## 環境構築準備手順
 
 環境構築準備手順は以下の通りです。(macOSのTerminal上でTerraformコマンドを実行することを前提としています)
 
-#### プロファイルの設定
+### プロファイルの設定
 
 環境構築に利用するAWSアカウントのプロファイルの情報を、`~/.aws/config`と`~/.aws/credentials`に設定します。
 
-##### `~/.aws/config`
+#### `~/.aws/config`
 
 ```bash:~/.aws/config
 [profile terraform-web-template]
@@ -87,7 +107,7 @@ mfa_serial=arn:aws:iam::{aws-account}:mfa/{mfa-device-name}
 
 - {mfa-device-name}には、IAMコンソールのご自身のIAMユーザーの「多要素認証(MFA)」セクションに表示されている識別子の仮装MFAデバイス名を設定してください。
 
-##### `~/.aws/credentials`
+#### `~/.aws/credentials`
 
 ```bash:~/.aws/credentials
 [terraform-web-template]
@@ -99,7 +119,7 @@ aws_secret_access_key = ********************
 
 - [aws-vaultの使い方と仕組み](https://qiita.com/takuzo8679/items/6727f46b0aaf6df0a864)
 
-#### Terraformコマンドを実行する際に必要な事前準備
+### Terraformコマンドを実行する際に必要な事前準備
 
 Terraformコマンドを実行する前に、AWS CLIやTerraform CLIなどの必要なツールをインストールしてください。また、`terraform.tf`で実装している`terraform.tfstate`ファイルはS3バックエンドで保管するという設定にしているため、事前に各環境のAWSアカウントに紐づくAWSマネージメントコンソールの、Amazon S3コンソール内で、
 
@@ -125,26 +145,6 @@ terraform init \
   -backend-config="profile=terraform-template" \
   -backend-config="key=state/audit.terraform.tfstate"
 ```
-
-#### Terraformコマンドを実行する際の注意点
-
-- Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。このテンプレートでは、サンプルとして、GitHubリモートリポジトリ上での管理対象としない代表的な値のみを実装しています。利用方法に応じて適宜修正をしてください。
-- `base_locals.tf`の`# project info`に設定している、`project`、`author`、`email`の値を修正してください。
-
-#### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
-
-Terraformや各種Providerのバージョンのアップデートを行なうため、`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるProviderのチェックサムの値がずれてしまうことを防止する目的で、`terraform plan`コマンドを実行する前に、ターミナル上で必ず、以下のコマンドを実行してください。
-
-```bash
-terraform providers lock \
-  -platform=windows_amd64 \
-  -platform=darwin_amd64 \
-  -platform=linux_amd64  \
-  -platform=darwin_arm64 \
-  -platform=linux_arm64
-```
-
-- 出典: [複数のプラットフォームで terraform initする際の注意点](https://dev.classmethod.jp/articles/multiplatform-terraform-init-lock/)
 
 ## インフラ構成図
 
