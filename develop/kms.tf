@@ -4,6 +4,7 @@
 resource "aws_kms_key" "application" {
   description             = "${local.project}-${local.env}-kms-application-key"
   enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
   deletion_window_in_days = 7
 
   tags = {
@@ -23,6 +24,21 @@ resource "aws_kms_key" "aurora" {
 
   tags = {
     Name = "${local.project}-${local.env}-kms-aurora-key"
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS for Amazon ElastCache
+# ===============================================================================
+resource "aws_kms_key" "elasticache" {
+  description             = "${local.project}-${local.env}-kms-ec-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-ec-key"
   }
 }
 
