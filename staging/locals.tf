@@ -41,7 +41,7 @@ locals {
 # Amazon ElastiCache
 # ================================================================================
 locals {
-  elasticache_redis_version = "7.1"
+  elasticache_redis_version = "7.2"
 }
 
 
