@@ -278,11 +278,11 @@ resource "aws_iam_role_policy_attachment" "security_notice" {
 # AWS IAM for AWS Chatbot
 # ===============================================================================
 resource "aws_iam_role" "chatbot_audit" {
-  name               = "${local.project}-${local.env}-iam-chatbot-audit-role"
+  name               = "${local.project}-${local.env}-iam-chatbot-role"
   assume_role_policy = data.aws_iam_policy_document.chatbot_audit_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-audit-role"
+    Name = "${local.project}-${local.env}-iam-chatbot-role"
   }
 }
 
@@ -303,12 +303,12 @@ data "aws_iam_policy_document" "chatbot_audit_assume" {
 }
 
 resource "aws_iam_policy" "chatbot_audit" {
-  name   = "${local.project}-${local.env}-iam-chatbot-audit-policy"
+  name   = "${local.project}-${local.env}-iam-chatbot-policy"
   path   = "/"
   policy = data.aws_iam_policy_document.chatbot_audit.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-audit-policy"
+    Name = "${local.project}-${local.env}-iam-chatbot-policy"
   }
 }
 
@@ -391,11 +391,11 @@ resource "aws_iam_role_policy_attachment" "chatbot_audit_resource_read_only_acce
 # AWS IAM for AWS Chatbot Guardrail
 # ===============================================================================
 resource "aws_iam_policy" "chatbot_audit_guardrail" {
-  name   = "${local.project}-${local.env}-iam-chatbot-guardrail-audit-policy"
+  name   = "${local.project}-${local.env}-iam-chatbot-guardrail-policy"
   policy = data.aws_iam_policy_document.chatbot_audit_guardrail.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-chatbot-audit-guardrail-policy"
+    Name = "${local.project}-${local.env}-iam-chatbot-guardrail-policy"
   }
 }
 
@@ -675,12 +675,12 @@ resource "aws_iam_role_policy_attachment" "sns" {
 # AWS IAM for Amazon SNS via Amazon EventBridge
 # ===============================================================================
 resource "aws_iam_role" "eventbridge_to_sns" {
-  name               = "${local.project}-${local.env}-iam-eventbridge-to-sns-role"
+  name               = "${local.project}-${local.env}-iam-eb-to-sns-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.eventbridge_to_sns_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-eventbridge-to-sns-role"
+    Name = "${local.project}-${local.env}-iam-eb-to-sns-role"
   }
 }
 
@@ -701,12 +701,12 @@ data "aws_iam_policy_document" "eventbridge_to_sns_assume" {
 }
 
 resource "aws_iam_policy" "eventbridge_to_sns_policy" {
-  name   = "${local.project}-${local.env}-iam-eventbridge-to-sns-policy"
+  name   = "${local.project}-${local.env}-iam-eb-to-sns-policy"
   path   = "/"
   policy = data.aws_iam_policy_document.eventbridge_to_sns_policy.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-eventbridge-to-sns-policy"
+    Name = "${local.project}-${local.env}-iam-eb-to-sns-policy"
   }
 }
 
