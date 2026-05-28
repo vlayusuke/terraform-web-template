@@ -16,7 +16,7 @@ resource "aws_cloudwatch_log_stream" "root_login_monitoring" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring_lambda" {
-  name            = "${local.project}-${local.env}-cw-lmd-root-login-monitoring-to-lmd-audit"
+  name            = "${local.project}-${local.env}-cw-lmd-root-login-monitoring-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.root_login_monitoring.name
   filter_pattern  = "{ $.responseElements.ConsoleLogin = \"Success\" && $.userIdentity.type = \"Root\" }"
   destination_arn = aws_lambda_function.root_login_monitoring.arn
@@ -44,7 +44,7 @@ resource "aws_cloudwatch_log_stream" "root_login_monitoring_global" {
 
 resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring_lambda_global" {
   provider        = aws.virginia
-  name            = "${local.project}-${local.env}-cw-lmd-root-login-monitoring-to-lmd-audit-global"
+  name            = "${local.project}-${local.env}-cw-lmd-root-login-monitoring-to-lmd-global"
   log_group_name  = aws_cloudwatch_log_group.root_login_monitoring_global.name
   filter_pattern  = "{ $.responseElements.ConsoleLogin = \"Success\" && $.userIdentity.type = \"Root\" }"
   destination_arn = aws_lambda_function.root_login_monitoring_global.arn
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_log_stream" "lambda_error" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "lambda_error" {
-  name            = "${local.project}-${local.env}-cw-lmd-error-to-lmd-audit"
+  name            = "${local.project}-${local.env}-cw-lmd-error-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.lambda_error.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_error.arn
@@ -94,7 +94,7 @@ resource "aws_cloudwatch_log_stream" "security_notice" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "security_notice" {
-  name            = "${local.project}-${local.env}-cw-lmd-security-notice-to-lmd-audit"
+  name            = "${local.project}-${local.env}-cw-lmd-security-notice-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.security_notice.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.security_notice.arn
@@ -119,7 +119,7 @@ resource "aws_cloudwatch_log_stream" "lambda_log_error_alert_audit" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "lambda_log_error_alert_audit" {
-  name            = "${local.project}-${local.env}-cw-lmd-log-error-alert-to-lmd-audit"
+  name            = "${local.project}-${local.env}-cw-lmd-log-error-alert-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.lambda_log_error_alert_audit.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
