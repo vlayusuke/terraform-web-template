@@ -2,7 +2,7 @@
 # Amazon SNS Topic for Audit Event Notification (ap-northeast-1)
 # ===============================================================================
 resource "aws_sns_topic" "event_notifications_audit" {
-  name = "${local.project}-${local.env}-sns-event-notifications-audit"
+  name = "${local.project}-${local.env}-sns-event-notifications"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -20,7 +20,7 @@ resource "aws_sns_topic" "event_notifications_audit" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-sns-event-notifications-audit"
+    Name = "${local.project}-${local.env}-sns-event-notifications"
   }
 }
 
@@ -87,7 +87,7 @@ data "aws_iam_policy_document" "event_notifications_audit" {
 # ===============================================================================
 resource "aws_sns_topic" "event_notifications_audit_global" {
   provider = aws.virginia
-  name     = "${local.project}-${local.env}-sns-event-notifications-audit-global"
+  name     = "${local.project}-${local.env}-sns-event-notifications-global"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -105,7 +105,7 @@ resource "aws_sns_topic" "event_notifications_audit_global" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-sns-event-notifications-audit-global"
+    Name = "${local.project}-${local.env}-sns-event-notifications-global"
   }
 }
 
