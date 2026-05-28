@@ -37,7 +37,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 | Resources                  | Version  |
 | :------------------------- | -------: |
-| Terraform                  | 1.15.4   |
+| Terraform                  | 1.15.5   |
 | AWS Provider               | 6.47.0   |
 | AWS Cloud Control Provider | 1.86.0   |
 
