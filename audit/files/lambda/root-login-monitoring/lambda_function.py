@@ -8,7 +8,7 @@ from urllib import request
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-hook_url = os.getenv("hook_url")
+hook_url = os.environ['hook_url']
 account_name = os.environ['account_name']
 
 headers = {
