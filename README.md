@@ -146,6 +146,16 @@ terraform init \
   -backend-config="key=state/audit.terraform.tfstate"
 ```
 
+### 踏み台サーバー用EC2インスタンスのKey Pairの作成
+
+`terraform.tfvars`に設定する、踏み台サーバー用のEC2インスタンスのKey Pairの作成を行なってください。暗号化スイートは`ed25519`で固定します。
+
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_terraform-web-template -C "Key Pair for terraform-web-template"
+```
+
+なお、公開鍵のみを`terraform.tfvars`に設定します。秘密鍵の管理は独自でお願いいたします。
+
 ## インフラ構成図
 
 このテンプレートで構築が可能なアーキテクチャのインフラ構成図は以下の通りです。
