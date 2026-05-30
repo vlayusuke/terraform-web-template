@@ -162,15 +162,15 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_terraform-web-template -C "Key Pair f
 
 ### 本番環境
 
-![本番環境](./terraform-web-template-v1.1-en-prd.svg)
+![本番環境](./terraform-web-template-v1.2-en-prd.svg)
 
 ### ステージング環境
 
-![ステージング環境](./terraform-web-template-v1.1-en-stg.svg)
+![ステージング環境](./terraform-web-template-v1.2-en-stg.svg)
 
 ### 開発環境
 
-![開発環境](./terraform-web-template-v1.1-en-dev.svg)
+![開発環境](./terraform-web-template-v1.2-en-dev.svg)
 
 ## リリース履歴
 
