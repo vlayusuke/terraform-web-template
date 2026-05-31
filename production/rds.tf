@@ -25,7 +25,7 @@ resource "aws_rds_cluster" "aurora" {
   deletion_protection                   = true
   storage_encrypted                     = true
   kms_key_id                            = aws_kms_key.aurora.arn
-  enabled_cloudwatch_logs_exports       = local.enabled_cloudwatch_logs_exports
+  enabled_cloudwatch_logs_exports       = local.aurora_cloudwatch_log_group
   apply_immediately                     = true
 
   iam_roles = [
