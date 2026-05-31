@@ -1,8 +1,8 @@
 # ===============================================================================
 # Amazon CloudWatch Log group for Amazon ECS
 # ===============================================================================
-resource "aws_cloudwatch_log_group" "app" {
-  for_each          = local.app_log_group
+resource "aws_cloudwatch_log_group" "fargate_app" {
+  for_each          = local.fargate_app_log_group
   name              = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   retention_in_days = local.retention_in_days
 
@@ -11,31 +11,31 @@ resource "aws_cloudwatch_log_group" "app" {
   }
 }
 
-resource "aws_cloudwatch_log_stream" "app" {
-  for_each       = local.app_log_group
+resource "aws_cloudwatch_log_stream" "fargate_app" {
+  for_each       = local.fargate_app_log_group
   name           = "${local.project}-${local.env}-cw-${each.key}-cwstream"
   log_group_name = "${local.project}-${local.env}-cw-${each.key}-cwlog"
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "app_to_lambda" {
-  for_each        = local.app_log_group
+resource "aws_cloudwatch_log_subscription_filter" "fargate_app_to_lambda" {
+  for_each        = local.fargate_app_log_group
   name            = "${local.project}-${local.env}-cw-${each.key}-to-lmd"
   log_group_name  = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   filter_pattern  = "{ $.level_name = \"ERROR\" || $.level_name = \"CRITICAL\" || $.level_name = \"ALERT\" || $.level_name = \"EMERGENCY\" }"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "app_to_firehose" {
-  for_each        = local.app_log_group
+resource "aws_cloudwatch_log_subscription_filter" "fargate_app_to_firehose" {
+  for_each        = local.fargate_app_log_group
   name            = "${local.project}-${local.env}-cw-${each.key}-to-adf"
-  log_group_name  = aws_cloudwatch_log_group.app[each.key].name
+  log_group_name  = aws_cloudwatch_log_group.fargate_app[each.key].name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ecs_logs_app[each.key].arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
 }
 
-resource "aws_cloudwatch_log_group" "nginx" {
-  for_each          = local.nginx_log_group
+resource "aws_cloudwatch_log_group" "fargate_nginx" {
+  for_each          = local.fargate_nginx_log_group
   name              = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   retention_in_days = local.retention_in_days
 
@@ -44,24 +44,24 @@ resource "aws_cloudwatch_log_group" "nginx" {
   }
 }
 
-resource "aws_cloudwatch_log_stream" "nginx" {
-  for_each       = local.nginx_log_group
+resource "aws_cloudwatch_log_stream" "fargate_nginx" {
+  for_each       = local.fargate_nginx_log_group
   name           = "${local.project}-${local.env}-cw-${each.key}-cwstream"
   log_group_name = "${local.project}-${local.env}-cw-${each.key}-cwlog"
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "nginx_to_lambda" {
-  for_each        = local.nginx_log_group
+resource "aws_cloudwatch_log_subscription_filter" "fargate_nginx_to_lambda" {
+  for_each        = local.fargate_nginx_log_group
   name            = "${local.project}-${local.env}-cw-${each.key}-to-lmd"
   log_group_name  = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   filter_pattern  = "{ $.status = \"5*\" || $.request_time >= 3.000 }"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "nginx_to_firehose" {
-  for_each        = local.nginx_log_group
+resource "aws_cloudwatch_log_subscription_filter" "fargate_nginx_to_firehose" {
+  for_each        = local.fargate_nginx_log_group
   name            = "${local.project}-${local.env}-cw-${each.key}-to-adf"
-  log_group_name  = aws_cloudwatch_log_group.nginx[each.key].name
+  log_group_name  = aws_cloudwatch_log_group.fargate_nginx[each.key].name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ecs_logs_nginx[each.key].arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
@@ -72,7 +72,7 @@ resource "aws_cloudwatch_log_subscription_filter" "nginx_to_firehose" {
 # Amazon CloudWatch Log group for Amazon RDS / Amazon Aurora
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "rds" {
-  for_each          = local.enabled_cloudwatch_logs_exports
+  for_each          = local.aurora_cloudwatch_log_group
   name              = "/aws/rds/cluster/${aws_rds_cluster.aurora.cluster_identifier}/${each.key}"
   retention_in_days = local.retention_in_days
 
@@ -82,13 +82,13 @@ resource "aws_cloudwatch_log_group" "rds" {
 }
 
 resource "aws_cloudwatch_log_stream" "rds" {
-  for_each       = local.enabled_cloudwatch_logs_exports
+  for_each       = local.aurora_cloudwatch_log_group
   name           = "${local.project}-${local.env}-cw-rds-${each.key}-cwstream"
   log_group_name = aws_cloudwatch_log_group.rds[each.key].name
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "rds_to_lambda" {
-  for_each        = local.enabled_cloudwatch_logs_exports
+  for_each        = local.aurora_cloudwatch_log_group
   name            = "${local.project}-${local.env}-cw-rds-${each.key}-to-lmd"
   log_group_name  = "/aws/rds/cluster/${aws_rds_cluster.aurora.cluster_identifier}/${each.key}"
   filter_pattern  = "?Warning ?Error"
@@ -96,7 +96,7 @@ resource "aws_cloudwatch_log_subscription_filter" "rds_to_lambda" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "rds_to_firehose" {
-  for_each        = local.aurora_log_types
+  for_each        = local.aurora_cloudwatch_log_group
   name            = "${local.project}-${local.env}-cw-rds-${each.key}-to-adf"
   log_group_name  = "/aws/rds/cluster/${aws_rds_cluster.aurora.cluster_identifier}/${each.key}"
   filter_pattern  = ""
