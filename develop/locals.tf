@@ -34,14 +34,6 @@ locals {
 locals {
   aurora_mysql_version = "8.0.mysql_aurora.3.12.0"
   rds_max_connections  = 512
-
-  enabled_cloudwatch_logs_exports = toset([
-    "audit",
-    "error",
-    "general",
-    "slowquery",
-    "iam-db-auth-error"
-  ])
 }
 
 
@@ -54,7 +46,7 @@ locals {
 
 
 # ================================================================================
-# Amazon CloudWatch
+# Amazon CloudWatch Logs
 # ================================================================================
 locals {
   retention_in_days = 30
@@ -67,24 +59,24 @@ locals {
     aws_lambda_function.lambda_execute_ecs_force_deployment.function_name,
   ])
 
-  app_log_group = toset([
+  fargate_app_log_group = toset([
     "app-app",
     "cron",
     "queue",
     "migrate",
   ])
 
-  nginx_log_group = toset([
+  fargate_nginx_log_group = toset([
     "app-nginx"
   ])
 
-  aurora_log_types = {
-    audit             = aws_kinesis_firehose_delivery_stream.aurora_logs_audit.arn
-    error             = aws_kinesis_firehose_delivery_stream.aurora_logs_error.arn
-    general           = aws_kinesis_firehose_delivery_stream.aurora_logs_general.arn
-    slowquery         = aws_kinesis_firehose_delivery_stream.aurora_logs_slowquery.arn
-    iam-db-auth-error = aws_kinesis_firehose_delivery_stream.aurora_logs_iam_db_auth_error.arn
-  }
+  aurora_cloudwatch_log_group = toset([
+    "audit",
+    "error",
+    "general",
+    "slowquery",
+    "iam-db-auth-error"
+  ])
 }
 
 

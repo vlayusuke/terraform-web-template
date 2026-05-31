@@ -1891,9 +1891,9 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_amazon_data_firehose" {
       "logs:DescribeLogGroups",
     ]
     resources = concat(
-      [for key in local.app_log_group : aws_cloudwatch_log_group.app[key].arn],
-      [for key in local.nginx_log_group : aws_cloudwatch_log_group.nginx[key].arn],
-      [for key in local.enabled_cloudwatch_logs_exports : aws_cloudwatch_log_group.rds[key].arn],
+      [for key in local.fargate_app_log_group : aws_cloudwatch_log_group.fargate_app[key].arn],
+      [for key in local.fargate_nginx_log_group : aws_cloudwatch_log_group.fargate_nginx[key].arn],
+      [for key in local.aurora_cloudwatch_log_group : aws_cloudwatch_log_group.rds[key].arn],
       [aws_cloudwatch_log_group.elasticache.arn],
       [for key in local.lambda_functions : aws_cloudwatch_log_group.lambda_functions[key].arn],
       [aws_cloudwatch_log_group.ses.arn],
