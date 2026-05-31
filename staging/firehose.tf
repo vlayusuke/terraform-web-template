@@ -148,7 +148,7 @@ resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
 # Amazon Data Firehose Stream (Amazon ECS logs App)
 # ===============================================================================
 resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_app" {
-  for_each    = local.app_log_group
+  for_each    = local.fargate_app_log_group
   name        = "${local.project}-${local.env}-adf-ecs-logs-${each.key}-to-s3"
   destination = "extended_s3"
 
@@ -176,7 +176,7 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_app" {
 # Amazon Data Firehose Stream (Amazon ECS logs Nginx)
 # ===============================================================================
 resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_nginx" {
-  for_each    = local.nginx_log_group
+  for_each    = local.fargate_nginx_log_group
   name        = "${local.project}-${local.env}-adf-ecs-logs-${each.key}-to-s3"
   destination = "extended_s3"
 
