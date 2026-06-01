@@ -96,7 +96,7 @@ resource "aws_cloudwatch_log_subscription_filter" "rds_to_lambda" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "rds_to_firehose" {
-  for_each        = local.aurora_cloudwatch_log_group
+  for_each        = local.aurora_adf_stream_arns
   name            = "${local.project}-${local.env}-cw-rds-${each.key}-to-adf"
   log_group_name  = "/aws/rds/cluster/${aws_rds_cluster.aurora.cluster_identifier}/${each.key}"
   filter_pattern  = ""
