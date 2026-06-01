@@ -12,7 +12,6 @@
         "matheusq94.tfs",
         "boto3typed.boto3-ide",
         "amazonwebservices.aws-toolkit-vscode",
-        "github.copilot",
         "github.copilot-chat"
     ]
 }
