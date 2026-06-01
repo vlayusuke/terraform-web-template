@@ -59,14 +59,14 @@ locals {
     aws_lambda_function.lambda_execute_ecs_force_deployment.function_name,
   ])
 
-  fargate_app_log_group = toset([
+  fargate_app_cloudwatch_log_group = toset([
     "app-app",
     "cron",
     "queue",
     "migrate",
   ])
 
-  fargate_nginx_log_group = toset([
+  fargate_nginx_cloudwatch_log_group = toset([
     "app-nginx"
   ])
 
