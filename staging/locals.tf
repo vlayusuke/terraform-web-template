@@ -77,6 +77,14 @@ locals {
     "slowquery",
     "iam-db-auth-error"
   ])
+
+  aurora_adf_stream_arns = {
+    "audit"             = aws_kinesis_firehose_delivery_stream.aurora_logs_audit.arn,
+    "error"             = aws_kinesis_firehose_delivery_stream.aurora_logs_error.arn,
+    "general"           = aws_kinesis_firehose_delivery_stream.aurora_logs_general.arn,
+    "slowquery"         = aws_kinesis_firehose_delivery_stream.aurora_logs_slowquery.arn,
+    "iam-db-auth-error" = aws_kinesis_firehose_delivery_stream.aurora_logs_iam_db_auth_error.arn,
+  }
 }
 
 
