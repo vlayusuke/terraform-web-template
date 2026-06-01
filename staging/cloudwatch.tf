@@ -2,7 +2,7 @@
 # Amazon CloudWatch Log group for Amazon ECS
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "fargate_app" {
-  for_each          = local.fargate_app_log_group
+  for_each          = local.fargate_app_cloudwatch_log_group
   name              = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   retention_in_days = local.retention_in_days
 
@@ -12,13 +12,13 @@ resource "aws_cloudwatch_log_group" "fargate_app" {
 }
 
 resource "aws_cloudwatch_log_stream" "fargate_app" {
-  for_each       = local.fargate_app_log_group
+  for_each       = local.fargate_app_cloudwatch_log_group
   name           = "${local.project}-${local.env}-cw-${each.key}-cwstream"
   log_group_name = "${local.project}-${local.env}-cw-${each.key}-cwlog"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "fargate_app_to_lambda" {
-  for_each        = local.fargate_app_log_group
+  for_each        = local.fargate_app_cloudwatch_log_group
   name            = "${local.project}-${local.env}-cw-${each.key}-to-lmd"
   log_group_name  = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   filter_pattern  = "{ $.level_name = \"ERROR\" || $.level_name = \"CRITICAL\" || $.level_name = \"ALERT\" || $.level_name = \"EMERGENCY\" }"
@@ -26,7 +26,7 @@ resource "aws_cloudwatch_log_subscription_filter" "fargate_app_to_lambda" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "fargate_app_to_firehose" {
-  for_each        = local.fargate_app_log_group
+  for_each        = local.fargate_app_cloudwatch_log_group
   name            = "${local.project}-${local.env}-cw-${each.key}-to-adf"
   log_group_name  = aws_cloudwatch_log_group.fargate_app[each.key].name
   filter_pattern  = ""
@@ -35,7 +35,7 @@ resource "aws_cloudwatch_log_subscription_filter" "fargate_app_to_firehose" {
 }
 
 resource "aws_cloudwatch_log_group" "fargate_nginx" {
-  for_each          = local.fargate_nginx_log_group
+  for_each          = local.fargate_nginx_cloudwatch_log_group
   name              = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   retention_in_days = local.retention_in_days
 
@@ -45,13 +45,13 @@ resource "aws_cloudwatch_log_group" "fargate_nginx" {
 }
 
 resource "aws_cloudwatch_log_stream" "fargate_nginx" {
-  for_each       = local.fargate_nginx_log_group
+  for_each       = local.fargate_nginx_cloudwatch_log_group
   name           = "${local.project}-${local.env}-cw-${each.key}-cwstream"
   log_group_name = "${local.project}-${local.env}-cw-${each.key}-cwlog"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "fargate_nginx_to_lambda" {
-  for_each        = local.fargate_nginx_log_group
+  for_each        = local.fargate_nginx_cloudwatch_log_group
   name            = "${local.project}-${local.env}-cw-${each.key}-to-lmd"
   log_group_name  = "${local.project}-${local.env}-cw-${each.key}-cwlog"
   filter_pattern  = "{ $.status = \"5*\" || $.request_time >= 3.000 }"
@@ -59,7 +59,7 @@ resource "aws_cloudwatch_log_subscription_filter" "fargate_nginx_to_lambda" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "fargate_nginx_to_firehose" {
-  for_each        = local.fargate_nginx_log_group
+  for_each        = local.fargate_nginx_cloudwatch_log_group
   name            = "${local.project}-${local.env}-cw-${each.key}-to-adf"
   log_group_name  = aws_cloudwatch_log_group.fargate_nginx[each.key].name
   filter_pattern  = ""
