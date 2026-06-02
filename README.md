@@ -172,6 +172,12 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_terraform-web-template -C "Key Pair f
 
 ![開発環境](./terraform-web-template-v1.2-en-dev.svg)
 
+## コスト
+
+本テンプレートのすべての環境を構築した場合のコスト内訳は、以下のドキュメントを参照してください。
+
+- [AWS Cost Estimation for terraform-web-template](./aws-cost-estimation.md)
+
 ## リリース履歴
 
 このテンプレートのリリース履歴は、[Releases](https://github.com/vlayusuke/terraform-web-template/releases)を参照してください。
