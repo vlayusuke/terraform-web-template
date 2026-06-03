@@ -899,6 +899,186 @@ data "aws_iam_policy_document" "config_logs_global" {
 
 
 # ===============================================================================
+# Amazon S3 Bucket for Amazon GuardDuty Logs
+# ===============================================================================
+resource "aws_s3_bucket" "guardduty_logs" {
+  bucket = "${local.project}-${local.env}-${local.account_id}-s3-gdt-logs-bucket"
+
+  tags = {
+    Name = "${local.project}-${local.env}-${local.account_id}-s3-gdt-logs-bucket"
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "guardduty_logs" {
+  bucket = aws_s3_bucket.guardduty_logs.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "guardduty_logs" {
+  bucket = aws_s3_bucket.guardduty_logs.id
+  acl    = "log-delivery-write"
+
+  depends_on = [
+    aws_s3_bucket_ownership_controls.guardduty_logs,
+  ]
+}
+
+resource "aws_s3_bucket_public_access_block" "guardduty_logs" {
+  bucket = aws_s3_bucket.guardduty_logs.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "guardduty_logs" {
+  bucket = aws_s3_bucket.guardduty_logs.bucket
+
+  rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+    bucket_key_enabled = false
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "guardduty_logs" {
+  bucket = aws_s3_bucket.guardduty_logs.id
+
+  rule {
+    id     = "delete-object"
+    status = "Enabled"
+
+    filter {
+      object_size_greater_than = 0
+    }
+
+    expiration {
+      days = local.expire_days
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = local.expire_days
+    }
+  }
+
+  depends_on = [
+    aws_s3_bucket_versioning.guardduty_logs,
+  ]
+}
+
+resource "aws_s3_bucket_versioning" "guardduty_logs" {
+  bucket = aws_s3_bucket.guardduty_logs.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "guardduty_logs" {
+  bucket = aws_s3_bucket.guardduty_logs.id
+
+  target_bucket = aws_s3_bucket.s3_logs.id
+  target_prefix = "guardduty-logs/"
+
+}
+
+resource "aws_s3_bucket_policy" "guardduty_logs" {
+  bucket = aws_s3_bucket.guardduty_logs.id
+  policy = data.aws_iam_policy_document.guardduty_logs.json
+}
+
+data "aws_iam_policy_document" "guardduty_logs" {
+  statement {
+    sid    = "EnforceSSL"
+    effect = "Deny"
+    actions = [
+      "s3:*",
+    ]
+    resources = [
+      aws_s3_bucket.guardduty_logs.arn,
+      "${aws_s3_bucket.guardduty_logs.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
+      ]
+    }
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AWSConfigBucketPermissionsCheck"
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketAcl",
+    ]
+    resources = [
+      aws_s3_bucket.guardduty_logs.arn,
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "config.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AWSConfigBucketExistenceCheck"
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket",
+    ]
+    resources = [
+      aws_s3_bucket.guardduty_logs.arn,
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "config.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AWSConfigBucketDelivery"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+    ]
+    resources = [
+      "${aws_s3_bucket.guardduty_logs.arn}/*",
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "config.amazonaws.com",
+      ]
+    }
+  }
+}
+
+
+# ===============================================================================
 # Amazon S3 Bucket for Secure Information
 # ===============================================================================
 resource "aws_s3_bucket" "secure_info" {
