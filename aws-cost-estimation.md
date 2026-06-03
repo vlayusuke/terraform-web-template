@@ -1,472 +1,280 @@
 # AWS Cost Estimation for terraform-web-template
 
-このドキュメントは、`terraform-web-template`で構築されるAWSリソースの1環境あたり1ヶ月間(730時間)のコスト見積もりです。
+このドキュメントは、`terraform-web-template`で構築されるAWSリソースの1環境あたり1ヶ月間(730時間)のコスト見積もりをUSDで示します。
 
-**リージョン**: `ap-northeast-1` (東京リージョン)
-**計算基準**: 月間730時間 (30日 × 24時間)
-**対象環境**: `develop`, `staging`, `production` (環境差分防止のため、各環境で同じ構成を想定)
+**Region**: `ap-northeast-1` (Tokyo)
+**Calculation basis**: 730 hours/month (30d × 24h)
+**Target environments**: `develop`, `staging`, `production` (同一構成を想定)
 
 ## 1. 計算対象外リソース (無料または最小限のコスト)
 
-以下のリソースは**無料または無視できるコストで提供**されています：
+以下は概ね無料、または無視できるコストとして扱っています（詳細はAWSの料金表を参照）：
 
-- AWS CloudFormation の stack 定義
-- AWS IAM (Identity and Access Management)
-- AWS KMS - 最初の1000リクエスト/月は無料
-- AWS Secrets Manager - 最初のシークレット1つは無料、以降$0.4/月
-- AWS Systems Manager Parameter Store - 無料版
-- Amazon Route 53 - hosted zone ($0.50/月)
-- Amazon VPC、Security Groups、Network ACLs - 無料
-- VPC Flow Logs (CloudWatch Logs への出力時のログストレージコストのみ計上)
-- Amazon CloudWatch Alarms - 無料
+- IAM, CloudFormation definitions
+- KMS（最初のリクエスト等は無料枠あり）
+- Secrets Manager（最初のシークレット等は無料枠あり）
+- Systems Manager Parameter Store（無料版）
+- Route 53 hosted zone（小額）
+- VPC / Security Groups / NACL（管理面でのコストは無料）
 
-## 2. コスト見積もり (月間 730 時間ベース)
+## 2. コスト見積もり (730 時間/月 ベース)
 
-### 2.1 Amazon Aurora RDS
+### 2.1 Amazon Aurora (Aurora MySQL)
 
-**構成:**
+**構成**:
 
-- Engine: MySQL 8.0 with Aurora
-- Instance Type: `db.t4g.medium` × 2 (プライマリ + レプリカ)
-- Backup Retention: 14 日
-- Performance Insights: 有効化 (7日間保持)
+- Engine: aurora-mysql
+- Instance: `db.t4g.medium` × 2
+- ストレージ想定: 100 GB
+- バックアップストレージ想定: 50 GB
 
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Aurora MySQL インスタンス (`db.t4g.medium`) | 2 | ¥0.314/時間 | ¥458.84 |
-| Aurora ストレージ | 100 GB (推定) | ¥0.238/GB | ¥23.80 |
-| バックアップストレージ (14日間) | 50 GB (推定) | ¥0.238/GB | ¥11.90 |
-| Performance Insights | 1 | ¥0.0308/時間 | ¥22.48 |
-| **Aurora 月額合計** | | | **¥517.02** |
+| Aurora instance (`db.t4g.medium`) | 2 | $0.03 / hr | $43.80 |
+| Storage (estimate) | 100 GB | $0.10 / GB-month | $10.00 |
+| Backup storage (estimate) | 50 GB | $0.10 / GB-month | $5.00 |
+| Performance Insights etc (estimate) | 1 | — | $5.00 |
+| **Aurora subtotal** | | | **$63.80** |
 
 ### 2.2 Amazon ElastiCache (Redis)
 
-**構成:**
+**構成**:
 
-- Node Type: `cache.t4g.medium` × 2 (マルチAZ有効化)
-- Engine: Redis 7.2
-- Automatic Failover: 有効化
+- Node Type: `cache.t4g.medium` × 2
 
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| ElastiCache ノード (`cache.t4g.medium`) | 2 | ¥0.146/時間 | ¥213.16 |
-| キャッシュデータの転送 (推定) | 10 GB | ¥0.0 | ¥0.00 |
-| **ElastiCache 月額合計** | | | **¥213.16** |
+| ElastiCache node (`cache.t4g.medium`) | 2 | $0.024 / hr | $35.04 |
+| **ElastiCache subtotal** | | | **$35.04** |
 
-### 2.3 Amazon ECS Fargate
+### 2.3 Amazon ECS (Fargate)
 
-**構成:**
+**構成 (Terraform 参照)**:
 
-- App Service: 2 タスク (0.25 CPU + 0.5 GB メモリ)
-- Cron Service: 1 タスク (0.25 CPU + 0.5 GB メモリ)
-- Queue Service: 1 タスク (0.25 CPU + 0.5 GB メモリ)
-- Migrate Service: オンデマンド実行 (月5回実行と想定)
+- App service: desired_count = 2 (cpu=256, memory=512)
+- Cron: 1 (cpu=256, memory=512)
+- Queue: 1 (cpu=256, memory=512)
 
-| 項目 | 数量 | 単価 | 月額コスト |
+合算想定:
+
+- 合計 vCPU: 1.00 vCPU  (= 4 × 0.25)
+- 合計 memory: 2.0 GB
+- vCPU時間: 1.00 × 730 = 730 vCPU-hr
+- Memory時間: 2.0 × 730 = 1,460 GB-hr
+
+料金想定:
+
+- vCPU: $0.04048 / vCPU-hr
+- Memory: $0.004445 / GB-hr
+
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Fargate CPU (0.25 CPU) | 208 CPU時間/月 | ¥0.02515/CPU時間 | ¥5.23 |
-| Fargate メモリ (0.5 GB) | 416 GB時間/月 | ¥0.00274/GB時間 | ¥1.14 |
-| **ECS Fargate 月額合計** | | | **¥6.37** |
+| Fargate vCPU | 730 vCPU-hr | $0.04048 / vCPU-hr | $29.55 |
+| Fargate Memory | 1,460 GB-hr | $0.004445 / GB-hr | $6.49 |
+| **Fargate subtotal** | | | **$36.04** |
 
-**注:**
+### 2.4 Amazon EC2 (Bastion)
 
-- App Service: 2 タスク × 24h × 30d = 1,440 タスク時間
-- Cron Service: 1 タスク × 24h × 30d = 720 タスク時間
-- Queue Service: 1 タスク × 24h × 30d = 720 タスク時間
-- Migrate Service: 5 回実行 × 10分 = 50分/月
+**構成**:
 
-### 2.4 Amazon EC2 (Bastion Host)
+- Instance: `t4g.nano` (730h)
+- EBS total: 72 GB (root 8 GB + data 64 GB, gp3 想定)
 
-**構成:**
-
-- Instance Type: `t4g.nano`
-- Root Volume: 8 GB (gp3)
-- EBS Volume: 64 GB (gp3)
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| EC2 インスタンス (t4g.nano) | 730 時間 | ¥0.0104/時間 | ¥7.59 |
-| EBS Root Volume (8 GB gp3) | 8 GB | ¥0.095/GB | ¥0.76 |
-| EBS Data Volume (64 GB gp3) | 64 GB | ¥0.095/GB | ¥6.08 |
-| Elastic IP アドレス | 1 | ¥1.40/月 | ¥1.40 |
-| **EC2 月額合計** | | | **¥15.83** |
+| EC2 `t4g.nano` | 730 hr | $0.0052 / hr | $3.80 |
+| EBS gp3 (72 GB) | 72 GB | $0.08 / GB-month | $5.76 |
+| Elastic IP (typical) | 1 | monthly | $0.00–small (included) |
+| **EC2 subtotal** | | | **$9.56** |
 
 ### 2.5 Application Load Balancer (ALB)
 
-**構成:**
-
-- 1 × ALB (インターネット対向)
-- 1 × Target Group
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| ALB 時間単価 | 730 時間 | ¥0.0205/時間 | ¥14.97 |
-| ALB 処理単価 (推定 1,000万/月) | 10,000,000 LCU | ¥0.0000014/LCU | ¥14.00 |
-| **ALB 月額合計** | | | **¥28.97** |
+| ALB (time + LCU estimate) | — | — | **$22.27** |
 
 ### 2.6 Amazon CloudFront
 
-**構成:**
-
-- 1 × Distribution
-- 複数 Origin (ALB, S3 assets, S3 uploads)
-- オリジナルリクエスト推定: 月 10 GB
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| CloudFront Data Transfer Out (10 GB) | 10 GB | ¥0.085/GB | ¥0.85 |
-| CloudFront HTTP/HTTPS Requests | 1,000,000 件 | ¥0.010/10,000件 | ¥1.00 |
-| **CloudFront 月額合計** | | | **¥1.85** |
+| Data Out 10 GB + requests (estimate) | 10 GB + requests | — | **$1.85** |
 
 ### 2.7 Amazon S3
 
-**構成:**
-
-- Assets Bucket
-- Uploads Bucket
-- Logs Bucket (ALB, VPC Flow Logs)
-- SES Event Logs Bucket
-- S3 標準ストレージ推定: 50 GB
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| S3 ストレージ (標準) | 50 GB | ¥0.023/GB | ¥1.15 |
-| S3 PUT リクエスト | 10,000 件 | ¥0.00000442/件 | ¥0.04 |
-| S3 GET リクエスト | 100,000 件 | ¥0.00000035/件 | ¥0.04 |
-| S3 オブジェクト削除 | 5,000 件 | ¥0 | ¥0.00 |
-| **S3 月額合計** | | | **¥1.23** |
+| S3 storage 50 GB (standard) | 50 GB | $0.023 / GB | $1.15 |
+| S3 requests (small) | — | — | included |
+| **S3 subtotal** | | | **$1.15** |
 
 ### 2.8 Amazon CloudWatch Logs
 
-**構成:**
-
-- ECS ログ (`app`, `cron`, `queue`, `migrate`)
-- Aurora ログ (`audit`, `error`, `general`, `slowquery`, `iam-db-auth-error`)
-- ALB ログ
-- VPC Flow Logs
-- Lambda ログ
-- ElastiCache ログ
-- Log Group 保持期間: 30日
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| ログ取得量 (推定 50 GB/月) | 50 GB | ¥0.538/GB | ¥26.90 |
-| ログストレージ (推定 100 GB 保持) | 100 GB | ¥0.0323/GB | ¥3.23 |
-| **CloudWatch Logs 月額合計** | | | **¥30.13** |
+| Log ingestion 50 GB (estimate) + storage | — | — | **$28.00** |
 
 ### 2.9 Amazon Data Firehose
 
-**構成:**
-
-- 5 × Delivery Stream (Aurora ログ用: `audit`, `error`, `general`, `slowquery`, `iam-db-auth-error`)
-- 各ストリームの出力先: S3
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Firehose PUT リクエスト (推定 100,000件/月) | 100,000 | ¥0.38/100万件 | ¥0.04 |
-| Firehose vCPU時間 (推定 0.1 vCPU時間) | 0.1 | ¥0.149/vCPU時間 | ¥0.01 |
-| **Firehose 月額合計** | | | **¥0.05** |
+| Firehose (small usage estimate) | — | — | **$0.05** |
 
 ### 2.10 AWS Lambda
 
-**構成:**
-
-- `rds_control`: RDS制御
-- `lambda_log_error_alert`: エラーアラート
-- `lambda_metric_alarm`: メトリクスアラーム
-- `lambda_schedule_ecs_maintenance`: ECS定期メンテナンス
-- `lambda_execute_ecs_force_deployment`: ECSデプロイメント
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Lambda 実行回数 (推定 50,000回/月) | 50,000 | ¥0.0000002/件 | ¥0.01 |
-| Lambda 実行時間 (推定 1,000秒/月 at 256MB) | 1,000,000 ms | ¥0.0000166667/ms | ¥0.02 |
-| **Lambda 月額合計** | | | **¥0.03** |
+| Lambda (small usage estimate) | — | — | **$0.03** |
 
-### 2.11 Amazon SNS (Simple Notification Service)
+### 2.11 Amazon SNS
 
-**構成:**
-
-- Topic: metric-alarm notifications
-- Topic: event notifications
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| SNS Publish リクエスト (推定 1,000/月) | 1,000 | ¥0.00/件 | ¥0.00 |
-| SNS Email Notifications (推定 50/月) | 50 | ¥0.00202/件 | ¥0.10 |
-| **SNS 月額合計** | | | **¥0.10** |
+| SNS (small usage) | — | — | **$0.10** |
 
-### 2.12 AWS WAFv2 (Web Application Firewall)
+### 2.12 AWS WAFv2
 
-**構成:**
-
-- CloudFront 用 Web ACL
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| WAFv2 Web ACL | 1 | ¥6.50/月 | ¥6.50 |
-| WAFv2 Rules (推定 5 rules) | 5 | ¥1.00/ルール | ¥5.00 |
-| WAFv2 Requests (推定 1,000万/月) | 10,000,000 | ¥0.00000060/件 | ¥6.00 |
-| **WAFv2 月額合計** | | | **¥17.50** |
+| WAFv2 Web ACL + rules + requests (estimate) | — | — | **$12.00** |
 
-### 2.13 AWS Data Lifecycle Manager (DLM)
+### 2.13 Data Lifecycle Manager (EBS snapshots)
 
-**構成:**
-
-- EBS スナップショット自動作成ポリシー
-- スナップショット保持期間: 7日
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| EBS スナップショット (推定 5 snapshots × 72 GB) | 360 GB | ¥0.018/GB | ¥6.48 |
-| **DLM 月額合計** | | | **¥6.48** |
+| Snapshot storage 360 GB (estimate) | 360 GB | $0.05 / GB | $18.00 |
 
-### 2.14 AWS Certificate Manager (ACM)
+### 2.14 AWS Certificate Manager
 
-**構成:**
-
-- 2 × ACM Certificate (ALB用, CloudFront用)
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| ACM 証明書 | 2 | ¥0 | ¥0.00 |
-| **ACM 月額合計** | | | **¥0.00** |
+| ACM public certificates | — | free | $0.00 |
 
 ### 2.15 Amazon Route 53
 
-**構成:**
-
-- 1 × Hosted Zone
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Hosted Zone | 1 | ¥0.50/月 | ¥0.50 |
-| Query (推定 10,000,000/月) | 10,000,000 | ¥0.40/百万件 | ¥4.00 |
-| **Route 53 月額合計** | | | **¥4.50** |
+| Hosted zone + queries (estimate) | — | — | $4.50 |
 
-### 2.16 Amazon VPC Endpoints
+### 2.16 VPC Endpoints
 
-**構成:**
-
-- Interface VPC Endpoints (複数サービス用)
-- Gateway Endpoints (S3, DynamoDB)
-
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Interface Endpoint (推定 3 endpoints) | 3 | ¥7.30/月 | ¥21.90 |
-| Endpoint リクエスト (推定 1,000万/月) | 10,000,000 | ¥0.01/百万件 | ¥0.10 |
-| Gateway Endpoint | 2 | ¥0 | ¥0.00 |
-| **VPC Endpoints 月額合計** | | | **¥22.00** |
+| Interface endpoints (3 × $7.30/month) | 3 | $7.30 / endpoint-mo | $21.90 |
 
 ### 2.17 Amazon API Gateway
 
-**構成:**
-
-- なし (このテンプレートでは非該当)
-
-| 項目 | 数量 | 単価 | 月額コスト |
-| :---- | ----: | ----: | ----: |
-| **API Gateway 月額合計** | | | **¥0.00** |
+テンプレート内に該当なし（見積対象外）
 
 ### 2.18 Amazon DynamoDB
 
-**構成:**
+テンプレート内に該当なし（見積対象外）
 
-- なし (このテンプレートでは非該当)
+### 2.19 Amazon EFS
 
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| **DynamoDB 月額合計** | | | **¥0.00** |
-
-### 2.19 Amazon EFS (Elastic File System)
-
-**構成:**
-
-- 1 × EFS (ECS タスク用)
-- ストレージ推定: 10 GB
-
-| 項目 | 数量 | 単価 | 月額コスト |
-| :---- | ----: | ----: | ----: |
-| EFS ストレージ (標準ストレージクラス) | 10 GB | ¥0.23/GB | ¥2.30 |
-| EFS Infrequent Access | 5 GB | ¥0.033/GB | ¥0.17 |
-| EFS スループット | - | ¥0 (バースト) | ¥0.00 |
-| **EFS 月額合計** | | | **¥2.47** |
+| EFS small usage estimate | — | — | **$3.13** |
 
 ### 2.20 Amazon Inspector v2
 
-**構成:**
+初年度無料枠等を考慮し小額/無料扱い（推定）
 
-- 対象リソース: EC2, ECR, Lambda
+### 2.21 Amazon ECR
 
-| 項目 | 数量 | 単価 | 月額コスト |
+| Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Inspector ベース費用 | 1 | ¥0/月 (初年度無料) | ¥0.00 |
-| Inspector EC2スキャン | 1 インスタンス | 推定 ¥0/月 | ¥0.00 |
-| **Inspector v2 月額合計** | | | **¥0.00** |
-
-### 2.21 Amazon ECR (Elastic Container Registry)
-
-**構成:**
-
-- 1 × ECR リポジトリ
-- ストレージ推定: 5 GB
-
-| 項目 | 数量 | 単価 | 月額コスト |
-| :---- | ----: | ----: | ----: |
-| ECR ストレージ | 5 GB | ¥0.071/GB | ¥0.36 |
-| ECR データ転送 (Out) | 1 GB | ¥0.114/GB | ¥0.11 |
-| **ECR 月額合計** | | | **¥0.47** |
+| ECR storage 5 GB | 5 GB | $0.10 / GB-month (approx) | $0.50 |
 
 ### 2.22 AWS Config
 
-**構成:**
-
-- AWS Config (`audit`環境のみで有効化)
-
-| 項目 | 数量 | 単価 | 月額コスト |
-| :---- | ----: | ----: | ----: |
-| Config レコーディング | - | ¥0 (推定) | ¥0.00 |
-| **AWS Config 月額合計** | | | **¥0.00** |
+`audit` 環境のみ有効化想定。小額/概算扱い。
 
 ### 2.23 AWS CloudTrail
 
-**構成:**
+S3保存分等の小額: **$0.02**
 
-- CloudTrail (`audit`環境のみで有効化)
-- ログ出力先: S3
+### 2.24 Amazon GuardDuty
 
-| 項目 | 数量 | 単価 | 月額コスト |
+S3やCloudTrail、VPC Flow Logs等を解析して脅威検出を行うAmazon GuardDutyと関連リソースが`audit`配下で実装されています。主なリソースは`aws_guardduty_detector`、複数の`aws_guardduty_detector_feature`（S3 Data Events, RDS login events, EBS malware protection, runtime monitoring）、`aws_guardduty_publishing_destination`（S3出力）、および専用のKMSキーです。
+
+| 項目 | 数量/想定 | 単価(目安) | 月額コスト (USD) |
 | :---- | ----: | ----: | ----: |
-| CloudTrail Management Events | - | ¥0 (推定) | ¥0.00 |
-| S3 ストレージ (CloudTrail ログ) | 1 GB | ¥0.023/GB | ¥0.02 |
-| **CloudTrail 月額合計** | | | **¥0.02** |
+| GuardDuty データ解析 (推定) | ~50 GB 分析 | $0.20 / GB (概算) | $10.00 |
+| S3 Data Events 機能 (追加解析) | 中程度の活動量 | 概算 | $10.00 |
+| GuardDuty ログ用 S3 ストレージ | 10 GB | $0.023 / GB | $0.23 |
+| KMS CMK (customer-managed key) | 1 key | $1.00 / month (概算) | $1.00 |
+| **GuardDuty 小計 (概算)** | | | **$21.23** |
 
-## 3. 環境別月額コスト合計
+**注:** GuardDuty の実コストは検出対象・ログ量・分析対象の種類によって大きく変動します。上記は中小規模の設定を想定した概算です。
 
-### 3.1 develop/staging/production 環境 (1環境あたり)
+## 3. 環境別月額コスト合計 (1 環境あたり)
 
-| カテゴリ | 月額コスト |
+| Category | Monthly cost (USD) |
 | :---- | ----: |
-| Aurora RDS | ¥517.02 |
-| ElastiCache | ¥213.16 |
-| ECS Fargate | ¥6.37 |
-| EC2 (Bastion) | ¥15.83 |
-| ALB | ¥28.97 |
-| CloudFront | ¥1.85 |
-| S3 | ¥1.23 |
-| CloudWatch Logs | ¥30.13 |
-| Kinesis Firehose | ¥0.05 |
-| Lambda | ¥0.03 |
-| SNS | ¥0.10 |
-| WAFv2 | ¥17.50 |
-| DLM | ¥6.48 |
-| ACM | ¥0.00 |
-| Route 53 | ¥4.50 |
-| VPC Endpoints | ¥22.00 |
-| EFS | ¥2.47 |
-| Inspector v2 | ¥0.00 |
-| ECR | ¥0.47 |
-| AWS Config | ¥0.00 |
-| CloudTrail | ¥0.02 |
-| **1環境あたりの月額合計** | **¥868.19** |
+| Aurora RDS | $63.80 |
+| ElastiCache | $35.04 |
+| ECS Fargate | $36.04 |
+| EC2 (Bastion + EBS) | $9.56 |
+| ALB | $22.27 |
+| CloudFront | $1.85 |
+| S3 | $1.15 |
+| CloudWatch Logs | $28.00 |
+| Firehose | $0.05 |
+| Lambda | $0.03 |
+| SNS | $0.10 |
+| WAFv2 | $12.00 |
+| DLM (snapshots) | $18.00 |
+| ACM | $0.00 |
+| Route 53 | $4.50 |
+| VPC Endpoints | $21.90 |
+| EFS | $3.13 |
+| Inspector v2 | $0.00 |
+| ECR | $0.50 |
+| AWS Config | $0.00 |
+| CloudTrail | $0.02 |
+| **Monthly total (per environment)** | **$257.94** |
 
-### 3.2 `audit`環境
+## 4. `audit` 環境 (概算)
 
-**注:** audit環境は、セキュリティ＆コンプライアンス系のリソースが中心のため、コストが大きく異なります。
+`audit` 環境はセキュリティ/監査向けのリソースに偏るため別途概算しています。
 
-| カテゴリ | 月額コスト |
+| Category | Monthly cost (USD) |
 | :---- | ----: |
-| CloudTrail | ¥100.00 (推定) |
-| AWS Config | ¥50.00 (推定) |
-| Inspector v2 | ¥50.00 (推定) |
-| CloudWatch Logs | ¥20.00 (推定) |
-| S3 (ログ保存) | ¥10.00 (推定) |
-| Lambda (検証機能) | ¥5.00 (推定) |
-| SNS | ¥2.00 (推定) |
-| **audit環境の月額合計** | **¥237.00 (推定)** |
+| CloudTrail | $10–100 (estimate) |
+| AWS Config | $10–50 (estimate) |
+| Inspector v2 | $0–50 (estimate) |
+| CloudWatch Logs | $5–20 (estimate) |
+| S3 (logs) | $1–10 (estimate) |
+| Lambda | $0–5 (estimate) |
+| SNS | $0–2 (estimate) |
+| GuardDuty | $21.23 (estimate) |
+| **audit monthly total (estimate)** | **$258.23 (estimate)** |
 
-## 4. 3環境 (dev/staging/prd)+ audit のトータルコスト
+## 5. 合計（3 環境 + audit）
+
+概算:
 
 ```text
-= (¥868.19 × 3) + ¥237.00
-= ¥2,604.57 + ¥237.00
-= ¥2,841.57/月額
+= ($257.94 × 3) + $258.23 (audit estimate) = $773.82 + $258.23 = $1,032.05 / month
 ```
 
-**年間コスト**: ¥2,841.57 × 12 = **¥34,098.84**
+## 6. コスト削減案
 
-## 5. コスト削減機会
+- Reserved Instances / Savings Plans の適用（Aurora, Fargate, EC2 など）
+- CloudWatch Logs の保持期間短縮
+- CloudFront キャッシュ最適化
+- スナップショット・バックアップの削減/ライフサイクルポリシー
 
-### 5.1 Reserved Instances (RI) による削減
+## 7. 精度向上の手段
 
-Aurora RDS インスタンスに 1年間のRIを適用した場合、**約40%のコスト削減**が期待できます。
-
-- Aurora (1年RI): ¥517.02 → ¥310.21/月 (¥206.81削減)
-
-### 5.2 Savings Plans による削減
-
-Fargate、EC2、RDS に Savings Plans を適用した場合、**約20-25%のコスト削減**が期待できます。
-
-### 5.3 CloudFront キャッシュ最適化
-
-CloudFront のキャッシュ設定を最適化して、オリジナルリクエストを削減した場合、ALB と CloudFront のコストを削減できます。
-
-### 5.4 ログ保持期間の短縮
-
-CloudWatch Logs の保持期間を 30日から 7日に短縮した場合、**約75%のログストレージコスト削減**が期待できます。
-
-- CloudWatch Logs: ¥30.13 → ¥7.53/月 (¥22.60削減)
-
-## 6. 注意事項
-
-1. **データ転送料金**: VPC 内でのデータ転送は無料ですが、インターネット経由のデータ転送にはコストが発生します。実際の使用パターンに応じて調整が必要です。
-
-2. **ストレージサイズ**: このドキュメントで使用しているストレージサイズ (Aurora: 100GB、S3: 50GB など)は**推定値**です。実際の使用量に応じて調整してください。
-
-3. **リクエスト数**: CloudFront、CloudWatch Logs のリクエスト数も推定値です。実際のアクセスパターンに応じて変動します。
-
-4. **リージョン料金**: このドキュメントは東京リージョン (ap-northeast-1)の料金を使用しています。他のリージョンを使用する場合は、AWS 公式の料金ページから最新の料金を確認してください。
-
-5. **価格変動**: AWS の料金は予告なく変更される場合があります。最新の料金は [AWS 料金ページ](https://aws.amazon.com/jp/pricing/) を参照してください。
-
-6. **無料利用枠**: AWS アカウントが作成されたばかりの場合、無料利用枠の対象になる場合があります。詳細は [AWS 無料利用枠](https://aws.amazon.com/jp/free/) を参照してください。
-
-## 7. より正確なコスト算出方法
-
-より正確なコスト見積もりを取得するには、以下の方法を推奨します：
-
-### 方法1: AWS Cost Explorer を使用
-
-AWS マネジメントコンソールの Cost Explorer で、実際のコスト実績を確認できます。
-
-### 方法2: AWS Pricing API を使用
-
-AWS Pricing API を使用して、プログラマティックにリソース別の最新料金を取得できます。
-
-### 方法3: Terraform を用いたコスト自動計算
-
-Infracost などのツールを使用して、Terraform から自動的にコスト見積もりを生成できます。
+- `infracost` を用いて Terraform から自動で見積を生成することを推奨します。
 
 ```bash
-# Infracost のインストール
 brew install infracost
-
-# コスト見積もりの生成
 cd develop
 infracost breakdown --path .
 ```
 
-## 8. 参考資料
-
-- [AWS 料金ページ](https://aws.amazon.com/jp/pricing/)
-- [AWS RDS 料金](https://aws.amazon.com/jp/rds/pricing/)
-- [AWS ElastiCache 料金](https://aws.amazon.com/jp/elasticache/pricing/)
-- [AWS ECS 料金](https://aws.amazon.com/jp/ecs/pricing/)
-- [AWS CloudFront 料金](https://aws.amazon.com/jp/cloudfront/pricing/)
-- [AWS S3 料金](https://aws.amazon.com/jp/s3/pricing/)
-- [Infracost - Terraform cost estimation](https://www.infracost.io/)
-
 ---
 
-**最終更新**: 2026年6月3日
-**計算対象リージョン**: `ap-northeast-1` (東京リージョン)
+最終更新: 2026-06-04
