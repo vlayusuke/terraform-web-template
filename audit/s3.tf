@@ -899,7 +899,7 @@ data "aws_iam_policy_document" "config_logs_global" {
 
 
 # ===============================================================================
-# Amazon S3 Bucket for Amazon GuardDuty
+# Amazon S3 Bucket for Amazon GuardDuty Logs
 # ===============================================================================
 resource "aws_s3_bucket" "guardduty_logs" {
   bucket = "${local.project}-${local.env}-${local.account_id}-s3-gdt-logs-bucket"

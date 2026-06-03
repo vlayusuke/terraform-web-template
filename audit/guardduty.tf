@@ -26,12 +26,6 @@ resource "aws_guardduty_detector_feature" "rds_login_events" {
   status      = "ENABLED"
 }
 
-resource "aws_guardduty_detector_feature" "malware_protection" {
-  detector_id = aws_guardduty_detector.main.id
-  name        = "MALWARE_PROTECTION"
-  status      = "ENABLED"
-}
-
 resource "aws_guardduty_detector_feature" "ebs_malware_protection" {
   detector_id = aws_guardduty_detector.main.id
   name        = "EBS_MALWARE_PROTECTION"
