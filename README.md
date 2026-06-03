@@ -56,7 +56,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 | develop     |      560 | N/A              |
 | staging     |      560 | N/A              |
 | production  |      560 | N/A              |
-| audit       |      168 | Each AWS account |
+| audit       |      180 | Each AWS account |
 
 ## 環境構築をする際の注意事項
 
