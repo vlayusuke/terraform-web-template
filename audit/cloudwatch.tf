@@ -180,59 +180,6 @@ resource "aws_cloudwatch_log_group" "cloudtrail_global" {
 
 
 # ===============================================================================
-# Amazon CloudWatch Log group for AWS Config (ap-northeast-1)
-# ===============================================================================
-resource "aws_cloudwatch_log_group" "config" {
-  name              = "${local.project}-${local.env}-cw-cfg-cwlog"
-  retention_in_days = local.retention_in_days
-
-  tags = {
-    Name = "${local.project}-${local.env}-cw-cfg-cwlog"
-  }
-}
-
-resource "aws_cloudwatch_log_stream" "config" {
-  name           = "${local.project}-${local.env}-cw-cfg-cwstream"
-  log_group_name = aws_cloudwatch_log_group.config.name
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "config" {
-  name            = "${local.project}-${local.env}-cw-cfg-subscription-filter"
-  log_group_name  = aws_cloudwatch_log_group.config.name
-  filter_pattern  = ""
-  destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
-}
-
-
-# ===============================================================================
-# Amazon CloudWatch Log group for AWS Config (ap-northeast-3)
-# ===============================================================================
-resource "aws_cloudwatch_log_group" "config_osaka" {
-  provider          = aws.osaka
-  name              = "${local.project}-${local.env}-cw-cfg-cwlog-osaka"
-  retention_in_days = local.retention_in_days
-
-  tags = {
-    Name = "${local.project}-${local.env}-cw-cfg-cwlog-osaka"
-  }
-}
-
-
-# ===============================================================================
-# Amazon CloudWatch Log group for AWS Config (us-east-1)
-# ===============================================================================
-resource "aws_cloudwatch_log_group" "config_global" {
-  provider          = aws.virginia
-  name              = "${local.project}-${local.env}-cw-cfg-cwlog-global"
-  retention_in_days = local.retention_in_days
-
-  tags = {
-    Name = "${local.project}-${local.env}-cw-cfg-cwlog-global"
-  }
-}
-
-
-# ===============================================================================
 # Amazon CloudWatch Log group for Amazon SNS
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "sns" {
