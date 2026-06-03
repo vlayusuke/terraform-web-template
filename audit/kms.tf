@@ -70,3 +70,77 @@ data "aws_iam_policy_document" "cloudtrail_kms_policy" {
     }
   }
 }
+
+
+# ===============================================================================
+# AWS KMS for Amazon GuardDuty
+# ===============================================================================
+resource "aws_kms_key" "guardduty" {
+  description             = "${local.project}-${local.env}-kms-gdt-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-gdt-key"
+  }
+}
+
+resource "aws_kms_key_policy" "guardduty" {
+  key_id = aws_kms_key.guardduty.key_id
+  policy = data.aws_iam_policy_document.guardduty_kms_policy.json
+}
+
+data "aws_iam_policy_document" "guardduty_kms_policy" {
+  statement {
+    sid    = "GuardDutyAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "guardduty.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "GuardDutyKMS"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      aws_kms_key.guardduty.arn,
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "guardduty.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AllowAccountAccess"
+    effect = "Allow"
+    actions = [
+      "kms:*",
+    ]
+    resources = [
+      aws_kms_key.guardduty.arn,
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:group/${local.iam_infra_group}",
+      ]
+    }
+  }
+}
