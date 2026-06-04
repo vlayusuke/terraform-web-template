@@ -7,13 +7,13 @@ resource "aws_lb" "main_external" {
   load_balancer_type         = "application"
   enable_deletion_protection = false
 
-  security_groups = [
-    aws_security_group.alb.id,
-  ]
-
   subnets = [
     for subnet in aws_subnet.main_public :
     subnet.id
+  ]
+
+  security_groups = [
+    aws_security_group.alb_external.id,
   ]
 
   access_logs {
