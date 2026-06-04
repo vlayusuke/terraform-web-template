@@ -2,7 +2,7 @@
 # Application Load Balancer
 # ===============================================================================
 resource "aws_lb" "main_external" {
-  name                       = "${local.project}-${local.env}-alb"
+  name                       = "${local.project}-${local.env}-alb-external"
   internal                   = false
   load_balancer_type         = "application"
   enable_deletion_protection = false
@@ -22,7 +22,7 @@ resource "aws_lb" "main_external" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-alb"
+    Name = "${local.project}-${local.env}-alb-external"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_lb_listener" "alb_external_listener" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-alb-listener"
+    Name = "${local.project}-${local.env}-alb-external-listener"
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_lb_listener" "alb_external_listener" {
 # Application Load Balancer Target Group
 # ===============================================================================
 resource "aws_lb_target_group" "alb_external_tg" {
-  name                 = "${local.project}-${local.env}-alb-tg"
+  name                 = "${local.project}-${local.env}-alb-external-tg"
   target_type          = "ip"
   port                 = 80
   protocol             = "HTTP"
@@ -86,7 +86,7 @@ resource "aws_lb_target_group" "alb_external_tg" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-alb-tg"
+    Name = "${local.project}-${local.env}-alb-external-tg"
   }
 }
 
@@ -103,7 +103,7 @@ resource "aws_lb_listener_certificate" "alb_listener_cert" {
 # ===============================================================================
 # Application Load Balancer Listener Rule
 # ===============================================================================
-resource "aws_lb_listener_rule" "app" {
+resource "aws_lb_listener_rule" "main" {
   listener_arn = aws_lb_listener.alb_external_listener.arn
 
   condition {
@@ -120,7 +120,7 @@ resource "aws_lb_listener_rule" "app" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-alb-listener-rule"
+    Name = "${local.project}-${local.env}-alb-external-listener-rule"
   }
 }
 
@@ -151,6 +151,6 @@ resource "aws_lb_listener_rule" "naked" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-alb-listener-rule-redirect"
+    Name = "${local.project}-${local.env}-alb-external-listener-rule-redirect"
   }
 }
