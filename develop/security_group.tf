@@ -1,8 +1,8 @@
 # ===============================================================================
 # Security Group for Application Load Balancer
 # ===============================================================================
-resource "aws_security_group" "alb" {
-  name        = "${local.project}-${local.env}-alb-sg"
+resource "aws_security_group" "alb_external" {
+  name        = "${local.project}-${local.env}-alb-external-sg"
   description = "Security Group for ${local.project}-${local.env} External ALB"
   vpc_id      = aws_vpc.main.id
 
@@ -16,7 +16,7 @@ resource "aws_security_group" "alb" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-alb-sg"
+    Name = "${local.project}-${local.env}-alb-external-sg"
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_security_group_rule" "ingress_from_cloudfront_sg_rule" {
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.alb.id
+  security_group_id = aws_security_group.alb_external.id
 
   cidr_blocks = [
     for natgw_eip in aws_eip.main : "${natgw_eip.public_ip}/32"
@@ -158,7 +158,7 @@ resource "aws_security_group" "fargate_app" {
     to_port     = 80
     protocol    = "tcp"
     security_groups = [
-      aws_security_group.alb.id,
+      aws_security_group.alb_external.id,
     ]
   }
 
