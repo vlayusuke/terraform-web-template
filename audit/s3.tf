@@ -1035,7 +1035,7 @@ data "aws_iam_policy_document" "guardduty_logs" {
     principals {
       type = "Service"
       identifiers = [
-        "config.amazonaws.com",
+        "guardduty.amazonaws.com",
       ]
     }
   }
@@ -1053,7 +1053,7 @@ data "aws_iam_policy_document" "guardduty_logs" {
     principals {
       type = "Service"
       identifiers = [
-        "config.amazonaws.com",
+        "guardduty.amazonaws.com",
       ]
     }
   }
@@ -1071,7 +1071,7 @@ data "aws_iam_policy_document" "guardduty_logs" {
     principals {
       type = "Service"
       identifiers = [
-        "config.amazonaws.com",
+        "guardduty.amazonaws.com",
       ]
     }
   }
