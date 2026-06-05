@@ -162,6 +162,11 @@ resource "aws_cloudfront_response_headers_policy" "main" {
       frame_option = "SAMEORIGIN"
       override     = true
     }
+
+    xss_protection {
+      protection = true
+      override   = true
+    }
   }
 }
 
@@ -228,6 +233,10 @@ resource "aws_cloudfront_function" "basic_auth" {
   key_value_store_associations = [
     aws_cloudfront_key_value_store.basic_auth.id,
   ]
+
+  tags = {
+    Name = "${local.project}-${local.env}-cf-fnc-basic-auth"
+  }
 }
 
 
