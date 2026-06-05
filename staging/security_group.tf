@@ -52,7 +52,7 @@ resource "aws_security_group" "vpce_ecr" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "Allow HTTPS traffic from ECS Security Groups"
+    description = "Allow HTTPS traffic from AWS Fargate Security Groups"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
@@ -186,7 +186,7 @@ resource "aws_security_group" "fargate_cron" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "Allow HTTP traffic from ECS app Security Group"
+    description = "Allow HTTP traffic from AWS Fargate app Security Group"
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
@@ -219,7 +219,7 @@ resource "aws_security_group" "fargate_queue" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "Allow HTTP traffic from ECS app Security Group"
+    description = "Allow HTTP traffic from AWS Fargate app Security Group"
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
@@ -252,7 +252,7 @@ resource "aws_security_group" "aurora" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "Allow MySQL traffic from ECS app Security Group"
+    description = "Allow MySQL traffic from AWS Fargate app Security Group"
     protocol    = "tcp"
     from_port   = 3306
     to_port     = 3306
@@ -262,7 +262,7 @@ resource "aws_security_group" "aurora" {
   }
 
   ingress {
-    description = "Allow MySQL traffic from ECS cron Security Group"
+    description = "Allow MySQL traffic from AWS Fargate cron Security Group"
     protocol    = "tcp"
     from_port   = 3306
     to_port     = 3306
@@ -272,7 +272,7 @@ resource "aws_security_group" "aurora" {
   }
 
   ingress {
-    description = "Allow MySQL traffic from ECS queue Security Group"
+    description = "Allow MySQL traffic from AWS Fargate queue Security Group"
     protocol    = "tcp"
     from_port   = 3306
     to_port     = 3306
@@ -282,7 +282,7 @@ resource "aws_security_group" "aurora" {
   }
 
   ingress {
-    description = "Allow MySQL traffic from Bastion Security Group"
+    description = "Allow MySQL traffic from Amazon EC2 Bastion Instance Security Group"
     protocol    = "tcp"
     from_port   = 3306
     to_port     = 3306
@@ -292,7 +292,7 @@ resource "aws_security_group" "aurora" {
   }
 
   ingress {
-    description = "Allow SSH traffic from Bastion Security Group"
+    description = "Allow SSH traffic from Amazon EC2 Bastion Instance Security Group"
     protocol    = "tcp"
     from_port   = 22
     to_port     = 22
@@ -302,7 +302,7 @@ resource "aws_security_group" "aurora" {
   }
 
   ingress {
-    description = "Allow MySQL traffic from EC2 Instance Connector Endpoint Security Group"
+    description = "Allow MySQL traffic from Amazon EC2 Instance Connector Endpoint Security Group"
     protocol    = "tcp"
     from_port   = 3306
     to_port     = 3306
@@ -312,7 +312,7 @@ resource "aws_security_group" "aurora" {
   }
 
   ingress {
-    description = "Allow SSH traffic from EC2 Instance Connector Endpoint Security Group"
+    description = "Allow SSH traffic from Amazon EC2 Instance Connector Endpoint Security Group"
     protocol    = "tcp"
     from_port   = 22
     to_port     = 22
@@ -345,7 +345,7 @@ resource "aws_security_group" "redis" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "Allow Redis traffic from ECS app Security Group"
+    description = "Allow Redis traffic from AWS Fargate app Security Group"
     protocol    = "tcp"
     from_port   = 6379
     to_port     = 6379
@@ -355,7 +355,7 @@ resource "aws_security_group" "redis" {
   }
 
   ingress {
-    description = "Allow Redis traffic from ECS cron Security Group"
+    description = "Allow Redis traffic from AWS Fargate cron Security Group"
     protocol    = "tcp"
     from_port   = 6379
     to_port     = 6379
@@ -365,7 +365,7 @@ resource "aws_security_group" "redis" {
   }
 
   ingress {
-    description = "Allow Redis traffic from ECS queue Security Group"
+    description = "Allow Redis traffic from AWS Fargate queue Security Group"
     protocol    = "tcp"
     from_port   = 6379
     to_port     = 6379
@@ -375,7 +375,7 @@ resource "aws_security_group" "redis" {
   }
 
   ingress {
-    description = "Allow Redis traffic from Bastion Security Group"
+    description = "Allow Redis traffic from Amazon EC2 Bastion Instance Security Group"
     protocol    = "tcp"
     from_port   = 6379
     to_port     = 6379
@@ -385,7 +385,7 @@ resource "aws_security_group" "redis" {
   }
 
   ingress {
-    description = "Allow Redis traffic from EC2 Instance Connector Endpoint Security Group"
+    description = "Allow Redis traffic from Amazon EC2 Instance Connector Endpoint Security Group"
     protocol    = "tcp"
     from_port   = 6379
     to_port     = 6379
@@ -418,7 +418,7 @@ resource "aws_security_group" "efs" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "Allow NFS traffic from ECS app Security Group"
+    description = "Allow NFS traffic from AWS Fargate app Security Group"
     protocol    = "tcp"
     from_port   = 2049
     to_port     = 2049
