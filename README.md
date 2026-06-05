@@ -38,7 +38,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 | Resources                  | Version  |
 | :------------------------- | -------: |
 | Terraform                  | 1.15.5   |
-| AWS Provider               | 6.48.0   |
+| AWS Provider               | 6.49.0   |
 | AWS Cloud Control Provider | 1.87.0   |
 
 ### AWS Lambda関数に使用しているPythonのruntimeのVersion
@@ -132,7 +132,7 @@ backend "s3" {
 }
 ```
 
-に指定されている`bucket`ディレクティブと同じ名称のS3バケットを作成します。さらに、作成したS3バケットには、`key`プレフィックスを作成してください。Terraformの実行時には、作成した`key`プレフィックス内に`example-environment.terraform.tfstate`ファイルが作成されます。
+に指定されている`bucket`ディレクティブと同じ名称のS3バケットを作成します。さらに、作成したS3バケットには、`key`プレフィックスを作成してください。Terraformコマンドの実行時には、作成した`key`プレフィックス内に`example-environment.terraform.tfstate`ファイルが作成されます。
 
 > 注意: `audit/terraform.tf`のバックエンド設定では、Terraformの`data`や`output`を使って`bucket`名を動的に解決できません。`terraform init`コマンド実行時に`-backend-config="bucket=..."`引数を用いて、明示的にS3バケット名を指定してください。
 
