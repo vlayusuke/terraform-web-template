@@ -1,21 +1,23 @@
 # AWS Cost Estimation for terraform-web-template
 
-このドキュメントは、`terraform-web-template`で構築されるAWSリソースの1環境あたり1ヶ月間(730時間)のコスト見積もりをUSDで示します。
+このドキュメントは、`terraform-web-template`で構築されるAWSリソースの1環境あたり1ヶ月間(730時間)のコスト見積もり示したものです。為替変動を考慮して、コストはUSDで算出しています。
 
-**Region**: `ap-northeast-1` (Tokyo)
-**Calculation basis**: 730 hours/month (30d × 24h)
-**Target environments**: `develop`, `staging`, `production` (同一構成を想定)
+なお、アウトバウンド通信のデータ転送にかかるコストは推定値を含むため、全体的なコストは変動する可能性があります。
+
+- **Region**: `ap-northeast-1` (Tokyo)
+- **Calculation basis**: 730 hours/month (30d × 24h)
+- **Target environments**: `develop`, `staging`, `production` (同一構成を想定)
 
 ## 1. 計算対象外リソース (無料または最小限のコスト)
 
-以下は概ね無料、または無視できるコストとして扱っています（詳細はAWSの料金表を参照）：
+以下は概ね無料、または無視できるコストとして扱っています (詳細はAWSの料金表を参照):
 
-- IAM, CloudFormation definitions
-- KMS（最初のリクエスト等は無料枠あり）
-- Secrets Manager（最初のシークレット等は無料枠あり）
-- Systems Manager Parameter Store（無料版）
-- Route 53 hosted zone（小額）
-- VPC / Security Groups / NACL（管理面でのコストは無料）
+- AWS IAM, AWS CloudFormation
+- AWS KMS (最初のリクエスト等は無料枠あり)
+- AWS Secrets Manager (最初のシークレット等は無料枠あり)
+- AWS Systems Manager Parameter Store (無料版)
+- Amazon Route 53 Hosted Zone (小額)
+- AMazon VPC / Security Groups / NACL (管理面でのコストは無料)
 
 ## 2. コスト見積もり (730 時間/月 ベース)
 
@@ -36,7 +38,7 @@
 | Performance Insights etc (estimate) | 1 | — | $5.00 |
 | **Aurora subtotal** | | | **$63.80** |
 
-### 2.2 Amazon ElastiCache (Redis)
+### 2.2 Amazon ElastiCache (Redis OSS)
 
 **構成**:
 
@@ -47,13 +49,13 @@
 | ElastiCache node (`cache.t4g.medium`) | 2 | $0.024 / hr | $35.04 |
 | **ElastiCache subtotal** | | | **$35.04** |
 
-### 2.3 Amazon ECS (Fargate)
+### 2.3 Amazon ECS (AWS Fargate)
 
 **構成 (Terraform 参照)**:
 
-- App service: desired_count = 2 (cpu=256, memory=512)
-- Cron: 1 (cpu=256, memory=512)
-- Queue: 1 (cpu=256, memory=512)
+- app service: desired_count = 2 (cpu=256, memory=512)
+- cron: 1 (cpu=256, memory=512)
+- queue: 1 (cpu=256, memory=512)
 
 合算想定:
 
@@ -153,13 +155,13 @@
 
 | Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Hosted zone + queries (estimate) | — | — | $4.50 |
+| Hosted Zone + queries (estimate) | — | — | $4.50 |
 
 ### 2.16 VPC Endpoints
 
 | Item | Qty | Unit price | Monthly cost |
 | :---- | ----: | ----: | ----: |
-| Interface endpoints (3 × $7.30/month) | 3 | $7.30 / endpoint-mo | $21.90 |
+| Interface Endpoints (3 × $7.30/month) | 3 | $7.30 / endpoint-mo | $21.90 |
 
 ### 2.17 Amazon API Gateway
 
@@ -211,27 +213,27 @@ S3やCloudTrail、VPC Flow Logs等を解析して脅威検出を行うAmazon Gua
 
 | Category | Monthly cost (USD) |
 | :---- | ----: |
-| Aurora RDS | $63.80 |
-| ElastiCache | $35.04 |
-| ECS Fargate | $36.04 |
-| EC2 (Bastion + EBS) | $9.56 |
-| ALB | $22.27 |
-| CloudFront | $1.85 |
-| S3 | $1.15 |
-| CloudWatch Logs | $28.00 |
-| Firehose | $0.05 |
-| Lambda | $0.03 |
-| SNS | $0.10 |
-| WAFv2 | $12.00 |
-| DLM (snapshots) | $18.00 |
-| ACM | $0.00 |
-| Route 53 | $4.50 |
+| Amazon Aurora | $63.80 |
+| Amazon ElastiCache | $35.04 |
+| Amazon ECS | $36.04 |
+| Amazon EC2 (Bastion + EBS) | $9.56 |
+| Application Load Balancer | $22.27 |
+| Amazon CloudFront | $1.85 |
+| Amazon S3 | $1.15 |
+| Amazon CloudWatch Logs | $28.00 |
+| Amazon Data Firehose | $0.05 |
+| AWS Lambda | $0.03 |
+| Amazon SNS | $0.10 |
+| AWS WAFv2 | $12.00 |
+| AWS Data Lifecycle Manager (snapshots) | $18.00 |
+| AWS Certificate Manager | $0.00 |
+| Amazon Route 53 | $4.50 |
 | VPC Endpoints | $21.90 |
-| EFS | $3.13 |
-| Inspector v2 | $0.00 |
-| ECR | $0.50 |
+| Amazon EFS | $3.13 |
+| Amazon Inspector v2 | $0.00 |
+| Amazon ECR | $0.50 |
 | AWS Config | $0.00 |
-| CloudTrail | $0.02 |
+| AWS CloudTrail | $0.02 |
 | **Monthly total (per environment)** | **$257.94** |
 
 ## 4. `audit` 環境 (概算)
@@ -240,17 +242,17 @@ S3やCloudTrail、VPC Flow Logs等を解析して脅威検出を行うAmazon Gua
 
 | Category | Monthly cost (USD) |
 | :---- | ----: |
-| CloudTrail | $10–100 (estimate) |
+| AWS CloudTrail | $10–100 (estimate) |
 | AWS Config | $10–50 (estimate) |
-| Inspector v2 | $0–50 (estimate) |
-| CloudWatch Logs | $5–20 (estimate) |
-| S3 (logs) | $1–10 (estimate) |
-| Lambda | $0–5 (estimate) |
-| SNS | $0–2 (estimate) |
-| GuardDuty | $21.23 (estimate) |
+| Amazon Inspector v2 | $0–50 (estimate) |
+| Amazon CloudWatch Logs | $5–20 (estimate) |
+| Amazon S3 (logs) | $1–10 (estimate) |
+| AWS Lambda | $0–5 (estimate) |
+| Amazon SNS | $0–2 (estimate) |
+| Amazon GuardDuty | $21.23 (estimate) |
 | **audit monthly total (estimate)** | **$258.23 (estimate)** |
 
-## 5. 合計（3 環境 + audit）
+## 5. 合計 （3 環境 + `audit`）
 
 概算:
 
@@ -260,7 +262,7 @@ S3やCloudTrail、VPC Flow Logs等を解析して脅威検出を行うAmazon Gua
 
 ## 6. コスト削減案
 
-- Reserved Instances / Savings Plans の適用（Aurora, Fargate, EC2 など）
+- Reserved Instances / Savings Plans の適用 (Aurora, Fargate, EC2 など)
 - CloudWatch Logs の保持期間短縮
 - CloudFront キャッシュ最適化
 - スナップショット・バックアップの削減/ライフサイクルポリシー
@@ -277,4 +279,4 @@ infracost breakdown --path .
 
 ---
 
-最終更新: 2026-06-04
+最終更新: 2026-06-07
