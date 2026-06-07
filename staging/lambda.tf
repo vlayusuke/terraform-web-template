@@ -2,7 +2,7 @@
 # AWS Lambda Function for Amazon CloudWatch Logs Error Alert
 # ===============================================================================
 resource "aws_lambda_function" "lambda_log_error_alert" {
-  function_name    = "lmd-cw-log-error-alert"
+  function_name    = "lmd-cwt-log-error-alert"
   role             = aws_iam_role.lambda_cloudwatch.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.log_error_alert.output_path
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-lmd-cw-log-error-alert"
+    Name = "${local.project}-${local.env}-lmd-cwt-log-error-alert"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_lambda_permission" "lambda_cloudwatch_app" {
 # AWS Lambda Function for Amazon CloudWatch Metric Alarm
 # ===============================================================================
 resource "aws_lambda_function" "lambda_metric_alarm" {
-  function_name    = "lmd-metric-alarm"
+  function_name    = "lmd-cwt-metric-alarm"
   role             = aws_iam_role.lambda_cloudwatch.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.metric_alarm.output_path
@@ -78,7 +78,7 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-lmd-metric-alarm"
+    Name = "${local.project}-${local.env}-lmd-cwt-metric-alarm"
   }
 }
 
