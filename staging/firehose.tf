@@ -2,7 +2,7 @@
 # Amazon Data Firehose Stream (Amazon Aurora logs)
 # ===============================================================================
 resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
-  name        = "${local.project}-${local.env}-adf-aurora-logs-audit-to-s3"
+  name        = "${local.project}-${local.env}-adf-aur-logs-audit-to-s3"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -20,12 +20,12 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-adf-aurora-logs-audit-to-s3"
+    Name = "${local.project}-${local.env}-adf-aur-logs-audit-to-s3"
   }
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_error" {
-  name        = "${local.project}-${local.env}-adf-aurora-logs-error-to-s3"
+  name        = "${local.project}-${local.env}-adf-aur-logs-error-to-s3"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -43,12 +43,12 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_error" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-adf-aurora-logs-error-to-s3"
+    Name = "${local.project}-${local.env}-adf-aur-logs-error-to-s3"
   }
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_general" {
-  name        = "${local.project}-${local.env}-adf-aurora-logs-general-to-s3"
+  name        = "${local.project}-${local.env}-adf-aur-logs-general-to-s3"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -66,12 +66,12 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_general" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-adf-aurora-logs-general-to-s3"
+    Name = "${local.project}-${local.env}-adf-aur-logs-general-to-s3"
   }
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_slowquery" {
-  name        = "${local.project}-${local.env}-adf-aurora-logs-slowquery-to-s3"
+  name        = "${local.project}-${local.env}-adf-aur-logs-slowquery-to-s3"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -89,12 +89,12 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_slowquery" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-adf-aurora-logs-slowquery-to-s3"
+    Name = "${local.project}-${local.env}-adf-aur-logs-slowquery-to-s3"
   }
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" {
-  name        = "${local.project}-${local.env}-adf-aurora-logs-auth-error-to-s3"
+  name        = "${local.project}-${local.env}-adf-aur-logs-auth-error-to-s3"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -112,7 +112,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" 
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-adf-aurora-logs-auth-error-to-s3"
+    Name = "${local.project}-${local.env}-adf-aur-logs-auth-error-to-s3"
   }
 }
 
@@ -121,7 +121,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" 
 # Amazon Data Firehose Stream (Amazon ElastiCache logs)
 # ===============================================================================
 resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
-  name        = "${local.project}-${local.env}-adf-ec-logs-redis-to-s3"
+  name        = "${local.project}-${local.env}-adf-elc-logs-redis-to-s3"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -139,7 +139,7 @@ resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-adf-ec-logs-redis-to-s3"
+    Name = "${local.project}-${local.env}-adf-elc-logs-redis-to-s3"
   }
 }
 
