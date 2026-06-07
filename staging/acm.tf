@@ -67,16 +67,16 @@ resource "aws_acm_certificate" "main_cloudfront" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-acm-certificate-cf"
+    Name = "${local.project}-${local.env}-acm-certificate-cft"
   }
 }
 
 resource "aws_route53_record" "main_cloudfront" {
   for_each = {
-    for dvocf in aws_acm_certificate.main_cloudfront.domain_validation_options : dvocf.domain_name => {
-      name   = dvocf.resource_record_name
-      record = dvocf.resource_record_value
-      type   = dvocf.resource_record_type
+    for dvocft in aws_acm_certificate.main_cloudfront.domain_validation_options : dvocft.domain_name => {
+      name   = dvocft.resource_record_name
+      record = dvocft.resource_record_value
+      type   = dvocft.resource_record_type
     }
   }
 
