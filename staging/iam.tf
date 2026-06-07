@@ -399,8 +399,8 @@ data "aws_iam_policy_document" "ecs_service" {
       aws_ssm_parameter.app_key.arn,
       aws_ssm_parameter.aurora_writer_endpoint.arn,
       aws_ssm_parameter.aurora_reader_endpoint.arn,
-      aws_ssm_parameter.ec_writer_endpoint.arn,
-      aws_ssm_parameter.ec_reader_endpoint.arn,
+      aws_ssm_parameter.elasticache_writer_endpoint.arn,
+      aws_ssm_parameter.elasticache_reader_endpoint.arn,
     ]
   }
 
@@ -772,12 +772,12 @@ resource "aws_iam_role_policy_attachment" "rds_performance_insights" {
 # AWS IAM for AWS Lambda (CloudWatch Error Alert)
 # ===============================================================================
 resource "aws_iam_role" "lambda_cloudwatch" {
-  name               = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-role"
+  name               = "${local.project}-${local.env}-iam-lmd-cwt-logs-error-alert-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.lambda_cloudwatch_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-role"
+    Name = "${local.project}-${local.env}-iam-lmd-cwt-logs-error-alert-role"
   }
 }
 
@@ -798,10 +798,10 @@ data "aws_iam_policy_document" "lambda_cloudwatch_assume" {
 }
 
 resource "aws_iam_policy" "lambda_cloudwatch" {
-  name   = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-cwt-logs-error-alert-policy"
   policy = data.aws_iam_policy_document.lambda_cloudwatch.json
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-cwt-logs-error-alert-policy"
   }
 }
 
@@ -857,12 +857,12 @@ resource "aws_iam_role_policy_attachment" "lambda_cloudwatch" {
 # AWS IAM for AWS Lambda (RDS Control)
 # ===============================================================================
 resource "aws_iam_role" "rds_control" {
-  name               = "${local.project}-${local.env}-iam-lambda-rds-control-role"
+  name               = "${local.project}-${local.env}-iam-lmd-rds-control-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.rds_control_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-rds-control-role"
+    Name = "${local.project}-${local.env}-iam-lmd-rds-control-role"
   }
 }
 
@@ -883,11 +883,11 @@ data "aws_iam_policy_document" "rds_control_assume" {
 }
 
 resource "aws_iam_policy" "rds_control" {
-  name   = "${local.project}-${local.env}-iam-lambda-rds-control-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-rds-control-policy"
   policy = data.aws_iam_policy_document.rds_control.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-rds-control-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-rds-control-policy"
   }
 }
 
@@ -964,7 +964,7 @@ resource "aws_iam_role" "lambda_schedule_ecs_maintenance" {
   assume_role_policy = data.aws_iam_policy_document.lambda_schedule_ecs_maintenance_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-schedule-ecs-maintenance-handler-role"
+    Name = "${local.project}-${local.env}-iam-lmd-schedule-ecs-maintenance-handler-role"
   }
 }
 
@@ -985,11 +985,11 @@ data "aws_iam_policy_document" "lambda_schedule_ecs_maintenance_assume" {
 }
 
 resource "aws_iam_policy" "lambda_schedule_ecs_maintenance" {
-  name   = "${local.project}-${local.env}-iam-lambda-schedule-ecs-maintenance-handler-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-schedule-ecs-maintenance-handler-policy"
   policy = data.aws_iam_policy_document.lambda_schedule_ecs_maintenance.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-schedule-ecs-maintenance-handler-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-schedule-ecs-maintenance-handler-policy"
   }
 }
 
@@ -1093,7 +1093,7 @@ resource "aws_iam_role" "lambda_execute_ecs_force_deployment" {
   assume_role_policy = data.aws_iam_policy_document.lambda_execute_ecs_force_deployment_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-execute-ecs-force-deployment-role"
+    Name = "${local.project}-${local.env}-iam-lmd-execute-ecs-force-deployment-role"
   }
 }
 
@@ -1114,11 +1114,11 @@ data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment_assume" {
 }
 
 resource "aws_iam_policy" "lambda_execute_ecs_force_deployment" {
-  name   = "${local.project}-${local.env}-iam-lambda-execute-ecs-force-deployment-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-execute-ecs-force-deployment-policy"
   policy = data.aws_iam_policy_document.lambda_execute_ecs_force_deployment.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-execute-ecs-force-deployment-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-execute-ecs-force-deployment-policy"
   }
 }
 
@@ -1188,12 +1188,12 @@ resource "aws_iam_role_policy_attachment" "lambda_execute_ecs_force_deployment" 
 # AWS IAM for Amazon EventBridge Scheduler (EventBridge Scheduler Maintenance ECS)
 # ===============================================================================
 resource "aws_iam_role" "eventbridge_scheduler_maintenance_ecs" {
-  name               = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-role"
+  name               = "${local.project}-${local.env}-iam-ebd-scheduler-maintenance-ecs-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.eventbridge_scheduler_maintenance_ecs_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-role"
+    Name = "${local.project}-${local.env}-iam-ebd-scheduler-maintenance-ecs-role"
   }
 }
 
@@ -1214,11 +1214,11 @@ data "aws_iam_policy_document" "eventbridge_scheduler_maintenance_ecs_assume" {
 }
 
 resource "aws_iam_policy" "eventbridge_scheduler_maintenance_ecs" {
-  name   = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-policy"
+  name   = "${local.project}-${local.env}-iam-ebd-scheduler-maintenance-ecs-policy"
   policy = data.aws_iam_policy_document.eventbridge_scheduler_maintenance_ecs.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-eventbridge-scheduler-maintenance-ecs-policy"
+    Name = "${local.project}-${local.env}-iam-ebd-scheduler-maintenance-ecs-policy"
   }
 }
 
@@ -1272,11 +1272,11 @@ resource "aws_iam_role_policy_attachment" "eventbridge_scheduler_maintenance_ecs
 # AWS IAM for Amazon Data Firehose
 # ===============================================================================
 resource "aws_iam_role" "amazon_data_firehose" {
-  name               = "${local.project}-${local.env}-iam-amazon-data-firehose-role"
+  name               = "${local.project}-${local.env}-iam-adf-role"
   assume_role_policy = data.aws_iam_policy_document.amazon_data_firehose_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-amazon-data-firehose-role"
+    Name = "${local.project}-${local.env}-iam-adf-role"
   }
 }
 
@@ -1297,12 +1297,12 @@ data "aws_iam_policy_document" "amazon_data_firehose_assume" {
 }
 
 resource "aws_iam_policy" "amazon_data_firehose" {
-  name   = "${local.project}-${local.env}-iam-amazon-data-firehose-policy"
+  name   = "${local.project}-${local.env}-iam-adf-policy"
   path   = "/"
   policy = data.aws_iam_policy_document.amazon_data_firehose.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-amazon-data-firehose-policy"
+    Name = "${local.project}-${local.env}-iam-adf-policy"
   }
 }
 
@@ -1770,12 +1770,12 @@ data "aws_iam_policy_document" "chatbot_guardrail" {
 # AWS IAM for Amazon EventBridge Scheduler
 # ===============================================================================
 resource "aws_iam_role" "event_bridge_scheduler" {
-  name               = "${local.project}-${local.env}-iam-event-bridge-scheduler-role"
+  name               = "${local.project}-${local.env}-iam-ebd-scheduler-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.event_bridge_scheduler_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-event-bridge-scheduler-role"
+    Name = "${local.project}-${local.env}-iam-ebd-scheduler-role"
   }
 }
 
@@ -1796,12 +1796,12 @@ data "aws_iam_policy_document" "event_bridge_scheduler_assume" {
 }
 
 resource "aws_iam_policy" "event_bridge_scheduler" {
-  name   = "${local.project}-${local.env}-iam-event-bridge-scheduler-policy"
+  name   = "${local.project}-${local.env}-iam-ebd-scheduler-policy"
   path   = "/"
   policy = data.aws_iam_policy_document.event_bridge_scheduler.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-event-bridge-scheduler-policy"
+    Name = "${local.project}-${local.env}-iam-ebd-scheduler-policy"
   }
 }
 
@@ -1832,11 +1832,11 @@ resource "aws_iam_role_policy_attachment" "event_bridge_scheduler" {
 # AWS IAM for Amazon CloudWatch Logs to Amazon Data Firehose
 # ===============================================================================
 resource "aws_iam_role" "cloudwatch_logs_to_amazon_data_firehose" {
-  name               = "${local.project}-${local.env}-iam-cw-logs-to-adf-role"
+  name               = "${local.project}-${local.env}-iam-cwt-logs-to-adf-role"
   assume_role_policy = data.aws_iam_policy_document.cloudwatch_logs_to_amazon_data_firehose_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-cw-logs-to-adf-role"
+    Name = "${local.project}-${local.env}-iam-cwt-logs-to-adf-role"
   }
 }
 
@@ -1858,12 +1858,12 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_amazon_data_firehose_assume" 
 }
 
 resource "aws_iam_policy" "cloudwatch_logs_to_amazon_data_firehose" {
-  name   = "${local.project}-${local.env}-iam-cw-logs-to-adf-policy"
+  name   = "${local.project}-${local.env}-iam-cwt-logs-to-adf-policy"
   path   = "/"
   policy = data.aws_iam_policy_document.cloudwatch_logs_to_amazon_data_firehose.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-cw-logs-to-adf-policy"
+    Name = "${local.project}-${local.env}-iam-cwt-logs-to-adf-policy"
   }
 }
 
@@ -2255,8 +2255,8 @@ data "aws_iam_policy_document" "enforce_mfa" {
       "s3:PutObject",
     ]
     resources = [
-      "arn:aws:s3:::v-terraform-web-template-stg",
-      "arn:aws:s3:::v-terraform-web-template-stg/*",
+      "arn:aws:s3:::v-terraform-web-template-dev",
+      "arn:aws:s3:::v-terraform-web-template-dev/*",
     ]
   }
 }
