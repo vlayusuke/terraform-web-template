@@ -141,7 +141,7 @@ resource "aws_cloudfront_distribution" "main" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cf-distribution"
+    Name = "${local.project}-${local.env}-cft-distribution"
   }
 }
 
@@ -150,7 +150,7 @@ resource "aws_cloudfront_distribution" "main" {
 # Amazon CloudFront Response Headers Policy
 # ===============================================================================
 resource "aws_cloudfront_response_headers_policy" "main" {
-  name    = "${local.project}-${local.env}-cf-response-header-policy"
+  name    = "${local.project}-${local.env}-cft-response-header-policy"
   comment = "Amazon CloudFront Response Headers Policy for ${local.project}-${local.env}"
 
   security_headers_config {
@@ -175,7 +175,7 @@ resource "aws_cloudfront_response_headers_policy" "main" {
 # Amazon CloudFront Cache Policy
 # ===============================================================================
 resource "aws_cloudfront_cache_policy" "main" {
-  name        = "${local.project}-${local.env}-cf-cache-policy"
+  name        = "${local.project}-${local.env}-cft-cache-policy"
   comment     = "Amazon CloudFront Cache Policy for ${local.project}-${local.env}"
   default_ttl = 86400
   max_ttl     = 259200
@@ -204,7 +204,7 @@ resource "aws_cloudfront_cache_policy" "main" {
 # Origin Access Control
 # ===============================================================================
 resource "aws_cloudfront_origin_access_control" "assets" {
-  name                              = "${local.project}-${local.env}-cf-oac-assets"
+  name                              = "${local.project}-${local.env}-cft-oac-assets"
   description                       = "Origin Access Control for ${local.project}-${local.env} assets"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -212,7 +212,7 @@ resource "aws_cloudfront_origin_access_control" "assets" {
 }
 
 resource "aws_cloudfront_origin_access_control" "uploads" {
-  name                              = "${local.project}-${local.env}-cf-oac-uploads"
+  name                              = "${local.project}-${local.env}-cft-oac-uploads"
   description                       = "Origin Access Control for ${local.project}-${local.env} uploads"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -224,7 +224,7 @@ resource "aws_cloudfront_origin_access_control" "uploads" {
 # CloudFront Functions
 # ===============================================================================
 resource "aws_cloudfront_function" "basic_auth" {
-  name    = "${local.project}-${local.env}-cf-fnc-basic-auth"
+  name    = "${local.project}-${local.env}-cft-fnc-basic-auth"
   runtime = "cloudfront-js-2.0"
   comment = "${local.project}-${local.env} CloudFront Functions for basic authentication"
   publish = true
@@ -235,7 +235,7 @@ resource "aws_cloudfront_function" "basic_auth" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cf-fnc-basic-auth"
+    Name = "${local.project}-${local.env}-cft-fnc-basic-auth"
   }
 }
 
@@ -244,7 +244,7 @@ resource "aws_cloudfront_function" "basic_auth" {
 # CloudFront Key-Value Store
 # ===============================================================================
 resource "aws_cloudfront_key_value_store" "basic_auth" {
-  name    = "${local.project}-${local.env}-cf-kvs-basic-auth"
+  name    = "${local.project}-${local.env}-cft-kvs-basic-auth"
   comment = "${local.project}-${local.env} CloudFront Key-Value Store for basic authentication"
 }
 
