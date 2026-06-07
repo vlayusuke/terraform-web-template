@@ -2,7 +2,7 @@
 # Amazon ElastiCache
 # ===============================================================================
 resource "aws_elasticache_replication_group" "redis" {
-  replication_group_id       = "${local.project}-${local.env}-ec-redis-cluster"
+  replication_group_id       = "${local.project}-${local.env}-elc-redis-cluster"
   description                = "Amazon ElastiCache Replication group for ${local.project}-${local.env}"
   engine                     = "redis"
   engine_version             = local.elasticache_redis_version
@@ -32,7 +32,7 @@ resource "aws_elasticache_replication_group" "redis" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-ec-redis-cluster"
+    Name = "${local.project}-${local.env}-elc-redis-cluster"
   }
 }
 
@@ -41,7 +41,7 @@ resource "aws_elasticache_replication_group" "redis" {
 # Subnet Group
 # ===============================================================================
 resource "aws_elasticache_subnet_group" "redis" {
-  name        = "${local.project}-${local.env}-ec-redis-cluster-subg"
+  name        = "${local.project}-${local.env}-elc-redis-cluster-subg"
   description = "Subnet group for ${local.project}-${local.env} Amazon ElastiCache Cluster"
 
   subnet_ids = [
@@ -50,7 +50,7 @@ resource "aws_elasticache_subnet_group" "redis" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-ec-redis-cluster-subg"
+    Name = "${local.project}-${local.env}-elc-redis-cluster-subg"
   }
 }
 
@@ -59,7 +59,7 @@ resource "aws_elasticache_subnet_group" "redis" {
 # Parameter Group
 # ===============================================================================
 resource "aws_elasticache_parameter_group" "redis" {
-  name        = "${local.project}-${local.env}-ec-redis-cache-params-ecpg"
+  name        = "${local.project}-${local.env}-elc-redis-cache-params-ecpg"
   description = "Parameter group for ${local.project}-${local.env} Amazon ElastiCache Cluster"
   family      = "redis7"
 
@@ -69,6 +69,6 @@ resource "aws_elasticache_parameter_group" "redis" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-ec-redis-cache-params-ecpg"
+    Name = "${local.project}-${local.env}-elc-redis-cache-params-ecpg"
   }
 }
