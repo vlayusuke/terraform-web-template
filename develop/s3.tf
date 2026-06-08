@@ -912,10 +912,10 @@ data "aws_iam_policy_document" "ecs_logs" {
 # Amazon S3 Bucket for AWS Lambda logs
 # ===============================================================================
 resource "aws_s3_bucket" "lambda_logs" {
-  bucket = "${local.project}-${local.env}-s3-lambda-logs-bucket"
+  bucket = "${local.project}-${local.env}-s3-lmd-logs-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-lambda-logs-bucket"
+    Name = "${local.project}-${local.env}-s3-lmd-logs-bucket"
   }
 }
 
@@ -926,7 +926,7 @@ resource "aws_s3_object" "prefix_lambda" {
   acl      = "private"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-prefix-lambda-${each.key}"
+    Name = "${local.project}-${local.env}-s3-prefix-lmd-${each.key}"
   }
 }
 
@@ -1058,10 +1058,10 @@ data "aws_iam_policy_document" "lambda_logs" {
 # Amazon S3 Bucket for Amazon Aurora logs
 # ===============================================================================
 resource "aws_s3_bucket" "aurora_logs" {
-  bucket = "${local.project}-${local.env}-s3-aurora-logs-bucket"
+  bucket = "${local.project}-${local.env}-s3-aur-logs-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-aurora-logs-bucket"
+    Name = "${local.project}-${local.env}-s3-aur-logs-bucket"
   }
 }
 
@@ -1071,7 +1071,7 @@ resource "aws_s3_object" "prefix_audit" {
   acl    = "private"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-prefix-audit"
+    Name = "${local.project}-${local.env}-s3-prefix-aur-audit"
   }
 }
 
@@ -1081,7 +1081,7 @@ resource "aws_s3_object" "prefix_error" {
   acl    = "private"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-prefix-error"
+    Name = "${local.project}-${local.env}-s3-prefix-aur-error"
   }
 }
 
@@ -1091,7 +1091,7 @@ resource "aws_s3_object" "prefix_general" {
   acl    = "private"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-prefix-general"
+    Name = "${local.project}-${local.env}-s3-prefix-aur-general"
   }
 }
 
@@ -1101,7 +1101,7 @@ resource "aws_s3_object" "prefix_slowquery" {
   acl    = "private"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-prefix-slowquery"
+    Name = "${local.project}-${local.env}-s3-prefix-aur-slowquery"
   }
 }
 
@@ -1111,7 +1111,7 @@ resource "aws_s3_object" "prefix_iam_db_auth_error" {
   acl    = "private"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-prefix-iam-db-auth-error"
+    Name = "${local.project}-${local.env}-s3-prefix-aur-iam-db-auth-error"
   }
 }
 
@@ -1243,10 +1243,10 @@ data "aws_iam_policy_document" "aurora_logs" {
 # Amazon S3 Bucket for Amazon ElastiCache logs
 # ===============================================================================
 resource "aws_s3_bucket" "elasticache_logs" {
-  bucket = "${local.project}-${local.env}-s3-ec-logs-bucket"
+  bucket = "${local.project}-${local.env}-s3-elc-logs-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-ec-logs-bucket"
+    Name = "${local.project}-${local.env}-s3-elc-logs-bucket"
   }
 }
 
@@ -1916,10 +1916,10 @@ data "aws_iam_policy_document" "sns_event_logs" {
 # Amazon S3 Bucket for Amazon CloudFront logs
 # ===============================================================================
 resource "aws_s3_bucket" "cloudfront_logs" {
-  bucket = "${local.project}-${local.env}-s3-cloudfront-logs-bucket"
+  bucket = "${local.project}-${local.env}-s3-cft-logs-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-cloudfront-logs-bucket"
+    Name = "${local.project}-${local.env}-s3-cft-logs-bucket"
   }
 }
 
@@ -2186,10 +2186,10 @@ data "aws_iam_policy_document" "waf_logs" {
 # Amazon S3 Bucket for Amazon EC2 Bastion
 # ================================================================================
 resource "aws_s3_bucket" "bastion" {
-  bucket = "${local.project}-${local.env}-s3-bastion-bucket"
+  bucket = "${local.project}-${local.env}-s3-ec2-bastion-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-bastion-bucket"
+    Name = "${local.project}-${local.env}-s3-ec2-bastion-bucket"
   }
 }
 
@@ -2199,7 +2199,7 @@ resource "aws_s3_object" "prefix_bastion_logs" {
   acl    = "private"
 
   tags = {
-    Name = "${local.project}-${local.env}-s3-prefix-bastion-logs"
+    Name = "${local.project}-${local.env}-s3-prefix-ec2-bastion-logs"
   }
 }
 
@@ -2622,7 +2622,7 @@ data "aws_iam_policy_document" "source_backup_osaka" {
 
 
 # ===============================================================================
-# Amazon S3 Bucket for Amazon S3 Logging
+# Amazon S3 Bucket for Amazon S3 Logs
 # ===============================================================================
 resource "aws_s3_bucket" "s3_logs" {
   bucket = "${local.project}-${local.env}-s3-logs-bucket"
