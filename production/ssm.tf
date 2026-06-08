@@ -91,7 +91,7 @@ resource "aws_ssm_parameter" "aurora_writer_endpoint" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-ssm-aurora-writer-endpoint"
+    Name = "${local.project}-${local.env}-ssm-aur-writer-endpoint"
   }
 }
 
@@ -109,12 +109,12 @@ resource "aws_ssm_parameter" "aurora_reader_endpoint" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-ssm-aurora-reader-endpoint"
+    Name = "${local.project}-${local.env}-ssm-aur-reader-endpoint"
   }
 }
 
-resource "aws_ssm_parameter" "ec_writer_endpoint" {
-  name        = "/${local.project}/${local.env}/ec-writer-endpoint"
+resource "aws_ssm_parameter" "elasticache_writer_endpoint" {
+  name        = "/${local.project}/${local.env}/elasticache-writer-endpoint"
   description = "The parameter for ${local.project}-${local.env} Amazon ElastiCache writer endpoint"
   key_id      = aws_kms_key.application.key_id
   type        = "SecureString"
@@ -127,12 +127,12 @@ resource "aws_ssm_parameter" "ec_writer_endpoint" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-ssm-ec-writer-endpoint"
+    Name = "${local.project}-${local.env}-ssm-elc-writer-endpoint"
   }
 }
 
-resource "aws_ssm_parameter" "ec_reader_endpoint" {
-  name        = "/${local.project}/${local.env}/ec-reader-endpoint"
+resource "aws_ssm_parameter" "elasticache_reader_endpoint" {
+  name        = "/${local.project}/${local.env}/elasticache-reader-endpoint"
   description = "The parameter for ${local.project}-${local.env} Amazon ElastiCache reader endpoint"
   key_id      = aws_kms_key.application.key_id
   type        = "SecureString"
@@ -145,6 +145,6 @@ resource "aws_ssm_parameter" "ec_reader_endpoint" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-ssm-ec-reader-endpoint"
+    Name = "${local.project}-${local.env}-ssm-elc-reader-endpoint"
   }
 }
