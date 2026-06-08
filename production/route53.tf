@@ -6,7 +6,7 @@ resource "aws_route53_zone" "main" {
   comment = "Amazon Route 53 Host Zone for ${local.project}-${local.env}"
 
   tags = {
-    Name = "${local.project}-${local.env}-route-53-host-zone"
+    Name = "${local.project}-${local.env}-r53-host-zone"
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_route53_record" "main_A" {
   zone_id        = aws_route53_zone.main.id
   name           = local.domain
   type           = "A"
-  set_identifier = "${local.project}-${local.env}-route-53-record-a"
+  set_identifier = "${local.project}-${local.env}-r53-record-a"
 
   alias {
     name                   = aws_cloudfront_distribution.main.domain_name
@@ -35,7 +35,7 @@ resource "aws_route53_record" "main_AAAA" {
   zone_id        = aws_route53_zone.main.id
   name           = local.domain
   type           = "AAAA"
-  set_identifier = "${local.project}-${local.env}-route-53-record-aaaa"
+  set_identifier = "${local.project}-${local.env}-r53-record-aaaa"
 
   alias {
     name                   = aws_cloudfront_distribution.main.domain_name
