@@ -2003,10 +2003,10 @@ data "aws_iam_policy_document" "bastion" {
       "cloudwatch:PutMetricData",
     ]
     resources = [
-      aws_cloudwatch_metric_alarm.bastion_cpu_high.arn,
-      aws_cloudwatch_metric_alarm.bastion_memory_high.arn,
-      aws_cloudwatch_metric_alarm.bastion_disk_high.arn,
-      aws_cloudwatch_metric_alarm.bastion_status_check_failed.arn,
+      aws_cloudwatch_metric_alarm.ec2_bastion_cpu_high.arn,
+      aws_cloudwatch_metric_alarm.ec2_bastion_memory_high.arn,
+      aws_cloudwatch_metric_alarm.ec2_bastion_disk_high.arn,
+      aws_cloudwatch_metric_alarm.ec2_bastion_status_check_failed.arn,
     ]
   }
 }
