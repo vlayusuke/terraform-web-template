@@ -114,7 +114,7 @@ resource "aws_ses_event_destination" "firehose" {
 # Amazon SES Send Events to Amazon CloudWatch Custom Metrics
 # ===============================================================================
 resource "aws_ses_event_destination" "cloudwatch" {
-  name                   = "${local.project}-${local.env}-ses-to-cw"
+  name                   = "${local.project}-${local.env}-ses-to-cwt"
   configuration_set_name = aws_ses_configuration_set.main_event.name
   enabled                = true
 
