@@ -2,7 +2,7 @@
 # Amazon Aurora Cluster
 # ===============================================================================
 resource "aws_rds_cluster" "aurora" {
-  cluster_identifier                    = "${local.project}-${local.env}-aurora-cluster"
+  cluster_identifier                    = "${local.project}-${local.env}-aur-cluster"
   engine                                = "aurora-mysql"
   engine_mode                           = "provisioned"
   engine_version                        = local.aurora_mysql_version
@@ -21,7 +21,7 @@ resource "aws_rds_cluster" "aurora" {
   db_subnet_group_name                  = aws_db_subnet_group.aurora.id
   db_cluster_parameter_group_name       = aws_rds_cluster_parameter_group.aurora.name
   backtrack_window                      = 86400
-  final_snapshot_identifier             = "${local.project}-${local.env}-aurora-cluster-snapshot"
+  final_snapshot_identifier             = "${local.project}-${local.env}-aur-cluster-snapshot"
   deletion_protection                   = true
   storage_encrypted                     = true
   kms_key_id                            = aws_kms_key.aurora.arn
@@ -54,7 +54,7 @@ resource "aws_rds_cluster" "aurora" {
   ]
 
   tags = {
-    Name     = "${local.project}-${local.env}-aurora-cluster"
+    Name     = "${local.project}-${local.env}-aur-cluster"
     AutoStop = "true"
   }
 }
@@ -64,7 +64,7 @@ resource "aws_rds_cluster" "aurora" {
 # Subnet Group
 # ===============================================================================
 resource "aws_db_subnet_group" "aurora" {
-  name        = "${local.project}-${local.env}-aurora-cluster-subg"
+  name        = "${local.project}-${local.env}-subg-aur-cluster"
   description = "Subnet group for ${local.project}-${local.env} Amazon Aurora Cluster"
 
   subnet_ids = [
@@ -73,7 +73,7 @@ resource "aws_db_subnet_group" "aurora" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-aurora-cluster-subg"
+    Name = "${local.project}-${local.env}-subg-aur-cluster"
   }
 }
 
@@ -83,7 +83,7 @@ resource "aws_db_subnet_group" "aurora" {
 # ===============================================================================
 resource "aws_rds_cluster_instance" "aurora" {
   count                                 = 2
-  identifier                            = "${local.project}-${local.env}-aurora-instance-${count.index + 1}"
+  identifier                            = "${local.project}-${local.env}-aur-instance-${count.index + 1}"
   cluster_identifier                    = aws_rds_cluster.aurora.id
   engine                                = aws_rds_cluster.aurora.engine
   engine_version                        = aws_rds_cluster.aurora.engine_version
@@ -116,7 +116,7 @@ resource "aws_rds_cluster_instance" "aurora" {
   ]
 
   tags = {
-    Name     = "${local.project}-${local.env}-aurora-instance-${count.index + 1}"
+    Name     = "${local.project}-${local.env}-aur-instance-${count.index + 1}"
     AutoStop = "true"
   }
 }
@@ -126,7 +126,7 @@ resource "aws_rds_cluster_instance" "aurora" {
 # Cluster Parameter Group
 # ===============================================================================
 resource "aws_rds_cluster_parameter_group" "aurora" {
-  name        = "${local.project}-${local.env}-aurora-cluster-dbpg"
+  name        = "${local.project}-${local.env}-dbpg-aur-cluster"
   family      = "aurora-mysql8.0"
   description = "Amazon Aurora Cluster Parameter Group for ${local.project}-${local.env}"
 
@@ -181,7 +181,7 @@ resource "aws_rds_cluster_parameter_group" "aurora" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-aurora-cluster-dbpg"
+    Name = "${local.project}-${local.env}-dbpg-aur-cluster"
   }
 }
 
@@ -190,7 +190,7 @@ resource "aws_rds_cluster_parameter_group" "aurora" {
 # DB Parameter Group
 # ===============================================================================
 resource "aws_db_parameter_group" "aurora" {
-  name        = "${local.project}-${local.env}-aurora-instance-dbpg"
+  name        = "${local.project}-${local.env}-dbpg-aur-instance"
   family      = "aurora-mysql8.0"
   description = "Amazon Aurora DB Parameter Group for ${local.project}-${local.env}"
 
@@ -220,6 +220,6 @@ resource "aws_db_parameter_group" "aurora" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-aurora-instance-dbpg"
+    Name = "${local.project}-${local.env}-dbpg-aur-instance"
   }
 }
