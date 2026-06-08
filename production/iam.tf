@@ -2255,8 +2255,8 @@ data "aws_iam_policy_document" "enforce_mfa" {
       "s3:PutObject",
     ]
     resources = [
-      "arn:aws:s3:::v-terraform-web-template-dev",
-      "arn:aws:s3:::v-terraform-web-template-dev/*",
+      "arn:aws:s3:::v-terraform-web-template-${local.env}",
+      "arn:aws:s3:::v-terraform-web-template-${local.env}/*",
     ]
   }
 }
