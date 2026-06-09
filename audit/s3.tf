@@ -2,10 +2,10 @@
 # Amazon S3 Bucket for AWS CloudTrail (ap-northeast-1)
 # ===============================================================================
 resource "aws_s3_bucket" "cloudtrail_logs" {
-  bucket = "${local.project}-${local.env}-${local.account_id}-s3-ct-logs-bucket"
+  bucket = "${local.project}-${local.env}-${local.account_id}-s3-ctl-logs-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-${local.account_id}-s3-ct-logs-bucket"
+    Name = "${local.project}-${local.env}-${local.account_id}-s3-ctl-logs-bucket"
   }
 }
 
@@ -174,10 +174,10 @@ data "aws_iam_policy_document" "cloudtrail_logs" {
 # ===============================================================================
 resource "aws_s3_bucket" "cloudtrail_logs_osaka" {
   provider = aws.osaka
-  bucket   = "${local.project}-${local.env}-${local.account_id}-s3-ct-logs-osaka-bucket"
+  bucket   = "${local.project}-${local.env}-${local.account_id}-s3-ctl-logs-osaka-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-${local.account_id}-s3-ct-logs-osaka-bucket"
+    Name = "${local.project}-${local.env}-${local.account_id}-s3-ctl-logs-osaka-bucket"
   }
 }
 
@@ -354,10 +354,10 @@ data "aws_iam_policy_document" "cloudtrail_logs_osaka" {
 # ===============================================================================
 resource "aws_s3_bucket" "cloudtrail_logs_global" {
   provider = aws.virginia
-  bucket   = "${local.project}-${local.env}-${local.account_id}-s3-ct-logs-global-bucket"
+  bucket   = "${local.project}-${local.env}-${local.account_id}-s3-ctl-logs-global-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-${local.account_id}-s3-ct-logs-global-bucket"
+    Name = "${local.project}-${local.env}-${local.account_id}-s3-ctl-logs-global-bucket"
   }
 }
 
@@ -533,10 +533,10 @@ data "aws_iam_policy_document" "cloudtrail_logs_global" {
 # Amazon S3 Bucket for AWS Config (ap-northeast-1)
 # ===============================================================================
 resource "aws_s3_bucket" "config_logs" {
-  bucket = "${local.project}-${local.env}-${local.account_id}-s3-config-logs-bucket"
+  bucket = "${local.project}-${local.env}-${local.account_id}-s3-cfg-logs-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-${local.account_id}-s3-config-logs-bucket"
+    Name = "${local.project}-${local.env}-${local.account_id}-s3-cfg-logs-bucket"
   }
 }
 
@@ -714,10 +714,10 @@ data "aws_iam_policy_document" "config_logs" {
 # ===============================================================================
 resource "aws_s3_bucket" "config_logs_global" {
   provider = aws.virginia
-  bucket   = "${local.project}-${local.env}-${local.account_id}-s3-config-logs-global-bucket"
+  bucket   = "${local.project}-${local.env}-${local.account_id}-s3-cfg-logs-global-bucket"
 
   tags = {
-    Name = "${local.project}-${local.env}-${local.account_id}-s3-config-logs-global-bucket"
+    Name = "${local.project}-${local.env}-${local.account_id}-s3-cfg-logs-global-bucket"
   }
 }
 
