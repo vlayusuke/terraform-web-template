@@ -2,13 +2,13 @@
 # AWS KMS for AWS CloudTrail
 # ===============================================================================
 resource "aws_kms_key" "cloudtrail" {
-  description             = "${local.project}-${local.env}-kms-ct-key"
+  description             = "${local.project}-${local.env}-kms-ctl-key"
   enable_key_rotation     = true
   key_usage               = "ENCRYPT_DECRYPT"
   deletion_window_in_days = 7
 
   tags = {
-    Name = "${local.project}-${local.env}-kms-ct-key"
+    Name = "${local.project}-${local.env}-kms-ctl-key"
   }
 }
 
