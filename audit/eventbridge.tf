@@ -2,7 +2,7 @@
 # Amazon EventBridge (Check Config)
 # ===============================================================================
 resource "aws_cloudwatch_event_rule" "check_config" {
-  name           = "${local.project}-${local.env}-eb-check-config"
+  name           = "${local.project}-${local.env}-ebd-check-config"
   description    = "Check Config Notification"
   event_bus_name = "default"
 
@@ -21,7 +21,7 @@ resource "aws_cloudwatch_event_rule" "check_config" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-eb-check-config"
+    Name = "${local.project}-${local.env}-ebd-check-config"
   }
 }
 
@@ -36,7 +36,7 @@ resource "aws_cloudwatch_event_target" "check_config" {
 # Amazon EventBridge (Check Non Compliance)
 # ===============================================================================
 resource "aws_cloudwatch_event_rule" "config_non_compliance" {
-  name           = "${local.project}-${local.env}-eb-config-non-compliance"
+  name           = "${local.project}-${local.env}-ebd-config-non-compliance"
   description    = "EventBridge rule to capture AWS Config non-compliance events"
   event_bus_name = "default"
 
@@ -55,7 +55,7 @@ resource "aws_cloudwatch_event_rule" "config_non_compliance" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-eb-config-non-compliance"
+    Name = "${local.project}-${local.env}-ebd-config-non-compliance"
   }
 }
 
@@ -70,7 +70,7 @@ resource "aws_cloudwatch_event_target" "config_non_compliance" {
 # Amazon EventBridge (AWS CloudTrail / ap-northeast-1)
 # ===============================================================================
 resource "aws_cloudwatch_event_rule" "cloudtrail" {
-  name           = "${local.project}-${local.env}-eb-ct"
+  name           = "${local.project}-${local.env}-ebd-ctr"
   description    = "AWS CloudTrail Notification for ap-northeast-1"
   event_bus_name = "default"
 
@@ -105,7 +105,7 @@ resource "aws_cloudwatch_event_rule" "cloudtrail" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-eb-ct"
+    Name = "${local.project}-${local.env}-ebd-ctr"
   }
 }
 
@@ -121,7 +121,7 @@ resource "aws_cloudwatch_event_target" "cloudtrail" {
 # ===============================================================================
 resource "aws_cloudwatch_event_rule" "cloudtrail_global" {
   provider       = aws.virginia
-  name           = "${local.project}-${local.env}-eb-ct-global"
+  name           = "${local.project}-${local.env}-ebd-ctr-global"
   description    = "AWS CloudTrail Notification for us-east-1"
   event_bus_name = "default"
 
@@ -149,7 +149,7 @@ resource "aws_cloudwatch_event_rule" "cloudtrail_global" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-eb-ct-global"
+    Name = "${local.project}-${local.env}-ebd-ctr-global"
   }
 }
 
