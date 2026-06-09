@@ -172,10 +172,10 @@ data "aws_iam_policy_document" "event_notifications_audit_global" {
 # Amazon SNS Topic for AWS Config Notification to Slack
 # ===============================================================================
 resource "aws_sns_topic" "config_notifications" {
-  name = "${local.project}-${local.env}-sns-config-notifications"
+  name = "${local.project}-${local.env}-sns-cfg-notifications"
 
   tags = {
-    Name = "${local.project}-${local.env}-sns-config-notifications"
+    Name = "${local.project}-${local.env}-sns-cfg-notifications"
   }
 }
 
