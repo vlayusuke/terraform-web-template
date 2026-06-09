@@ -2,12 +2,12 @@
 # AWS IAM for AWS Lambda (CloudWatch Error Alert)
 # ===============================================================================
 resource "aws_iam_role" "lambda_cloudwatch_audit" {
-  name               = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-role"
+  name               = "${local.project}-${local.env}-iam-lmd-cwt-logs-error-alert-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.lambda_cloudwatch_audit_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-role"
+    Name = "${local.project}-${local.env}-iam-lmd-cwt-logs-error-alert-role"
   }
 }
 
@@ -28,10 +28,10 @@ data "aws_iam_policy_document" "lambda_cloudwatch_audit_assume" {
 }
 
 resource "aws_iam_policy" "lambda_cloudwatch_audit" {
-  name   = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-cwt-logs-error-alert-policy"
   policy = data.aws_iam_policy_document.lambda_cloudwatch_audit.json
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-cw-logs-error-alert-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-cwt-logs-error-alert-policy"
   }
 }
 
@@ -71,12 +71,12 @@ resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_audit" {
 # AWS IAM for AWS Lambda (Root Login Monitoring)
 # ===============================================================================
 resource "aws_iam_role" "lambda_root_login_monitoring" {
-  name               = "${local.project}-${local.env}-iam-lambda-root-login-monitoring-role"
+  name               = "${local.project}-${local.env}-iam-lmd-root-login-monitoring-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.lambda_root_login_monitoring_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-root-login-monitoring-role"
+    Name = "${local.project}-${local.env}-iam-lmd-root-login-monitoring-role"
   }
 }
 
@@ -97,11 +97,11 @@ data "aws_iam_policy_document" "lambda_root_login_monitoring_assume" {
 }
 
 resource "aws_iam_policy" "lambda_root_login_monitoring" {
-  name   = "${local.project}-${local.env}-iam-lambda-root-login-monitoring-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-root-login-monitoring-policy"
   policy = data.aws_iam_policy_document.lambda_root_login_monitoring.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-root-login-monitoring-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-root-login-monitoring-policy"
   }
 }
 
@@ -140,12 +140,12 @@ resource "aws_iam_role_policy_attachment" "lambda_root_login_monitoring" {
 # AWS IAM for AWS Lambda (Lambda Error)
 # ===============================================================================
 resource "aws_iam_role" "lambda_error" {
-  name               = "${local.project}-${local.env}-iam-lambda-error-role"
+  name               = "${local.project}-${local.env}-iam-lmd-lambda-error-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.lambda_error_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-error-role"
+    Name = "${local.project}-${local.env}-iam-lmd-lambda-error-role"
   }
 }
 
@@ -166,11 +166,11 @@ data "aws_iam_policy_document" "lambda_error_assume" {
 }
 
 resource "aws_iam_policy" "lambda_error" {
-  name   = "${local.project}-${local.env}-iam-lambda-error-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-lambda-error-policy"
   policy = data.aws_iam_policy_document.lambda_error.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-error-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-lambda-error-policy"
   }
 }
 
@@ -209,12 +209,12 @@ resource "aws_iam_role_policy_attachment" "lambda_error" {
 # AWS IAM for AWS Lambda (Security Notice)
 # ===============================================================================
 resource "aws_iam_role" "lambda_security_notice" {
-  name               = "${local.project}-${local.env}-iam-lambda-security-notice-role"
+  name               = "${local.project}-${local.env}-iam-lmd-security-notice-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.lambda_security_notice_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-security-notice-role"
+    Name = "${local.project}-${local.env}-iam-lmd-security-notice-role"
   }
 }
 
@@ -235,11 +235,11 @@ data "aws_iam_policy_document" "lambda_security_notice_assume" {
 }
 
 resource "aws_iam_policy" "lambda_security_notice" {
-  name   = "${local.project}-${local.env}-iam-lambda-security-notice-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-security-notice-policy"
   policy = data.aws_iam_policy_document.lambda_security_notice.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lambda-security-notice-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-security-notice-policy"
   }
 }
 
@@ -521,12 +521,12 @@ resource "aws_iam_role_policy_attachment" "config_to_aws_config_role" {
 # AWS IAM for AWS CloudTrail
 # ===============================================================================
 resource "aws_iam_role" "cloudtrail" {
-  name               = "${local.project}-${local.env}-iam-ct-role"
+  name               = "${local.project}-${local.env}-iam-ctl-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.cloudtrail_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-ct-role"
+    Name = "${local.project}-${local.env}-iam-ctl-role"
   }
 }
 
@@ -547,12 +547,12 @@ data "aws_iam_policy_document" "cloudtrail_assume" {
 }
 
 resource "aws_iam_policy" "cloudtrail" {
-  name   = "${local.project}-${local.env}-iam-ct-policy"
+  name   = "${local.project}-${local.env}-iam-ctl-policy"
   path   = "/"
   policy = data.aws_iam_policy_document.cloudtrail.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-ct-policy"
+    Name = "${local.project}-${local.env}-iam-ctl-policy"
   }
 }
 
@@ -675,12 +675,12 @@ resource "aws_iam_role_policy_attachment" "sns" {
 # AWS IAM for Amazon SNS via Amazon EventBridge
 # ===============================================================================
 resource "aws_iam_role" "eventbridge_to_sns" {
-  name               = "${local.project}-${local.env}-iam-eb-to-sns-role"
+  name               = "${local.project}-${local.env}-iam-ebd-to-sns-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.eventbridge_to_sns_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-eb-to-sns-role"
+    Name = "${local.project}-${local.env}-iam-ebd-to-sns-role"
   }
 }
 
@@ -701,12 +701,12 @@ data "aws_iam_policy_document" "eventbridge_to_sns_assume" {
 }
 
 resource "aws_iam_policy" "eventbridge_to_sns_policy" {
-  name   = "${local.project}-${local.env}-iam-eb-to-sns-policy"
+  name   = "${local.project}-${local.env}-iam-ebd-to-sns-policy"
   path   = "/"
   policy = data.aws_iam_policy_document.eventbridge_to_sns_policy.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-eb-to-sns-policy"
+    Name = "${local.project}-${local.env}-iam-ebd-to-sns-policy"
   }
 }
 
