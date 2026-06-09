@@ -2,7 +2,7 @@
 # AWS CloudTrail (ap-northeast-1)
 # ===============================================================================
 resource "aws_cloudtrail" "audit" {
-  name                          = "${local.project}-${local.env}-ct-audit"
+  name                          = "${local.project}-${local.env}-ctl-audit"
   region                        = local.region
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs.id
   enable_logging                = true
@@ -32,7 +32,7 @@ resource "aws_cloudtrail" "audit" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-ct-audit"
+    Name = "${local.project}-${local.env}-ctl-audit"
   }
 }
 
@@ -41,7 +41,7 @@ resource "aws_cloudtrail" "audit" {
 # AWS CloudTrail (ap-northeast-3)
 # ===============================================================================
 resource "aws_cloudtrail" "audit_osaka" {
-  name                          = "${local.project}-${local.env}-ct-audit-osaka"
+  name                          = "${local.project}-${local.env}-ctl-audit-osaka"
   provider                      = aws.osaka
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs_osaka.id
   enable_logging                = true
@@ -71,7 +71,7 @@ resource "aws_cloudtrail" "audit_osaka" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-ct-audit-osaka"
+    Name = "${local.project}-${local.env}-ctl-audit-osaka"
   }
 }
 
@@ -80,7 +80,7 @@ resource "aws_cloudtrail" "audit_osaka" {
 # AWS CloudTrail (us-east-1)
 # ===============================================================================
 resource "aws_cloudtrail" "audit_global" {
-  name                          = "${local.project}-${local.env}-ct-audit-global"
+  name                          = "${local.project}-${local.env}-ctl-audit-global"
   provider                      = aws.virginia
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs_global.id
   enable_logging                = true
@@ -110,6 +110,6 @@ resource "aws_cloudtrail" "audit_global" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-ct-audit-global"
+    Name = "${local.project}-${local.env}-ctl-audit-global"
   }
 }
