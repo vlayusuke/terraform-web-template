@@ -121,7 +121,7 @@ resource "aws_cloudwatch_event_target" "cloudtrail" {
 # ===============================================================================
 resource "aws_cloudwatch_event_rule" "cloudtrail_global" {
   provider       = aws.virginia
-  name           = "${local.project}-${local.env}-ebd-ctr-global"
+  name           = "${local.project}-${local.env}-ebd-ctl-global"
   description    = "AWS CloudTrail Notification for us-east-1"
   event_bus_name = "default"
 
@@ -149,7 +149,7 @@ resource "aws_cloudwatch_event_rule" "cloudtrail_global" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-ebd-ctr-global"
+    Name = "${local.project}-${local.env}-ebd-ctl-global"
   }
 }
 
