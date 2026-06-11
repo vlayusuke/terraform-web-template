@@ -165,10 +165,10 @@ data "aws_iam_policy_document" "event_alarm" {
 
 
 # ===============================================================================
-# Amazon SNS Topic for Amazon Inspector Notification
+# Amazon SNS Topic for Amazon Inspector Notifications
 # ===============================================================================
-resource "aws_sns_topic" "inspector_notification" {
-  name = "${local.project}-${local.env}-sns-inspector-notification-topic"
+resource "aws_sns_topic" "inspector_notifications" {
+  name = "${local.project}-${local.env}-sns-inspector-notifications-topic"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -186,16 +186,16 @@ resource "aws_sns_topic" "inspector_notification" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-sns-inspector-notification-topic"
+    Name = "${local.project}-${local.env}-sns-inspector-notifications-topic"
   }
 }
 
-resource "aws_sns_topic_policy" "inspector_notification" {
-  arn    = aws_sns_topic.inspector_notification.arn
-  policy = data.aws_iam_policy_document.inspector_notification.json
+resource "aws_sns_topic_policy" "inspector_notifications" {
+  arn    = aws_sns_topic.inspector_notifications.arn
+  policy = data.aws_iam_policy_document.inspector_notifications.json
 }
 
-data "aws_iam_policy_document" "inspector_notification" {
+data "aws_iam_policy_document" "inspector_notifications" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
@@ -211,7 +211,7 @@ data "aws_iam_policy_document" "inspector_notification" {
       "sns:Receive",
     ]
     resources = [
-      aws_sns_topic.inspector_notification.arn,
+      aws_sns_topic.inspector_notifications.arn,
     ]
     condition {
       test     = "StringEquals"
@@ -235,7 +235,7 @@ data "aws_iam_policy_document" "inspector_notification" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.inspector_notification.arn,
+      aws_sns_topic.inspector_notifications.arn,
     ]
     principals {
       type = "Service"
@@ -248,10 +248,10 @@ data "aws_iam_policy_document" "inspector_notification" {
 
 
 # ===============================================================================
-# Amazon SNS Topic for Event Notification
+# Amazon SNS Topic for Event Notifications
 # ===============================================================================
-resource "aws_sns_topic" "event_notification" {
-  name = "${local.project}-${local.env}-sns-event-notification-topic"
+resource "aws_sns_topic" "event_notifications" {
+  name = "${local.project}-${local.env}-sns-event-notifications-topic"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -269,16 +269,16 @@ resource "aws_sns_topic" "event_notification" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-sns-event-notification-topic"
+    Name = "${local.project}-${local.env}-sns-event-notifications-topic"
   }
 }
 
-resource "aws_sns_topic_policy" "event_notification" {
-  arn    = aws_sns_topic.event_notification.arn
-  policy = data.aws_iam_policy_document.event_notification.json
+resource "aws_sns_topic_policy" "event_notifications" {
+  arn    = aws_sns_topic.event_notifications.arn
+  policy = data.aws_iam_policy_document.event_notifications.json
 }
 
-data "aws_iam_policy_document" "event_notification" {
+data "aws_iam_policy_document" "event_notifications" {
   statement {
     sid    = "SNSAccess"
     effect = "Allow"
@@ -293,7 +293,7 @@ data "aws_iam_policy_document" "event_notification" {
       "sns:Subscribe",
     ]
     resources = [
-      aws_sns_topic.event_notification.arn,
+      aws_sns_topic.event_notifications.arn,
     ]
     condition {
       test     = "StringEquals"
@@ -317,7 +317,7 @@ data "aws_iam_policy_document" "event_notification" {
       "sns:Publish",
     ]
     resources = [
-      aws_sns_topic.event_notification.arn,
+      aws_sns_topic.event_notifications.arn,
     ]
     principals {
       type = "Service"

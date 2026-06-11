@@ -57,14 +57,14 @@ resource "aws_scheduler_schedule" "rds_control_stop" {
 
 resource "aws_cloudwatch_event_target" "rds_control_start" {
   rule      = aws_scheduler_schedule.rds_control_start.name
-  target_id = aws_sns_topic.event_notification.name
-  arn       = aws_sns_topic.event_notification.arn
+  target_id = aws_sns_topic.event_notifications.name
+  arn       = aws_sns_topic.event_notifications.arn
 }
 
 resource "aws_cloudwatch_event_target" "rds_control_stop" {
   rule      = aws_scheduler_schedule.rds_control_stop.name
-  target_id = aws_sns_topic.event_notification.name
-  arn       = aws_sns_topic.event_notification.arn
+  target_id = aws_sns_topic.event_notifications.name
+  arn       = aws_sns_topic.event_notifications.arn
 }
 
 
@@ -92,8 +92,8 @@ resource "aws_cloudwatch_event_rule" "ecr_image_scan" {
 
 resource "aws_cloudwatch_event_target" "ecr_image_scan" {
   rule      = aws_cloudwatch_event_rule.ecr_image_scan.name
-  target_id = aws_sns_topic.event_notification.name
-  arn       = aws_sns_topic.event_notification.arn
+  target_id = aws_sns_topic.event_notifications.name
+  arn       = aws_sns_topic.event_notifications.arn
 }
 
 
@@ -158,8 +158,8 @@ resource "aws_cloudwatch_event_rule" "detect_ses_bounce" {
 
 resource "aws_cloudwatch_event_target" "detect_ses_bounce" {
   rule      = aws_cloudwatch_event_rule.detect_ses_bounce.name
-  target_id = aws_sns_topic.event_notification.name
-  arn       = aws_sns_topic.event_notification.arn
+  target_id = aws_sns_topic.event_notifications.name
+  arn       = aws_sns_topic.event_notifications.arn
 }
 
 
@@ -187,6 +187,6 @@ resource "aws_cloudwatch_event_rule" "detect_ses_complaint" {
 
 resource "aws_cloudwatch_event_target" "detect_ses_complaint" {
   rule      = aws_cloudwatch_event_rule.detect_ses_complaint.name
-  target_id = aws_sns_topic.event_notification.name
-  arn       = aws_sns_topic.event_notification.arn
+  target_id = aws_sns_topic.event_notifications.name
+  arn       = aws_sns_topic.event_notifications.arn
 }
