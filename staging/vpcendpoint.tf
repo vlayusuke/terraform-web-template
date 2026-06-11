@@ -4,6 +4,7 @@
 resource "aws_vpc_endpoint" "ecr_docker" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${local.region}.ecr.dkr"
+  service_region      = local.region
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
 
@@ -28,6 +29,7 @@ resource "aws_vpc_endpoint" "ecr_docker" {
 resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${local.region}.ecr.api"
+  service_region      = local.region
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
 
@@ -52,6 +54,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
 resource "aws_vpc_endpoint" "ssm" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${local.region}.ssm"
+  service_region      = local.region
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
 
@@ -76,6 +79,7 @@ resource "aws_vpc_endpoint" "ssm" {
 resource "aws_vpc_endpoint" "ssm_messages" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${local.region}.ssmmessages"
+  service_region      = local.region
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
 
@@ -100,6 +104,7 @@ resource "aws_vpc_endpoint" "ssm_messages" {
 resource "aws_vpc_endpoint" "ec2_messages" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${local.region}.ec2messages"
+  service_region      = local.region
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
 
