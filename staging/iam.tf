@@ -1514,8 +1514,8 @@ data "aws_iam_policy_document" "sns" {
     resources = [
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
-      aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.event_notification.arn,
+      aws_sns_topic.inspector_notifications.arn,
+      aws_sns_topic.event_notifications.arn,
     ]
   }
 
@@ -1672,8 +1672,8 @@ data "aws_iam_policy_document" "chatbot" {
     resources = [
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
-      aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.event_notification.arn,
+      aws_sns_topic.inspector_notifications.arn,
+      aws_sns_topic.event_notifications.arn,
     ]
     condition {
       test     = "StringEquals"
@@ -1694,8 +1694,8 @@ data "aws_iam_policy_document" "chatbot" {
     resources = [
       aws_sns_topic.metric_alarm.arn,
       aws_sns_topic.event_alarm.arn,
-      aws_sns_topic.inspector_notification.arn,
-      aws_sns_topic.event_notification.arn,
+      aws_sns_topic.inspector_notifications.arn,
+      aws_sns_topic.event_notifications.arn,
     ]
   }
 
