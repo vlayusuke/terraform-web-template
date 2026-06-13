@@ -550,7 +550,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host_count" {
   metric_name         = "UnHealthyHostCount"
   namespace           = "AWS/ApplicationELB"
   period              = 60
-  statistic           = "Minimum"
+  statistic           = "Maximum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
 
@@ -575,7 +575,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host_count" {
 resource "aws_cloudwatch_metric_alarm" "alb_rejected_connection" {
   alarm_name          = "${local.project}-${local.env}-cwt-alb-rejected-connection-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   metric_name         = "RejectedConnectionCount"
   namespace           = "AWS/ApplicationELB"
   period              = 60
@@ -639,7 +639,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_memory_high" {
   evaluation_periods  = 2
   metric_name         = "FreeableMemory"
   namespace           = "AWS/RDS"
-  period              = 60
+  period              = 300
   statistic           = "Minimum"
   threshold           = 256000000
   treat_missing_data  = "notBreaching"
@@ -664,7 +664,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_memory_high" {
 resource "aws_cloudwatch_metric_alarm" "rds_connections_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-rds-connections-high-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   metric_name         = "DatabaseConnections"
   namespace           = "AWS/RDS"
   period              = 60
@@ -755,7 +755,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_swap_high" {
   evaluation_periods  = 2
   metric_name         = "SwapUsage"
   namespace           = "AWS/ElastiCache"
-  period              = 60
+  period              = 300
   statistic           = "Maximum"
   threshold           = 50000000
   treat_missing_data  = "notBreaching"
@@ -787,8 +787,8 @@ resource "aws_cloudwatch_metric_alarm" "ses_complaint_rate" {
   evaluation_periods  = 1
   metric_name         = "Reputation.ComplaintRate"
   namespace           = "AWS/SES"
-  period              = 60
-  statistic           = "Minimum"
+  period              = 300
+  statistic           = "Maximum"
   threshold           = 0.001
   treat_missing_data  = "notBreaching"
 
@@ -811,8 +811,8 @@ resource "aws_cloudwatch_metric_alarm" "ses_bounce_rate" {
   evaluation_periods  = 1
   metric_name         = "Reputation.BounceRate"
   namespace           = "AWS/SES"
-  period              = 60
-  statistic           = "Minimum"
+  period              = 300
+  statistic           = "Maximum"
   threshold           = 0.001
   treat_missing_data  = "notBreaching"
 
@@ -884,7 +884,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
 resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
   alarm_name          = "${local.project}-${local.env}-cwt-lmd-concurrent-executions-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   metric_name         = "ConcurrentExecutions"
   namespace           = "AWS/Lambda"
   period              = 60
