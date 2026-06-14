@@ -32,10 +32,10 @@ resource "aws_ecs_cluster_capacity_providers" "main" {
 # ===============================================================================
 # Amazon ECS Service for App
 # ===============================================================================
-resource "aws_ecs_service" "app" {
-  name                               = "app"
+resource "aws_ecs_service" "fargate_app" {
+  name                               = "fargate-app"
   cluster                            = aws_ecs_cluster.main.id
-  task_definition                    = data.aws_ecs_task_definition.app.arn
+  task_definition                    = data.aws_ecs_task_definition.fargate_app.arn
   desired_count                      = 2
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
@@ -97,9 +97,9 @@ resource "aws_ecs_service" "app" {
   }
 }
 
-resource "aws_appautoscaling_target" "app" {
+resource "aws_appautoscaling_target" "fargate_app" {
   service_namespace  = "ecs"
-  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.fargate_app.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   min_capacity       = 2
   max_capacity       = 4
@@ -112,10 +112,10 @@ resource "aws_appautoscaling_target" "app" {
   }
 }
 
-resource "aws_appautoscaling_policy" "app_scale_out" {
+resource "aws_appautoscaling_policy" "fargate_app_scale_out" {
   name               = "scale-out"
   policy_type        = "StepScaling"
-  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.fargate_app.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 
@@ -137,14 +137,14 @@ resource "aws_appautoscaling_policy" "app_scale_out" {
   }
 
   depends_on = [
-    aws_appautoscaling_target.app,
+    aws_appautoscaling_target.fargate_app,
   ]
 }
 
-resource "aws_appautoscaling_policy" "app_scale_in" {
+resource "aws_appautoscaling_policy" "fargate_app_scale_in" {
   name               = "scale-in"
   policy_type        = "StepScaling"
-  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.fargate_app.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 
@@ -166,12 +166,12 @@ resource "aws_appautoscaling_policy" "app_scale_in" {
   }
 
   depends_on = [
-    aws_appautoscaling_target.app,
+    aws_appautoscaling_target.fargate_app,
   ]
 }
 
-resource "aws_ecs_task_definition" "app" {
-  family                   = "app"
+resource "aws_ecs_task_definition" "fargate_app" {
+  family                   = "fargate-app"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
@@ -217,18 +217,18 @@ resource "aws_ecs_task_definition" "app" {
   }
 }
 
-data "aws_ecs_task_definition" "app" {
-  task_definition = aws_ecs_task_definition.app.family
+data "aws_ecs_task_definition" "fargate_app" {
+  task_definition = aws_ecs_task_definition.fargate_app.family
 }
 
 
 # ===============================================================================
 # Amazon ECS Service for Cron
 # ===============================================================================
-resource "aws_ecs_service" "cron" {
-  name                               = "cron"
+resource "aws_ecs_service" "fargate_cron" {
+  name                               = "fargate-cron"
   cluster                            = aws_ecs_cluster.main.id
-  task_definition                    = data.aws_ecs_task_definition.cron.arn
+  task_definition                    = data.aws_ecs_task_definition.fargate_cron.arn
   desired_count                      = 1
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
@@ -274,8 +274,8 @@ resource "aws_ecs_service" "cron" {
   }
 }
 
-resource "aws_ecs_task_definition" "cron" {
-  family                   = "cron"
+resource "aws_ecs_task_definition" "fargate_cron" {
+  family                   = "fargate-cron"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
@@ -310,18 +310,18 @@ resource "aws_ecs_task_definition" "cron" {
   }
 }
 
-data "aws_ecs_task_definition" "cron" {
-  task_definition = aws_ecs_task_definition.cron.family
+data "aws_ecs_task_definition" "fargate_cron" {
+  task_definition = aws_ecs_task_definition.fargate_cron.family
 }
 
 
 # ===============================================================================
 # Amazon ECS Service for Queue
 # ===============================================================================
-resource "aws_ecs_service" "queue" {
-  name                               = "queue"
+resource "aws_ecs_service" "fargate_queue" {
+  name                               = "fargate-queue"
   cluster                            = aws_ecs_cluster.main.id
-  task_definition                    = data.aws_ecs_task_definition.queue.arn
+  task_definition                    = data.aws_ecs_task_definition.fargate_queue.arn
   desired_count                      = 1
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
@@ -367,8 +367,8 @@ resource "aws_ecs_service" "queue" {
   }
 }
 
-resource "aws_ecs_task_definition" "queue" {
-  family                   = "queue"
+resource "aws_ecs_task_definition" "fargate_queue" {
+  family                   = "fargate-queue"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
@@ -403,16 +403,16 @@ resource "aws_ecs_task_definition" "queue" {
   }
 }
 
-data "aws_ecs_task_definition" "queue" {
-  task_definition = aws_ecs_task_definition.queue.family
+data "aws_ecs_task_definition" "fargate_queue" {
+  task_definition = aws_ecs_task_definition.fargate_queue.family
 }
 
 
 # ===============================================================================
 # Amazon ECS Task for migrate
 # ===============================================================================
-resource "aws_ecs_task_definition" "migrate" {
-  family                   = "migrate"
+resource "aws_ecs_task_definition" "fargate_migrate" {
+  family                   = "fargate-migrate"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
