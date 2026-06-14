@@ -312,7 +312,7 @@ resource "aws_cloudwatch_metric_alarm" "app_cpu_high" {
   }
 
   alarm_actions = [
-    aws_appautoscaling_policy.app_scale_out.arn,
+    aws_appautoscaling_policy.fargate_app_scale_out.arn,
     aws_sns_topic.metric_alarm.arn,
   ]
 
@@ -343,7 +343,7 @@ resource "aws_cloudwatch_metric_alarm" "app_cpu_low" {
   }
 
   alarm_actions = [
-    aws_appautoscaling_policy.app_scale_in.arn,
+    aws_appautoscaling_policy.fargate_app_scale_in.arn,
     aws_sns_topic.metric_alarm.arn,
   ]
 
@@ -373,7 +373,7 @@ resource "aws_cloudwatch_metric_alarm" "app_memory_high" {
   }
 
   alarm_actions = [
-    aws_appautoscaling_policy.app_scale_out.arn,
+    aws_appautoscaling_policy.fargate_app_scale_out.arn,
     aws_sns_topic.metric_alarm.arn,
   ]
 
