@@ -140,10 +140,10 @@ data "aws_iam_policy_document" "github_actions_deploy" {
       aws_security_group.fargate_app.arn,
       aws_security_group.fargate_cron.arn,
       aws_security_group.fargate_queue.arn,
-      "${aws_ecs_task_definition.app.arn}:*",
-      "${aws_ecs_task_definition.cron.arn}:*",
-      "${aws_ecs_task_definition.queue.arn}:*",
-      "${aws_ecs_task_definition.migrate.arn}:*",
+      "${aws_ecs_task_definition.fargate_app.arn}:*",
+      "${aws_ecs_task_definition.fargate_cron.arn}:*",
+      "${aws_ecs_task_definition.fargate_queue.arn}:*",
+      "${aws_ecs_task_definition.fargate_migrate.arn}:*",
     ]
   }
 
@@ -159,13 +159,13 @@ data "aws_iam_policy_document" "github_actions_deploy" {
     ]
     resources = [
       aws_ecs_cluster.main.arn,
-      aws_ecs_service.app.arn,
-      aws_ecs_service.cron.arn,
-      aws_ecs_service.queue.arn,
-      "${aws_ecs_task_definition.app.arn}:*",
-      "${aws_ecs_task_definition.cron.arn}:*",
-      "${aws_ecs_task_definition.queue.arn}:*",
-      "${aws_ecs_task_definition.migrate.arn}:*",
+      aws_ecs_service.fargate_app.arn,
+      aws_ecs_service.fargate_cron.arn,
+      aws_ecs_service.fargate_queue.arn,
+      "${aws_ecs_task_definition.fargate_app.arn}:*",
+      "${aws_ecs_task_definition.fargate_cron.arn}:*",
+      "${aws_ecs_task_definition.fargate_queue.arn}:*",
+      "${aws_ecs_task_definition.fargate_migrate.arn}:*",
     ]
   }
 
@@ -507,10 +507,10 @@ data "aws_iam_policy_document" "ecs_task" {
       "ecs:DescribeServices",
     ]
     resources = [
-      "${aws_ecs_task_definition.app.arn}:*",
-      "${aws_ecs_task_definition.cron.arn}:*",
-      "${aws_ecs_task_definition.queue.arn}:*",
-      "${aws_ecs_task_definition.migrate.arn}:*",
+      "${aws_ecs_task_definition.fargate_app.arn}:*",
+      "${aws_ecs_task_definition.fargate_cron.arn}:*",
+      "${aws_ecs_task_definition.fargate_queue.arn}:*",
+      "${aws_ecs_task_definition.fargate_migrate.arn}:*",
     ]
   }
 
@@ -1144,9 +1144,9 @@ data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment" {
       "ecs:UpdateService",
     ]
     resources = [
-      aws_ecs_service.app.arn,
-      aws_ecs_service.cron.arn,
-      aws_ecs_service.queue.arn,
+      aws_ecs_service.fargate_app.arn,
+      aws_ecs_service.fargate_cron.arn,
+      aws_ecs_service.fargate_queue.arn,
     ]
   }
 
