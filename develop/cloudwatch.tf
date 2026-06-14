@@ -308,11 +308,11 @@ resource "aws_cloudwatch_metric_alarm" "app_cpu_high" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.app.name
+    ServiceName = aws_ecs_service.fargate_app.name
   }
 
   alarm_actions = [
-    aws_appautoscaling_policy.app_scale_out.arn,
+    aws_appautoscaling_policy.fargate_app_scale_out.arn,
     aws_sns_topic.metric_alarm.arn,
   ]
 
@@ -339,11 +339,11 @@ resource "aws_cloudwatch_metric_alarm" "app_cpu_low" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.app.name
+    ServiceName = aws_ecs_service.fargate_app.name
   }
 
   alarm_actions = [
-    aws_appautoscaling_policy.app_scale_in.arn,
+    aws_appautoscaling_policy.fargate_app_scale_in.arn,
     aws_sns_topic.metric_alarm.arn,
   ]
 
@@ -369,11 +369,11 @@ resource "aws_cloudwatch_metric_alarm" "app_memory_high" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.app.name
+    ServiceName = aws_ecs_service.fargate_app.name
   }
 
   alarm_actions = [
-    aws_appautoscaling_policy.app_scale_out.arn,
+    aws_appautoscaling_policy.fargate_app_scale_out.arn,
     aws_sns_topic.metric_alarm.arn,
   ]
 
@@ -403,7 +403,7 @@ resource "aws_cloudwatch_metric_alarm" "cron_cpu_high" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.cron.name
+    ServiceName = aws_ecs_service.fargate_cron.name
   }
 
   alarm_actions = [
@@ -432,7 +432,7 @@ resource "aws_cloudwatch_metric_alarm" "cron_memory_high" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.cron.name
+    ServiceName = aws_ecs_service.fargate_cron.name
   }
 
   alarm_actions = [
@@ -465,7 +465,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_cpu_high" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.queue.name
+    ServiceName = aws_ecs_service.fargate_queue.name
   }
 
   alarm_actions = [
@@ -494,7 +494,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_memory_high" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.queue.name
+    ServiceName = aws_ecs_service.fargate_queue.name
   }
 
   alarm_actions = [
