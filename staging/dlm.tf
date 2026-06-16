@@ -5,8 +5,13 @@ resource "aws_dlm_lifecycle_policy" "ebs_backup_policy" {
   description        = "${local.project}-${local.env}-dlm-ebs-backup-policy"
   state              = "ENABLED"
   execution_role_arn = aws_iam_role.dlm.arn
+  default_policy     = "VOLUME"
 
   policy_details {
+    create_interval = 1
+    retain_interval = 7
+    copy_tags       = false
+
     resource_types = [
       "VOLUME",
     ]
@@ -33,8 +38,6 @@ resource "aws_dlm_lifecycle_policy" "ebs_backup_policy" {
       retain_rule {
         count = 7
       }
-
-      copy_tags = false
     }
   }
 
