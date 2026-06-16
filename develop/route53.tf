@@ -2,8 +2,9 @@
 # Amazon Route 53 Host Zone
 # ================================================================================
 resource "aws_route53_zone" "main" {
-  name    = "${local.env}.${local.domain}"
-  comment = "Amazon Route 53 Host Zone for ${local.project}-${local.env}"
+  name          = "${local.env}.${local.domain}"
+  comment       = "Amazon Route 53 Host Zone for ${local.project}-${local.env}"
+  force_destroy = false
 
   tags = {
     Name = "${local.project}-${local.env}-r53-host-zone"
@@ -45,5 +46,21 @@ resource "aws_route53_record" "main_AAAA" {
 
   geolocation_routing_policy {
     country = "JP"
+  }
+}
+
+
+# ================================================================================
+# Amazon Route 53 Health Check
+# ================================================================================
+resource "aws_route53_health_check" "main" {
+  fqdn              = "${local.env}.${local.domain}"
+  type              = "HTTPS"
+  resource_path     = "/"
+  failure_threshold = 3
+  request_interval  = 30
+
+  tags = {
+    Name = "${local.project}-${local.env}-r53-health-check"
   }
 }
