@@ -1382,8 +1382,8 @@ data "aws_iam_policy_document" "amazon_data_firehose" {
       "${aws_cloudwatch_log_stream.sns.arn}:*",
       aws_cloudwatch_log_stream.adf.arn,
       "${aws_cloudwatch_log_stream.adf.arn}:*",
-      aws_cloudwatch_log_stream.bastion.arn,
-      "${aws_cloudwatch_log_stream.bastion.arn}:*",
+      aws_cloudwatch_log_stream.ec2_bastion.arn,
+      "${aws_cloudwatch_log_stream.ec2_bastion.arn}:*",
     ]
   }
 }
@@ -1899,7 +1899,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_amazon_data_firehose" {
       [aws_cloudwatch_log_group.ses.arn],
       [aws_cloudwatch_log_group.sns.arn],
       [aws_cloudwatch_log_group.adf.arn],
-      [aws_cloudwatch_log_group.bastion.arn],
+      [aws_cloudwatch_log_group.ec2_bastion.arn],
     )
   }
 }
@@ -1991,8 +1991,8 @@ data "aws_iam_policy_document" "bastion" {
       "logs:DescribeLogGroups",
     ]
     resources = [
-      aws_cloudwatch_log_group.bastion.arn,
-      "${aws_cloudwatch_log_group.bastion.arn}:log-stream:*",
+      aws_cloudwatch_log_group.ec2_bastion.arn,
+      "${aws_cloudwatch_log_group.ec2_bastion.arn}:log-stream:*",
     ]
   }
 
