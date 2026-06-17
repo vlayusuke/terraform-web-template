@@ -262,7 +262,7 @@ resource "aws_cloudwatch_log_stream" "adf" {
 # ================================================================================
 # Amazon CloudWatch Log group for Amazon EC2 Bastion
 # ================================================================================
-resource "aws_cloudwatch_log_group" "bastion" {
+resource "aws_cloudwatch_log_group" "ec2_bastion" {
   name              = "${local.project}-${local.env}-cwt-ec2-bastion-cwtlog"
   retention_in_days = local.retention_in_days
 
@@ -271,21 +271,21 @@ resource "aws_cloudwatch_log_group" "bastion" {
   }
 }
 
-resource "aws_cloudwatch_log_stream" "bastion" {
+resource "aws_cloudwatch_log_stream" "ec2_bastion" {
   name           = "${local.project}-${local.env}-cwt-ec2-bastion-cwtstream"
-  log_group_name = aws_cloudwatch_log_group.bastion.name
+  log_group_name = aws_cloudwatch_log_group.ec2_bastion.name
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "bastion_to_lambda" {
+resource "aws_cloudwatch_log_subscription_filter" "ec2_bastion_to_lambda" {
   name            = "${local.project}-${local.env}-cwt-ec2-bastion-to-lmd"
-  log_group_name  = aws_cloudwatch_log_group.bastion.name
+  log_group_name  = aws_cloudwatch_log_group.ec2_bastion.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "bastion_to_firehose" {
+resource "aws_cloudwatch_log_subscription_filter" "ec2_bastion_to_firehose" {
   name            = "${local.project}-${local.env}-cwt-ec2-bastion-to-adf"
-  log_group_name  = aws_cloudwatch_log_group.bastion.name
+  log_group_name  = aws_cloudwatch_log_group.ec2_bastion.name
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.bastion_logs.arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
