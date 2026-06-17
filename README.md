@@ -33,6 +33,10 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 - [hashicorp/aws Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest)
 - [hashicorp/awscc Terraform Registry](https://registry.terraform.io/providers/hashicorp/awscc/latest)
 
+### PythonのVersionについて
+
+Pythonのバージョンについては、macOS上でHomebrewでパッケージを管理している場合は、定期的に`brew outdated`コマンド実行して更新状況を能動的に確認してください。
+
 ### Terraformや各種ProviderのVersion
 
 | Resources                  | Version  |
