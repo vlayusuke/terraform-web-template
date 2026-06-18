@@ -55,6 +55,15 @@ resource "aws_lb_listener" "alb_external_listener" {
   }
 }
 
+resource "aws_lb_listener_certificate" "alb_listener_cert" {
+  listener_arn    = aws_lb_listener.alb_external_listener.arn
+  certificate_arn = aws_acm_certificate.main_alb.arn
+
+  depends_on = [
+    aws_lb_listener.alb_external_listener,
+  ]
+}
+
 
 # ===============================================================================
 # Application Load Balancer Target Group
@@ -88,15 +97,6 @@ resource "aws_lb_target_group" "alb_external_tg" {
   tags = {
     Name = "${local.project}-${local.env}-alb-external-tg"
   }
-}
-
-resource "aws_lb_listener_certificate" "alb_listener_cert" {
-  listener_arn    = aws_lb_listener.alb_external_listener.arn
-  certificate_arn = aws_acm_certificate.main_alb.arn
-
-  depends_on = [
-    aws_lb_listener.alb_external_listener,
-  ]
 }
 
 
