@@ -41,7 +41,6 @@ data "aws_iam_policy_document" "metric_alarm" {
       "sns:DeleteTopic",
       "sns:Subscribe",
       "sns:ListSubscriptionsByTopic",
-      "sns:Publish",
       "sns:Receive",
     ]
     resources = [
@@ -75,6 +74,7 @@ data "aws_iam_policy_document" "metric_alarm" {
       type = "Service"
       identifiers = [
         "events.amazonaws.com",
+        "chatbot.amazonaws.com",
       ]
     }
   }
@@ -124,7 +124,6 @@ data "aws_iam_policy_document" "event_alarm" {
       "sns:DeleteTopic",
       "sns:Subscribe",
       "sns:ListSubscriptionsByTopic",
-      "sns:Publish",
       "sns:Receive",
     ]
     resources = [
@@ -158,6 +157,7 @@ data "aws_iam_policy_document" "event_alarm" {
       type = "Service"
       identifiers = [
         "events.amazonaws.com",
+        "chatbot.amazonaws.com",
       ]
     }
   }
@@ -207,7 +207,6 @@ data "aws_iam_policy_document" "inspector_notifications" {
       "sns:DeleteTopic",
       "sns:Subscribe",
       "sns:ListSubscriptionsByTopic",
-      "sns:Publish",
       "sns:Receive",
     ]
     resources = [
@@ -241,6 +240,7 @@ data "aws_iam_policy_document" "inspector_notifications" {
       type = "Service"
       identifiers = [
         "events.amazonaws.com",
+        "chatbot.amazonaws.com",
       ]
     }
   }
@@ -283,14 +283,14 @@ data "aws_iam_policy_document" "event_notifications" {
     sid    = "SNSAccess"
     effect = "Allow"
     actions = [
-      "sns:Publish",
-      "sns:RemovePermission",
-      "sns:SetTopicAttributes",
-      "sns:DeleteTopic",
-      "sns:ListSubscriptionsByTopic",
       "sns:GetTopicAttributes",
+      "sns:SetTopicAttributes",
       "sns:AddPermission",
+      "sns:RemovePermission",
+      "sns:DeleteTopic",
       "sns:Subscribe",
+      "sns:ListSubscriptionsByTopic",
+      "sns:Receive",
     ]
     resources = [
       aws_sns_topic.event_notifications.arn,
@@ -323,6 +323,7 @@ data "aws_iam_policy_document" "event_notifications" {
       type = "Service"
       identifiers = [
         "events.amazonaws.com",
+        "chatbot.amazonaws.com",
       ]
     }
   }
