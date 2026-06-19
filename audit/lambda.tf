@@ -43,7 +43,7 @@ resource "aws_lambda_permission" "lambda_cloudwatch_audit" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_log_error_alert_audit.function_name
   principal     = "logs.${local.region}.amazonaws.com"
-  source_arn    = "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:*"
+  source_arn    = aws_cloudwatch_log_group.lambda_log_error_alert_audit.arn
 }
 
 
@@ -92,8 +92,8 @@ resource "aws_lambda_permission" "root_login_monitoring" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.root_login_monitoring.function_name
-  principal     = "cloudtrail.amazonaws.com"
-  source_arn    = "arn:aws:cloudtrail:${local.region}:${data.aws_caller_identity.current.account_id}:trail/*"
+  principal     = "logs.${local.region}.amazonaws.com"
+  source_arn    = aws_cloudwatch_log_group.root_login_monitoring.arn
 }
 
 
@@ -144,8 +144,8 @@ resource "aws_lambda_permission" "root_login_monitoring_global" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.root_login_monitoring_global.function_name
-  principal     = "cloudtrail.amazonaws.com"
-  source_arn    = "arn:aws:cloudtrail:${local.global_region}:${data.aws_caller_identity.current.account_id}:trail/*"
+  principal     = "logs.${local.global_region}.amazonaws.com"
+  source_arn    = aws_cloudwatch_log_group.root_login_monitoring_global.arn
 }
 
 
@@ -194,7 +194,7 @@ resource "aws_lambda_permission" "lambda_error" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_error.function_name
   principal     = "logs.${local.region}.amazonaws.com"
-  source_arn    = "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/*"
+  source_arn    = aws_cloudwatch_log_group.lambda_error.arn
 }
 
 
@@ -242,6 +242,6 @@ resource "aws_lambda_permission" "security_notice" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.security_notice.function_name
-  principal     = "guardduty.amazonaws.com"
-  source_arn    = "arn:aws:guardduty:${local.region}:${data.aws_caller_identity.current.account_id}:detector/*"
+  principal     = "logs.${local.region}.amazonaws.com"
+  source_arn    = aws_cloudwatch_log_group.security_notice.arn
 }
