@@ -92,8 +92,8 @@ resource "aws_lambda_permission" "lambda_metric_alarm" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_metric_alarm.function_name
-  principal     = "logs.${local.region}.amazonaws.com"
-  source_arn    = "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:*"
+  principal     = "cloudwatch.amazonaws.com"
+  source_arn    = "arn:aws:cloudwatch:${local.region}:${data.aws_caller_identity.current.account_id}:alarm:*"
 }
 
 
