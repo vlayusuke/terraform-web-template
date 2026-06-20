@@ -1,5 +1,5 @@
 # ===============================================================================
-# Amazon CloudWatch Log group for Login root monitoring (ap-northeast-1)
+# Amazon CloudWatch Log group for Login root monitoring
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "root_login_monitoring" {
   name              = "/aws/lambda/${aws_lambda_function.root_login_monitoring.function_name}-cwtlog"
@@ -20,34 +20,6 @@ resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring_lambda"
   log_group_name  = aws_cloudwatch_log_group.root_login_monitoring.name
   filter_pattern  = "{ $.responseElements.ConsoleLogin = \"Success\" && $.userIdentity.type = \"Root\" }"
   destination_arn = aws_lambda_function.root_login_monitoring.arn
-}
-
-
-# ===============================================================================
-# Amazon CloudWatch Log group for Login root monitoring (us-east-1)
-# ===============================================================================
-resource "aws_cloudwatch_log_group" "root_login_monitoring_global" {
-  provider          = aws.virginia
-  name              = "/aws/lambda/${aws_lambda_function.root_login_monitoring_global.function_name}-cwtlog-global"
-  retention_in_days = local.retention_in_days
-
-  tags = {
-    Name = "/aws/lambda/${aws_lambda_function.root_login_monitoring_global.function_name}-cwtlog-global"
-  }
-}
-
-resource "aws_cloudwatch_log_stream" "root_login_monitoring_global" {
-  provider       = aws.virginia
-  name           = "${local.project}-${local.env}-cwt-lmd-${aws_lambda_function.root_login_monitoring_global.function_name}-cwtstream-global"
-  log_group_name = aws_cloudwatch_log_group.root_login_monitoring_global.name
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "root_login_monitoring_lambda_global" {
-  provider        = aws.virginia
-  name            = "${local.project}-${local.env}-cwt-lmd-root-login-monitoring-to-lmd-global"
-  log_group_name  = aws_cloudwatch_log_group.root_login_monitoring_global.name
-  filter_pattern  = "{ $.responseElements.ConsoleLogin = \"Success\" && $.userIdentity.type = \"Root\" }"
-  destination_arn = aws_lambda_function.root_login_monitoring_global.arn
 }
 
 
@@ -127,7 +99,7 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_log_error_alert_audit"
 
 
 # ===============================================================================
-# Amazon CloudWatch Log group for AWS CloudTrail (ap-northeast-1)
+# Amazon CloudWatch Log group for AWS CloudTrail
 # ===============================================================================
 resource "aws_cloudwatch_log_group" "cloudtrail" {
   name              = "${local.project}-${local.env}-cwt-ctl-cwtlog"
@@ -148,34 +120,6 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudtrail" {
   log_group_name  = aws_cloudwatch_log_group.cloudtrail.name
   filter_pattern  = ""
   destination_arn = aws_lambda_function.lambda_log_error_alert_audit.arn
-}
-
-
-# ===============================================================================
-# Amazon CloudWatch Log group for AWS CloudTrail (ap-northeast-3)
-# ===============================================================================
-resource "aws_cloudwatch_log_group" "cloudtrail_osaka" {
-  provider          = aws.osaka
-  name              = "${local.project}-${local.env}-cwt-ctl-cwtlog-osaka"
-  retention_in_days = local.retention_in_days
-
-  tags = {
-    Name = "${local.project}-${local.env}-cwt-ctl-cwtlog-osaka"
-  }
-}
-
-
-# ===============================================================================
-# Amazon CloudWatch Log group for AWS CloudTrail (us-east-1)
-# ===============================================================================
-resource "aws_cloudwatch_log_group" "cloudtrail_global" {
-  provider          = aws.virginia
-  name              = "${local.project}-${local.env}-cwt-ctl-cwtlog-global"
-  retention_in_days = local.retention_in_days
-
-  tags = {
-    Name = "${local.project}-${local.env}-cwt-ctl-cwtlog-global"
-  }
 }
 
 
