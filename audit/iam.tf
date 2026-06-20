@@ -140,12 +140,12 @@ resource "aws_iam_role_policy_attachment" "lambda_root_login_monitoring" {
 # AWS IAM for AWS Lambda (Lambda Error)
 # ===============================================================================
 resource "aws_iam_role" "lambda_error" {
-  name               = "${local.project}-${local.env}-iam-lmd-lambda-error-role"
+  name               = "${local.project}-${local.env}-iam-lmd-error-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.lambda_error_assume.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lmd-lambda-error-role"
+    Name = "${local.project}-${local.env}-iam-lmd-error-role"
   }
 }
 
@@ -166,11 +166,11 @@ data "aws_iam_policy_document" "lambda_error_assume" {
 }
 
 resource "aws_iam_policy" "lambda_error" {
-  name   = "${local.project}-${local.env}-iam-lmd-lambda-error-policy"
+  name   = "${local.project}-${local.env}-iam-lmd-error-policy"
   policy = data.aws_iam_policy_document.lambda_error.json
 
   tags = {
-    Name = "${local.project}-${local.env}-iam-lmd-lambda-error-policy"
+    Name = "${local.project}-${local.env}-iam-lmd-error-policy"
   }
 }
 
@@ -464,8 +464,6 @@ data "aws_iam_policy_document" "config" {
     resources = [
       aws_s3_bucket.config_logs.arn,
       "${aws_s3_bucket.config_logs.arn}/*",
-      aws_s3_bucket.config_logs_global.arn,
-      "${aws_s3_bucket.config_logs_global.arn}/*",
     ]
   }
 
@@ -568,10 +566,6 @@ data "aws_iam_policy_document" "cloudtrail" {
     resources = [
       aws_s3_bucket.cloudtrail_logs.arn,
       "${aws_s3_bucket.cloudtrail_logs.arn}/*",
-      aws_s3_bucket.cloudtrail_logs_osaka.arn,
-      "${aws_s3_bucket.cloudtrail_logs_osaka.arn}/*",
-      aws_s3_bucket.cloudtrail_logs_global.arn,
-      "${aws_s3_bucket.cloudtrail_logs_global.arn}/*",
     ]
   }
 
@@ -586,10 +580,6 @@ data "aws_iam_policy_document" "cloudtrail" {
     resources = [
       aws_cloudwatch_log_group.cloudtrail.arn,
       "${aws_cloudwatch_log_group.cloudtrail.arn}:*",
-      aws_cloudwatch_log_group.cloudtrail_osaka.arn,
-      "${aws_cloudwatch_log_group.cloudtrail_osaka.arn}:*",
-      aws_cloudwatch_log_group.cloudtrail_global.arn,
-      "${aws_cloudwatch_log_group.cloudtrail_global.arn}:*",
     ]
   }
 }
