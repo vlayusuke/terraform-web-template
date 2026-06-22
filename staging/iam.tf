@@ -1588,6 +1588,7 @@ data "aws_iam_policy_document" "inspector" {
       aws_ecr_repository.app_base.arn,
       aws_ecr_repository.nginx.arn,
       aws_ecr_repository.app.arn,
+      aws_instance.ec2_bastion.arn,
       aws_lambda_function.lambda_log_error_alert.arn,
       aws_lambda_function.lambda_metric_alarm.arn,
       aws_lambda_function.rds_control.arn,
@@ -1667,7 +1668,7 @@ data "aws_iam_policy_document" "chatbot" {
       "sns:ListTopics",
       "sns:ListSubscriptions",
       "sns:ListSubscriptionsByTopic",
-      "sns:Publish",
+      "sns:Receive",
     ]
     resources = [
       aws_sns_topic.metric_alarm.arn,
