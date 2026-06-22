@@ -125,7 +125,7 @@ resource "aws_cloudwatch_log_stream" "elasticache" {
 resource "aws_cloudwatch_log_subscription_filter" "elasticache_to_lambda" {
   name            = "${local.project}-${local.env}-cwt-elc-redis-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.elasticache.name
-  filter_pattern  = ""
+  filter_pattern  = "?Warning ?Error"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
@@ -195,7 +195,7 @@ resource "aws_cloudwatch_log_stream" "ses" {
 resource "aws_cloudwatch_log_subscription_filter" "ses_to_lambda" {
   name            = "${local.project}-${local.env}-cwt-ses-to-lmd"
   log_group_name  = aws_cloudwatch_log_group.ses.name
-  filter_pattern  = ""
+  filter_pattern  = "?bounce ?complaint"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
