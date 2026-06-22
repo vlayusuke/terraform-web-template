@@ -1669,6 +1669,7 @@ data "aws_iam_policy_document" "chatbot" {
       "sns:ListSubscriptions",
       "sns:ListSubscriptionsByTopic",
       "sns:Receive",
+      "sns:ReceiveMessage",
     ]
     resources = [
       aws_sns_topic.metric_alarm.arn,
@@ -1723,9 +1724,14 @@ data "aws_iam_policy_document" "chatbot" {
       "chatbot:DescribeSlackChannelConfigurations",
       "chatbot:DeleteSlackChannelConfiguration",
       "chatbot:UpdateSlackChannelConfiguration",
+      "chatbot:CreateMicrosoftTeamsChannelConfiguration",
+      "chatbot:DescribeMicrosoftTeamsChannelConfigurations",
+      "chatbot:DeleteMicrosoftTeamsChannelConfiguration",
+      "chatbot:UpdateMicrosoftTeamsChannelConfiguration",
     ]
     resources = [
       "arn:aws:chatbot::${data.aws_caller_identity.current.account_id}:chat-configuration/slack-channel/*",
+      "arn:aws:chatbot::${data.aws_caller_identity.current.account_id}:chat-configuration/teams-channel/*",
     ]
   }
 }
@@ -1759,9 +1765,11 @@ data "aws_iam_policy_document" "chatbot_guardrail" {
     effect = "Allow"
     actions = [
       "chatbot:DescribeSlackChannelConfigurations",
+      "chatbot:DescribeMicrosoftTeamsChannelConfigurations",
     ]
     resources = [
       "arn:aws:chatbot::${data.aws_caller_identity.current.account_id}:chat-configuration/slack-channel/*",
+      "arn:aws:chatbot::${data.aws_caller_identity.current.account_id}:chat-configuration/teams-channel/*",
     ]
   }
 }
@@ -2043,7 +2051,7 @@ data "aws_iam_policy_document" "ssh_login" {
       "sts:AssumeRole",
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mcury-web-mnt-iam-ssh-role",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${local.project}-${local.env}-iam-bastion-role",
     ]
   }
 
