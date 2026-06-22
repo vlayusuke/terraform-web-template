@@ -10,13 +10,17 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
     bucket_arn         = aws_s3_bucket.aurora_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "audit-logs/"
+    prefix             = "${local.env}/audit-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -33,13 +37,17 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_error" {
     bucket_arn         = aws_s3_bucket.aurora_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "error-logs/"
+    prefix             = "${local.env}/error-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -56,13 +64,17 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_general" {
     bucket_arn         = aws_s3_bucket.aurora_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "general-logs/"
+    prefix             = "${local.env}/general-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -79,13 +91,17 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_slowquery" {
     bucket_arn         = aws_s3_bucket.aurora_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "slowquery-logs/"
+    prefix             = "${local.env}/slowquery-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -102,13 +118,17 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" 
     bucket_arn         = aws_s3_bucket.aurora_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "auth-error-logs/"
+    prefix             = "${local.env}/auth-error-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -129,13 +149,17 @@ resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
     bucket_arn         = aws_s3_bucket.elasticache_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "/"
+    prefix             = "${local.env}/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -157,13 +181,17 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_app" {
     bucket_arn         = aws_s3_bucket.ecs_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "${each.key}-logs/"
+    prefix             = "${local.env}/${each.key}-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -185,13 +213,17 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_nginx" {
     bucket_arn         = aws_s3_bucket.ecs_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "${each.key}-logs/"
+    prefix             = "${local.env}/${each.key}-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -213,13 +245,17 @@ resource "aws_kinesis_firehose_delivery_stream" "lambda_logs" {
     bucket_arn         = aws_s3_bucket.lambda_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "${each.key}-logs/"
+    prefix             = "${local.env}/${each.key}-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -240,13 +276,17 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_logs" {
     bucket_arn         = aws_s3_bucket.ses_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "ses-logs/"
+    prefix             = "${local.env}/ses-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -267,7 +307,7 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_event_logs" {
     bucket_arn         = aws_s3_bucket.ses_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "ses-event-logs/"
+    prefix             = "${local.env}/ses-event-logs/"
     compression_format = "GZIP"
 
     cloudwatch_logging_options {
@@ -280,6 +320,10 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_event_logs" {
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -300,13 +344,17 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_logs" {
     bucket_arn         = aws_s3_bucket.sns_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "sns-logs/"
+    prefix             = "${local.env}/sns-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -327,13 +375,17 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_event_logs" {
     bucket_arn         = aws_s3_bucket.sns_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "sns-event-logs/"
+    prefix             = "${local.env}/sns-event-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -354,13 +406,17 @@ resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
     bucket_arn         = aws_s3_bucket.bastion.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "ec2-bastion-logs/"
+    prefix             = "${local.env}/ec2-bastion-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
@@ -381,13 +437,17 @@ resource "aws_kinesis_firehose_delivery_stream" "firelens_logs" {
     bucket_arn         = aws_s3_bucket.ecs_logs.arn
     buffering_size     = 64
     buffering_interval = 300
-    prefix             = "firelens-logs/"
+    prefix             = "${local.env}/firelens-logs/"
     compression_format = "GZIP"
   }
 
   server_side_encryption {
     enabled  = true
     key_type = "AWS_OWNED_CMK"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 
   tags = {
