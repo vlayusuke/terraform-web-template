@@ -1,0 +1,82 @@
+name: Build and Push Docker Images to ECR
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".docker/**"
+
+env:
+  AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+  AWS_ROLE_ARN: ${{ vars.IAM_GITHUB_ACTIONS_DEPLOY_ROLE_ARN }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout repository
+        id: checkout
+        uses: actions/checkout@v4
+
+      # Assume Role with OIDC
+      - name: Assume Role with OIDC
+        id: assume-role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      # Login to Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Build and push Nginx Base Image
+      - name: Build and Push Nginx Base Image
+        id: build-push-nginx-base
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            -t $ECR_REGISTRY/tf-web/prd/base/nginx:$IMAGE_TAG \
+            -f .docker/base/nginx/Dockerfile \
+            .docker/base/nginx
+          docker push $ECR_REGISTRY/tf-web/prd/base/nginx:$IMAGE_TAG
+
+      # Build and push App Base Image
+      - name: Build and Push App Base Image
+        id: build-push-app-base
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            -t $ECR_REGISTRY/tf-web/prd/base/app:$IMAGE_TAG \
+            -f .docker/base/app/Dockerfile \
+            .docker/base/app
+          docker push $ECR_REGISTRY/tf-web/prd/base/app:$IMAGE_TAG
+
+      # Build and push Nginx Production Image
+      - name: Build and Push Nginx Production Image
+        id: build-push-nginx
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            -t $ECR_REGISTRY/tf-web/prd/nginx:$IMAGE_TAG \
+            -f .docker/production/nginx/Dockerfile \
+            .
+          docker push $ECR_REGISTRY/tf-web/prd/nginx:$IMAGE_TAG
