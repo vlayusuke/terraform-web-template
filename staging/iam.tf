@@ -856,17 +856,17 @@ resource "aws_iam_role_policy_attachment" "lambda_cloudwatch" {
 # ===============================================================================
 # AWS IAM for AWS Lambda (RDS Control)
 # ===============================================================================
-resource "aws_iam_role" "rds_control" {
+resource "aws_iam_role" "lambda_rds_control" {
   name               = "${local.project}-${local.env}-iam-lmd-rds-control-role"
   path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.rds_control_assume.json
+  assume_role_policy = data.aws_iam_policy_document.lambda_rds_control_assume.json
 
   tags = {
     Name = "${local.project}-${local.env}-iam-lmd-rds-control-role"
   }
 }
 
-data "aws_iam_policy_document" "rds_control_assume" {
+data "aws_iam_policy_document" "lambda_rds_control_assume" {
   statement {
     sid    = "LambdaAssume"
     effect = "Allow"
@@ -882,16 +882,16 @@ data "aws_iam_policy_document" "rds_control_assume" {
   }
 }
 
-resource "aws_iam_policy" "rds_control" {
+resource "aws_iam_policy" "lambda_rds_control" {
   name   = "${local.project}-${local.env}-iam-lmd-rds-control-policy"
-  policy = data.aws_iam_policy_document.rds_control.json
+  policy = data.aws_iam_policy_document.lambda_rds_control.json
 
   tags = {
     Name = "${local.project}-${local.env}-iam-lmd-rds-control-policy"
   }
 }
 
-data "aws_iam_policy_document" "rds_control" {
+data "aws_iam_policy_document" "lambda_rds_control" {
   statement {
     sid    = "LogsAccess"
     effect = "Allow"
@@ -949,9 +949,9 @@ data "aws_iam_policy_document" "rds_control" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "rds_control" {
-  role       = aws_iam_role.rds_control.name
-  policy_arn = aws_iam_policy.rds_control.arn
+resource "aws_iam_role_policy_attachment" "lambda_rds_control" {
+  role       = aws_iam_role.lambda_rds_control.name
+  policy_arn = aws_iam_policy.lambda_rds_control.arn
 }
 
 
