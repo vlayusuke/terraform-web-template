@@ -1591,7 +1591,7 @@ data "aws_iam_policy_document" "inspector" {
       aws_instance.ec2_bastion.arn,
       aws_lambda_function.lambda_log_error_alert.arn,
       aws_lambda_function.lambda_metric_alarm.arn,
-      aws_lambda_function.rds_control.arn,
+      aws_lambda_function.lambda_rds_control.arn,
       aws_lambda_function.lambda_schedule_ecs_maintenance.arn,
       aws_lambda_function.lambda_execute_ecs_force_deployment.arn,
     ]
