@@ -840,7 +840,7 @@ data "aws_iam_policy_document" "lambda_cloudwatch" {
     resources = [
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
-      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_rds_control.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
@@ -942,7 +942,7 @@ data "aws_iam_policy_document" "lambda_rds_control" {
     resources = [
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
-      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_rds_control.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
@@ -1071,7 +1071,7 @@ data "aws_iam_policy_document" "lambda_schedule_ecs_maintenance" {
     resources = [
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
-      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_rds_control.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
@@ -1171,7 +1171,7 @@ data "aws_iam_policy_document" "lambda_execute_ecs_force_deployment" {
     resources = [
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
-      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_rds_control.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
@@ -1255,7 +1255,7 @@ data "aws_iam_policy_document" "eventbridge_scheduler_maintenance_ecs" {
     resources = [
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_log_error_alert.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_metric_alarm.function_name].arn,
-      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.rds_control.function_name].arn,
+      aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_rds_control.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_schedule_ecs_maintenance.function_name].arn,
       aws_kinesis_firehose_delivery_stream.lambda_logs[aws_lambda_function.lambda_execute_ecs_force_deployment.function_name].arn,
     ]
