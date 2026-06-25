@@ -52,7 +52,7 @@ locals {
   retention_in_days = 30
 
   lambda_functions = toset([
-    aws_lambda_function.rds_control.function_name,
+    aws_lambda_function.lambda_rds_control.function_name,
     aws_lambda_function.lambda_log_error_alert.function_name,
     aws_lambda_function.lambda_metric_alarm.function_name,
     aws_lambda_function.lambda_schedule_ecs_maintenance.function_name,
