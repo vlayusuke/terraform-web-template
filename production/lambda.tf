@@ -5,8 +5,8 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
   function_name    = "lmd-cwt-log-error-alert"
   role             = aws_iam_role.lambda_cloudwatch.arn
   handler          = "lambda_function.lambda_handler"
-  filename         = data.archive_file.log_error_alert.output_path
-  source_code_hash = data.archive_file.log_error_alert.output_base64sha256
+  filename         = data.archive_file.lambda_log_error_alert.output_path
+  source_code_hash = data.archive_file.lambda_log_error_alert.output_base64sha256
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -32,7 +32,7 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
   }
 }
 
-data "archive_file" "log_error_alert" {
+data "archive_file" "lambda_log_error_alert" {
   type        = "zip"
   source_dir  = "${path.cwd}/files/lambda/log-error-alert"
   output_path = "${path.module}/artifacts/log-error-alert.zip"
@@ -54,8 +54,8 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
   function_name    = "lmd-cwt-metric-alarm"
   role             = aws_iam_role.lambda_cloudwatch.arn
   handler          = "lambda_function.lambda_handler"
-  filename         = data.archive_file.metric_alarm.output_path
-  source_code_hash = data.archive_file.metric_alarm.output_base64sha256
+  filename         = data.archive_file.lambda_metric_alarm.output_path
+  source_code_hash = data.archive_file.lambda_metric_alarm.output_base64sha256
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -82,7 +82,7 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
   }
 }
 
-data "archive_file" "metric_alarm" {
+data "archive_file" "lambda_metric_alarm" {
   type        = "zip"
   source_dir  = "${path.cwd}/files/lambda/metric-alarm"
   output_path = "${path.module}/artifacts/metric-alarm.zip"
@@ -100,12 +100,12 @@ resource "aws_lambda_permission" "lambda_metric_alarm" {
 # ===============================================================================
 # AWS Lambda Function for RDS Control
 # ===============================================================================
-resource "aws_lambda_function" "rds_control" {
+resource "aws_lambda_function" "lambda_rds_control" {
   function_name    = "lmd-rds-control"
-  role             = aws_iam_role.rds_control.arn
+  role             = aws_iam_role.lambda_rds_control.arn
   handler          = "lambda_function.lambda_handler"
-  filename         = data.archive_file.rds_control.output_path
-  source_code_hash = data.archive_file.rds_control.output_base64sha256
+  filename         = data.archive_file.lambda_rds_control.output_path
+  source_code_hash = data.archive_file.lambda_rds_control.output_base64sha256
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -125,14 +125,14 @@ resource "aws_lambda_function" "rds_control" {
   }
 }
 
-data "archive_file" "rds_control" {
+data "archive_file" "lambda_rds_control" {
   type        = "zip"
   source_dir  = "${path.cwd}/files/lambda/rds-control"
   output_path = "${path.module}/artifacts/rds-control.zip"
 }
 
-resource "aws_lambda_function_event_invoke_config" "rds_control" {
-  function_name = aws_lambda_function.rds_control.function_name
+resource "aws_lambda_function_event_invoke_config" "lambda_rds_control" {
+  function_name = aws_lambda_function.lambda_rds_control.function_name
 
   destination_config {
     on_failure {
@@ -145,10 +145,10 @@ resource "aws_lambda_function_event_invoke_config" "rds_control" {
   }
 }
 
-resource "aws_lambda_permission" "rds_control" {
+resource "aws_lambda_permission" "lambda_rds_control" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.rds_control.function_name
+  function_name = aws_lambda_function.lambda_rds_control.function_name
   principal     = "logs.${local.region}.amazonaws.com"
   source_arn    = "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:*"
 }
