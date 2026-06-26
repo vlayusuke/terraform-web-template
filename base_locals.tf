@@ -29,7 +29,7 @@ locals {
   ]
 
   # domain
-  domain = "vlayusuke.net"
+  domain = "app.vlayusuke.net"
 
   # database info
   database_name             = "tf-web"
