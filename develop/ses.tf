@@ -2,7 +2,7 @@
 # Amazon SES Domain Identity and Configuration
 # ===============================================================================
 resource "aws_ses_domain_identity" "main" {
-  domain = "${local.env}.${local.domain}"
+  domain = "${local.env}.${local.base_domain}"
 }
 
 resource "aws_ses_domain_dkim" "main" {
@@ -25,7 +25,7 @@ resource "aws_ses_configuration_set" "main_event" {
 # ===============================================================================
 resource "aws_route53_record" "ses_main_verification" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = "_amazonses.${local.env}.${local.domain}"
+  name    = "_amazonses.${local.env}.${local.base_domain}"
   type    = "TXT"
   ttl     = 300
 
@@ -37,7 +37,7 @@ resource "aws_route53_record" "ses_main_verification" {
 resource "aws_route53_record" "ses_main_dkim" {
   count   = 3
   zone_id = aws_route53_zone.main.zone_id
-  name    = "${element(aws_ses_domain_dkim.main.dkim_tokens, count.index)}._domainkey.${local.env}.${local.domain}"
+  name    = "${element(aws_ses_domain_dkim.main.dkim_tokens, count.index)}._domainkey.${local.env}.${local.base_domain}"
   type    = "CNAME"
   ttl     = 300
 
@@ -48,7 +48,7 @@ resource "aws_route53_record" "ses_main_dkim" {
 
 resource "aws_route53_record" "ses_main_spf" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = "${local.env}.${local.domain}"
+  name    = "${local.env}.${local.base_domain}"
   type    = "TXT"
   ttl     = 300
 
@@ -59,12 +59,12 @@ resource "aws_route53_record" "ses_main_spf" {
 
 resource "aws_route53_record" "ses_main_dmarc" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = "_dmarc.${local.env}.${local.domain}"
+  name    = "_dmarc.${local.env}.${local.base_domain}"
   type    = "TXT"
   ttl     = 300
 
   records = [
-    "v=DMARC1;p=none;pct=100;rua=mailto:postmaster@${local.env}.${local.domain}",
+    "v=DMARC1;p=none;pct=100;rua=mailto:postmaster@${local.env}.${local.base_domain}",
   ]
 }
 
