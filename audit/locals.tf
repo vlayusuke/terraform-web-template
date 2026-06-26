@@ -27,9 +27,9 @@ locals {
   retention_in_days = 180
 
   lambda_functions = toset([
-    aws_lambda_function.root_login_monitoring.function_name,
+    aws_lambda_function.lambda_root_login_monitoring.function_name,
     aws_lambda_function.lambda_error.function_name,
-    aws_lambda_function.security_notice.function_name,
+    aws_lambda_function.lambda_security_notice.function_name,
     aws_lambda_function.lambda_log_error_alert_audit.function_name,
   ])
 }
