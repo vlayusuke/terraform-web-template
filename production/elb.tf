@@ -109,7 +109,7 @@ resource "aws_lb_listener_rule" "main" {
   condition {
     host_header {
       values = [
-        local.domain,
+        local.base_domain,
       ]
     }
   }
@@ -134,7 +134,7 @@ resource "aws_lb_listener_rule" "naked" {
   condition {
     host_header {
       values = [
-        "www.${local.domain}",
+        "www.${local.base_domain}",
       ]
     }
   }
@@ -144,7 +144,7 @@ resource "aws_lb_listener_rule" "naked" {
     redirect {
       protocol    = "HTTPS"
       port        = 443
-      host        = local.domain
+      host        = local.base_domain
       query       = ""
       status_code = "HTTP_301"
     }

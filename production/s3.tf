@@ -105,7 +105,7 @@ resource "aws_s3_bucket_cors_configuration" "assets" {
       "GET",
     ]
     allowed_origins = [
-      "https://${local.domain}",
+      "https://${local.base_domain}",
     ]
     max_age_seconds = 3600
   }
@@ -307,7 +307,7 @@ resource "aws_s3_bucket_cors_configuration" "uploads" {
       "GET",
     ]
     allowed_origins = [
-      "https://${local.domain}",
+      "https://${local.base_domain}",
     ]
     max_age_seconds = 3600
   }
