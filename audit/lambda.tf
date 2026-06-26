@@ -5,8 +5,8 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
   function_name    = "aud-lmd-cwt-log-error-alert"
   role             = aws_iam_role.lambda_cloudwatch_audit.arn
   handler          = "lambda_function.lambda_handler"
-  filename         = data.archive_file.log_error_alert_audit.output_path
-  source_code_hash = data.archive_file.log_error_alert_audit.output_base64sha256
+  filename         = data.archive_file.lambda_log_error_alert_audit.output_path
+  source_code_hash = data.archive_file.lambda_log_error_alert_audit.output_base64sha256
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -32,7 +32,7 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
   }
 }
 
-data "archive_file" "log_error_alert_audit" {
+data "archive_file" "lambda_log_error_alert_audit" {
   type        = "zip"
   source_dir  = "${path.cwd}/files/lambda/log-error-alert-audit"
   output_path = "${path.module}/artifacts/log-error-alert-audit.zip"
@@ -50,12 +50,12 @@ resource "aws_lambda_permission" "lambda_cloudwatch_audit" {
 # ===============================================================================
 # AWS Lambda Function for Root Login
 # ===============================================================================
-resource "aws_lambda_function" "root_login_monitoring" {
+resource "aws_lambda_function" "lambda_root_login_monitoring" {
   function_name    = "aud-lmd-root-login-monitoring"
   role             = aws_iam_role.lambda_root_login_monitoring.arn
   handler          = "lambda_function.lambda_handler"
-  filename         = data.archive_file.root_login_monitoring.output_path
-  source_code_hash = data.archive_file.root_login_monitoring.output_base64sha256
+  filename         = data.archive_file.lambda_root_login_monitoring.output_path
+  source_code_hash = data.archive_file.lambda_root_login_monitoring.output_base64sha256
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -82,18 +82,18 @@ resource "aws_lambda_function" "root_login_monitoring" {
   }
 }
 
-data "archive_file" "root_login_monitoring" {
+data "archive_file" "lambda_root_login_monitoring" {
   type        = "zip"
   source_dir  = "${path.cwd}/files/lambda/root-login-monitoring"
-  output_path = "${path.module}/artifacts/aud-lmd-root-login-monitoring.zip"
+  output_path = "${path.module}/artifacts/aud-lmd-lambda-root-login-monitoring.zip"
 }
 
-resource "aws_lambda_permission" "root_login_monitoring" {
+resource "aws_lambda_permission" "lambda_root_login_monitoring" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.root_login_monitoring.function_name
+  function_name = aws_lambda_function.lambda_root_login_monitoring.function_name
   principal     = "logs.${local.region}.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_log_group.root_login_monitoring.arn}:*"
+  source_arn    = "${aws_cloudwatch_log_group.lambda_root_login_monitoring.arn}:*"
 }
 
 
@@ -149,12 +149,12 @@ resource "aws_lambda_permission" "lambda_error" {
 # ===============================================================================
 # AWS Lambda Function for Security Notice
 # ===============================================================================
-resource "aws_lambda_function" "security_notice" {
+resource "aws_lambda_function" "lambda_security_notice" {
   function_name    = "aud-lmd-security-notice"
   role             = aws_iam_role.lambda_security_notice.arn
   handler          = "lambda_function.lambda_handler"
-  filename         = data.archive_file.security_notice.output_path
-  source_code_hash = data.archive_file.security_notice.output_base64sha256
+  filename         = data.archive_file.lambda_security_notice.output_path
+  source_code_hash = data.archive_file.lambda_security_notice.output_base64sha256
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -180,16 +180,16 @@ resource "aws_lambda_function" "security_notice" {
   }
 }
 
-data "archive_file" "security_notice" {
+data "archive_file" "lambda_security_notice" {
   type        = "zip"
   source_dir  = "${path.cwd}/files/lambda/lambda-security-notice"
-  output_path = "${path.module}/artifacts/aud-lmd-security-notice.zip"
+  output_path = "${path.module}/artifacts/aud-lmd-lambda-security-notice.zip"
 }
 
-resource "aws_lambda_permission" "security_notice" {
+resource "aws_lambda_permission" "lambda_security_notice" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.security_notice.function_name
+  function_name = aws_lambda_function.lambda_security_notice.function_name
   principal     = "logs.${local.region}.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_log_group.security_notice.arn}:*"
+  source_arn    = "${aws_cloudwatch_log_group.lambda_security_notice.arn}:*"
 }
