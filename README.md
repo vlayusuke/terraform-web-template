@@ -57,9 +57,9 @@ Pythonのバージョンについては、macOS上でHomebrewでパッケージ�
 
 | Environmtnt | Resource | Notice           |
 | :---------- | -------: | :--------------- |
-| develop     |      569 | N/A              |
-| staging     |      569 | N/A              |
-| production  |      569 | N/A              |
+| develop     |      570 | N/A              |
+| staging     |      570 | N/A              |
+| production  |      570 | N/A              |
 | audit       |      135 | Each AWS account |
 
 ## 環境構築をする際の注意事項
@@ -159,6 +159,14 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_terraform-web-template -C "Key Pair f
 ```
 
 なお、公開鍵のみを`terraform.tfvars`に設定します。秘密鍵の管理は独自でお願いいたします。
+
+### 親ドメインへのDNSのNSレコード追加方法
+
+親ドメインに対して、発行されたDNSのNSレコードを追加する際は、Amazon Route 53のNSレコード発行のタイミングで、ターミナルより以下のコマンドを実行し、親ドメインへの追加をお願いします。
+
+```bash
+dig +noall +answer tes.example.org. ns
+```
 
 ## インフラ構成図
 
