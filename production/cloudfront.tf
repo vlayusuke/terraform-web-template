@@ -9,7 +9,7 @@ resource "aws_cloudfront_distribution" "main" {
   web_acl_id      = aws_wafv2_web_acl.main.arn
 
   aliases = [
-    local.base_domain,
+    local.domain,
   ]
 
   viewer_certificate {
