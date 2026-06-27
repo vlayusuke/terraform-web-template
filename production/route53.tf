@@ -2,7 +2,7 @@
 # Amazon Route 53 Host Zone
 # ================================================================================
 resource "aws_route53_zone" "main" {
-  name          = local.base_domain
+  name          = local.domain
   comment       = "Amazon Route 53 Host Zone for ${local.project}-${local.env}"
   force_destroy = false
 
@@ -17,7 +17,7 @@ resource "aws_route53_zone" "main" {
 # ================================================================================
 resource "aws_route53_record" "main_A" {
   zone_id        = aws_route53_zone.main.id
-  name           = local.base_domain
+  name           = local.domain
   type           = "A"
   set_identifier = "${local.project}-${local.env}-r53-record-a"
 
@@ -34,7 +34,7 @@ resource "aws_route53_record" "main_A" {
 
 resource "aws_route53_record" "main_AAAA" {
   zone_id        = aws_route53_zone.main.id
-  name           = local.base_domain
+  name           = local.domain
   type           = "AAAA"
   set_identifier = "${local.project}-${local.env}-r53-record-aaaa"
 
@@ -54,7 +54,7 @@ resource "aws_route53_record" "main_AAAA" {
 # Amazon Route 53 Health Check
 # ================================================================================
 resource "aws_route53_health_check" "main" {
-  fqdn              = local.base_domain
+  fqdn              = local.domain
   type              = "HTTPS"
   resource_path     = "/"
   failure_threshold = 3
@@ -76,7 +76,7 @@ data "aws_route53_zone" "root" {
 
 resource "aws_route53_record" "root_ns" {
   zone_id = data.aws_route53_zone.root.zone_id
-  name    = "${local.env}.${local.base_domain}"
+  name    = "${local.env}.${local.domain}"
   type    = "NS"
   ttl     = 300
 

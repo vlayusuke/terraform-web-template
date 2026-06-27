@@ -2,12 +2,12 @@
 # AWS AWS Certificate Manager for Application Load Balancer
 # ===============================================================================
 resource "aws_acm_certificate" "main_alb" {
-  domain_name       = local.base_domain
+  domain_name       = local.domain
   validation_method = "DNS"
 
   validation_option {
-    domain_name       = local.base_domain
-    validation_domain = local.base_domain
+    domain_name       = local.domain
+    validation_domain = local.domain
   }
 
   lifecycle {
@@ -54,12 +54,12 @@ resource "aws_acm_certificate_validation" "main_alb" {
 # ===============================================================================
 resource "aws_acm_certificate" "main_cloudfront" {
   provider          = aws.virginia
-  domain_name       = local.base_domain
+  domain_name       = local.domain
   validation_method = "DNS"
 
   validation_option {
-    domain_name       = local.base_domain
-    validation_domain = local.base_domain
+    domain_name       = local.domain
+    validation_domain = local.domain
   }
 
   lifecycle {
