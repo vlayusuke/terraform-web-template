@@ -162,10 +162,10 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_terraform-web-template -C "Key Pair f
 
 ### 親ドメインへのDNSのNSレコード追加方法
 
-親ドメインに対して、発行されたDNSのNSレコードを追加する際は、Amazon Route 53のNSレコード発行のタイミングで、ターミナルより以下のコマンドを実行し、親ドメインへの追加をお願いします。
+親ドメインに対して、発行されたDNSのNSレコードを追加する際は、Amazon Route 53のNSレコード発行のタイミングで、ターミナルより以下のコマンドを実行し、親ドメインへの追加をお願いします。`{env}`には、必要に応じて環境名を代入してください。
 
 ```bash
-dig +noall +answer tes.example.org. ns
+dig +noall +answer {env}.app.example.org. ns
 ```
 
 ## インフラ構成図
