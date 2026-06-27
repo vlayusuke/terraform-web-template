@@ -5,6 +5,10 @@ resource "aws_acm_certificate" "main_alb" {
   domain_name       = "${local.env}.${local.domain}"
   validation_method = "DNS"
 
+  subject_alternative_names = [
+    "*.${local.env}.${local.domain}",
+  ]
+
   validation_option {
     domain_name       = "${local.env}.${local.domain}"
     validation_domain = "${local.env}.${local.domain}"
@@ -22,16 +26,17 @@ resource "aws_acm_certificate" "main_alb" {
 resource "aws_route53_record" "main_alb" {
   for_each = {
     for dvoalb in aws_acm_certificate.main_alb.domain_validation_options : dvoalb.domain_name => {
-      name   = dvoalb.resource_record_name
-      record = dvoalb.resource_record_value
-      type   = dvoalb.resource_record_type
+      name    = dvoalb.resource_record_name
+      record  = dvoalb.resource_record_value
+      type    = dvoalb.resource_record_type
+      zone_id = aws_route53_zone.main.zone_id
     }
   }
 
   allow_overwrite = true
   name            = each.value.name
   type            = each.value.type
-  zone_id         = aws_route53_zone.main.zone_id
+  zone_id         = each.value.zone_id
   ttl             = 60
 
   records = [
@@ -57,6 +62,10 @@ resource "aws_acm_certificate" "main_cloudfront" {
   domain_name       = "${local.env}.${local.domain}"
   validation_method = "DNS"
 
+  subject_alternative_names = [
+    "*.${local.env}.${local.domain}",
+  ]
+
   validation_option {
     domain_name       = "${local.env}.${local.domain}"
     validation_domain = "${local.env}.${local.domain}"
@@ -74,16 +83,17 @@ resource "aws_acm_certificate" "main_cloudfront" {
 resource "aws_route53_record" "main_cloudfront" {
   for_each = {
     for dvocft in aws_acm_certificate.main_cloudfront.domain_validation_options : dvocft.domain_name => {
-      name   = dvocft.resource_record_name
-      record = dvocft.resource_record_value
-      type   = dvocft.resource_record_type
+      name    = dvocft.resource_record_name
+      record  = dvocft.resource_record_value
+      type    = dvocft.resource_record_type
+      zone_id = aws_route53_zone.main.zone_id
     }
   }
 
   allow_overwrite = true
   name            = each.value.name
   type            = each.value.type
-  zone_id         = aws_route53_zone.main.zone_id
+  zone_id         = each.value.zone_id
   ttl             = 60
 
   records = [
