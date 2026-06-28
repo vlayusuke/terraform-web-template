@@ -1,9 +1,9 @@
 # ===============================================================================
-# Amazon EventBridge (Check Config)
+# Amazon EventBridge (AWS Config compliance check)
 # ===============================================================================
-resource "aws_cloudwatch_event_rule" "check_config" {
-  name           = "${local.project}-${local.env}-ebd-check-config"
-  description    = "Check Config Notification"
+resource "aws_cloudwatch_event_rule" "config_check_compliance" {
+  name           = "${local.project}-${local.env}-ebd-cfg-check-compliance"
+  description    = "EventBridge rule to capture AWS Config compliance check events"
   event_bus_name = "default"
 
   event_pattern = jsonencode({
@@ -21,22 +21,22 @@ resource "aws_cloudwatch_event_rule" "check_config" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-ebd-check-config"
+    Name = "${local.project}-${local.env}-ebd-cfg-check-compliance"
   }
 }
 
-resource "aws_cloudwatch_event_target" "check_config" {
-  rule      = aws_cloudwatch_event_rule.check_config.name
+resource "aws_cloudwatch_event_target" "config_check_compliance" {
+  rule      = aws_cloudwatch_event_rule.config_check_compliance.name
   target_id = aws_sns_topic.event_notifications_audit.name
   arn       = aws_sns_topic.event_notifications_audit.arn
 }
 
 
 # ===============================================================================
-# Amazon EventBridge (Check Non Compliance)
+# Amazon EventBridge (AWS Config capture non-compliance)
 # ===============================================================================
 resource "aws_cloudwatch_event_rule" "config_non_compliance" {
-  name           = "${local.project}-${local.env}-ebd-config-non-compliance"
+  name           = "${local.project}-${local.env}-ebd-cfg-non-compliance"
   description    = "EventBridge rule to capture AWS Config non-compliance events"
   event_bus_name = "default"
 
@@ -55,7 +55,7 @@ resource "aws_cloudwatch_event_rule" "config_non_compliance" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-ebd-config-non-compliance"
+    Name = "${local.project}-${local.env}-ebd-cfg-non-compliance"
   }
 }
 
@@ -67,10 +67,10 @@ resource "aws_cloudwatch_event_target" "config_non_compliance" {
 
 
 # ==============================================================================
-# Amazon EventBridge (AWS Config Configuration Item Changes)
+# Amazon EventBridge (AWS Config configuration item changes)
 # ==============================================================================
 resource "aws_cloudwatch_event_rule" "config_item_change" {
-  name           = "${local.project}-${local.env}-ebd-config-item-change"
+  name           = "${local.project}-${local.env}-ebd-cfg-item-change"
   description    = "EventBridge rule to capture AWS Config configuration item changes"
   event_bus_name = "default"
 
@@ -85,7 +85,7 @@ resource "aws_cloudwatch_event_rule" "config_item_change" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-ebd-config-item-change"
+    Name = "${local.project}-${local.env}-ebd-cfg-item-change"
   }
 }
 
@@ -97,11 +97,11 @@ resource "aws_cloudwatch_event_target" "config_item_change" {
 
 
 # ===============================================================================
-# Amazon EventBridge (AWS CloudTrail)
+# Amazon EventBridge (AWS CloudTrail check for API calls)
 # ===============================================================================
-resource "aws_cloudwatch_event_rule" "cloudtrail" {
-  name           = "${local.project}-${local.env}-ebd-ctl"
-  description    = "AWS CloudTrail Notification"
+resource "aws_cloudwatch_event_rule" "cloudtrail_check_api_calls" {
+  name           = "${local.project}-${local.env}-ebd-ctl-check-api-calls"
+  description    = "EventBridge rule to capture AWS CloudTrail API call events"
   event_bus_name = "default"
 
   event_pattern = jsonencode({
@@ -136,12 +136,12 @@ resource "aws_cloudwatch_event_rule" "cloudtrail" {
   })
 
   tags = {
-    Name = "${local.project}-${local.env}-ebd-ctl"
+    Name = "${local.project}-${local.env}-ebd-ctl-check-api-calls"
   }
 }
 
-resource "aws_cloudwatch_event_target" "cloudtrail" {
-  rule      = aws_cloudwatch_event_rule.cloudtrail.name
+resource "aws_cloudwatch_event_target" "cloudtrail_check_api_calls" {
+  rule      = aws_cloudwatch_event_rule.cloudtrail_check_api_calls.name
   target_id = aws_sns_topic.event_notifications_audit.name
   arn       = aws_sns_topic.event_notifications_audit.arn
 }
