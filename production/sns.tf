@@ -2,7 +2,8 @@
 # Amazon SNS Topic for Metric Alarm
 # ===============================================================================
 resource "aws_sns_topic" "metric_alarm" {
-  name = "${local.project}-${local.env}-sns-metric-alarm-topic"
+  name         = "${local.project}-${local.env}-sns-metric-alarm-topic"
+  display_name = "Amazon SNS Topic for Metric Alarm"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -85,7 +86,8 @@ data "aws_iam_policy_document" "metric_alarm" {
 # Amazon SNS Topic for Event Alarm
 # ===============================================================================
 resource "aws_sns_topic" "event_alarm" {
-  name = "${local.project}-${local.env}-sns-event-alarm-topic"
+  name         = "${local.project}-${local.env}-sns-event-alarm-topic"
+  display_name = "Amazon SNS Topic for Event Alarm"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -168,7 +170,8 @@ data "aws_iam_policy_document" "event_alarm" {
 # Amazon SNS Topic for Amazon Inspector Notifications
 # ===============================================================================
 resource "aws_sns_topic" "inspector_notifications" {
-  name = "${local.project}-${local.env}-sns-inspector-notifications-topic"
+  name         = "${local.project}-${local.env}-sns-inspector-notifications-topic"
+  display_name = "Amazon SNS Topic for Amazon Inspector Notifications"
 
   delivery_policy = jsonencode({
     "http" : {
@@ -251,7 +254,8 @@ data "aws_iam_policy_document" "inspector_notifications" {
 # Amazon SNS Topic for Event Notifications
 # ===============================================================================
 resource "aws_sns_topic" "event_notifications" {
-  name = "${local.project}-${local.env}-sns-event-notifications-topic"
+  name         = "${local.project}-${local.env}-sns-event-notifications-topic"
+  display_name = "Amazon SNS Topic for Event Notifications"
 
   delivery_policy = jsonencode({
     "http" : {
