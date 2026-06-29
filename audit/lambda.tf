@@ -3,6 +3,7 @@
 # ===============================================================================
 resource "aws_lambda_function" "lambda_log_error_alert_audit" {
   function_name    = "aud-lmd-cwt-log-error-alert"
+  description      = "AWS Lambda function for CloudWatch log error alert at audit environment"
   role             = aws_iam_role.lambda_cloudwatch_audit.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_log_error_alert_audit.output_path
@@ -52,6 +53,7 @@ resource "aws_lambda_permission" "lambda_cloudwatch_audit" {
 # ===============================================================================
 resource "aws_lambda_function" "lambda_root_login_monitoring" {
   function_name    = "aud-lmd-root-login-monitoring"
+  description      = "AWS Lambda function for Root Login Monitoring at audit environment"
   role             = aws_iam_role.lambda_root_login_monitoring.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_root_login_monitoring.output_path
@@ -102,6 +104,7 @@ resource "aws_lambda_permission" "lambda_root_login_monitoring" {
 # ===============================================================================
 resource "aws_lambda_function" "lambda_error" {
   function_name    = "aud-lmd-lambda-error"
+  description      = "AWS Lambda function for Lambda Error at audit environment"
   role             = aws_iam_role.lambda_error.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_error.output_path
@@ -151,6 +154,7 @@ resource "aws_lambda_permission" "lambda_error" {
 # ===============================================================================
 resource "aws_lambda_function" "lambda_security_notice" {
   function_name    = "aud-lmd-security-notice"
+  description      = "AWS Lambda function for Security Notice at audit environment"
   role             = aws_iam_role.lambda_security_notice.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_security_notice.output_path
