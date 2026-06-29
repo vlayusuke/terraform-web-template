@@ -3,6 +3,7 @@
 # ===============================================================================
 resource "aws_lambda_function" "lambda_log_error_alert" {
   function_name    = "lmd-cwt-log-error-alert"
+  description      = "AWS Lambda function for Amazon CloudWatch Logs error alert"
   role             = aws_iam_role.lambda_cloudwatch.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_log_error_alert.output_path
@@ -52,6 +53,7 @@ resource "aws_lambda_permission" "lambda_cloudwatch_app" {
 # ===============================================================================
 resource "aws_lambda_function" "lambda_metric_alarm" {
   function_name    = "lmd-cwt-metric-alarm"
+  description      = "AWS Lambda function for Amazon CloudWatch Metric Alarm"
   role             = aws_iam_role.lambda_cloudwatch.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_metric_alarm.output_path
@@ -102,6 +104,7 @@ resource "aws_lambda_permission" "lambda_metric_alarm" {
 # ===============================================================================
 resource "aws_lambda_function" "lambda_rds_control" {
   function_name    = "lmd-rds-control"
+  description      = "AWS Lambda function for RDS control"
   role             = aws_iam_role.lambda_rds_control.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_rds_control.output_path
@@ -159,6 +162,7 @@ resource "aws_lambda_permission" "lambda_rds_control" {
 # ===============================================================================
 resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
   function_name    = "lmd-schedule-ecs-maintenance"
+  description      = "AWS Lambda function for creating EventBridge Scheduler for ECS maintenance"
   role             = aws_iam_role.lambda_schedule_ecs_maintenance.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_schedule_ecs_maintenance.output_path
@@ -232,6 +236,7 @@ resource "aws_lambda_permission" "allow_eventbridge_to_call_lambda" {
 # ===============================================================================
 resource "aws_lambda_function" "lambda_execute_ecs_force_deployment" {
   function_name    = "lmd-execute-ecs-force-deployment"
+  description      = "AWS Lambda function for executing ECS force deployment"
   role             = aws_iam_role.lambda_execute_ecs_force_deployment.arn
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_execute_ecs_force_deployment.output_path
