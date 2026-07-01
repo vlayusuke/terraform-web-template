@@ -170,6 +170,10 @@ resource "aws_appautoscaling_policy" "fargate_app_scale_in" {
   ]
 }
 
+
+# ===============================================================================
+# Amazon ECS Task for App
+# ===============================================================================
 resource "aws_ecs_task_definition" "fargate_app" {
   family                   = "fargate-app"
   network_mode             = "awsvpc"
@@ -193,6 +197,10 @@ resource "aws_ecs_task_definition" "fargate_app" {
   runtime_platform {
     cpu_architecture        = "ARM64"
     operating_system_family = "LINUX"
+  }
+
+  ephemeral_storage {
+    size_in_gib = 128
   }
 
   volume {
@@ -274,6 +282,10 @@ resource "aws_ecs_service" "fargate_cron" {
   }
 }
 
+
+# ===============================================================================
+# Amazon ECS Task for Cron
+# ===============================================================================
 resource "aws_ecs_task_definition" "fargate_cron" {
   family                   = "fargate-cron"
   network_mode             = "awsvpc"
@@ -297,6 +309,10 @@ resource "aws_ecs_task_definition" "fargate_cron" {
   runtime_platform {
     cpu_architecture        = "ARM64"
     operating_system_family = "LINUX"
+  }
+
+  ephemeral_storage {
+    size_in_gib = 64
   }
 
   lifecycle {
@@ -367,6 +383,10 @@ resource "aws_ecs_service" "fargate_queue" {
   }
 }
 
+
+# ===============================================================================
+# Amazon ECS Task for Queue
+# ===============================================================================
 resource "aws_ecs_task_definition" "fargate_queue" {
   family                   = "fargate-queue"
   network_mode             = "awsvpc"
@@ -390,6 +410,10 @@ resource "aws_ecs_task_definition" "fargate_queue" {
   runtime_platform {
     cpu_architecture        = "ARM64"
     operating_system_family = "LINUX"
+  }
+
+  ephemeral_storage {
+    size_in_gib = 64
   }
 
   lifecycle {
@@ -434,6 +458,10 @@ resource "aws_ecs_task_definition" "fargate_migrate" {
   runtime_platform {
     cpu_architecture        = "ARM64"
     operating_system_family = "LINUX"
+  }
+
+  ephemeral_storage {
+    size_in_gib = 64
   }
 
   tags = {
