@@ -20,7 +20,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -47,7 +47,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_error" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -74,7 +74,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_general" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -101,7 +101,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_slowquery" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -128,7 +128,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" 
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -159,7 +159,7 @@ resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -191,7 +191,7 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_app" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -223,7 +223,7 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_nginx" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -255,7 +255,7 @@ resource "aws_kinesis_firehose_delivery_stream" "lambda_logs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -286,7 +286,7 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_logs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -323,7 +323,7 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_event_logs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -354,7 +354,7 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_logs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -385,7 +385,7 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_event_logs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -416,7 +416,7 @@ resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -447,7 +447,7 @@ resource "aws_kinesis_firehose_delivery_stream" "firelens_logs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
