@@ -106,6 +106,7 @@ resource "aws_ses_event_destination" "firehose" {
     aws_iam_role.ses,
     aws_iam_policy.ses,
     aws_iam_role_policy_attachment.ses,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
   ]
 }
 
