@@ -146,6 +146,10 @@ resource "aws_lambda_function_event_invoke_config" "lambda_rds_control" {
       destination = aws_sns_topic.event_alarm.arn
     }
   }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.lambda_rds_control,
+  ]
 }
 
 resource "aws_lambda_permission" "lambda_rds_control" {
@@ -206,6 +210,10 @@ resource "aws_lambda_function_event_invoke_config" "lambda_schedule_ecs_maintena
       destination = aws_sns_topic.event_alarm.arn
     }
   }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.lambda_schedule_ecs_maintenance,
+  ]
 }
 
 data "archive_file" "lambda_schedule_ecs_maintenance" {
@@ -278,6 +286,10 @@ resource "aws_lambda_function_event_invoke_config" "lambda_execute_ecs_force_dep
       destination = aws_sns_topic.event_alarm.arn
     }
   }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.lambda_execute_ecs_force_deployment,
+  ]
 }
 
 resource "aws_lambda_permission" "lambda_execute_ecs_force_deployment" {
