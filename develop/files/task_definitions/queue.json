@@ -27,12 +27,10 @@
       }
     ],
     "logConfiguration": {
-      "logDriver": "awsfirelens",
+      "logDriver": "awslogs",
       "options": {
-        "Name": "cloudwatch",
         "awslogs-region": "${region}",
         "awslogs-group": "${log_group_prefix}-cw-queue-cwlog",
-        "auto-create-group": "true",
         "awslogs-stream-prefix": "queue"
       }
     },
