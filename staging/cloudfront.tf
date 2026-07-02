@@ -71,8 +71,6 @@ resource "aws_cloudfront_distribution" "main" {
     allowed_methods = [
       "GET",
       "HEAD",
-      "PUT",
-      "DELETE",
     ]
     cached_methods = [
       "GET",
