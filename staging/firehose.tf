@@ -423,34 +423,3 @@ resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
     Name = "${local.project}-${local.env}-adf-ec2-bastion-logs-to-s3"
   }
 }
-
-
-# ===============================================================================
-# Amazon Data Firehose Stream (Firelens logs)
-# ===============================================================================
-resource "aws_kinesis_firehose_delivery_stream" "firelens_logs" {
-  name        = "${local.project}-${local.env}-adf-firelens-logs-to-s3"
-  destination = "extended_s3"
-
-  extended_s3_configuration {
-    role_arn           = aws_iam_role.amazon_data_firehose.arn
-    bucket_arn         = aws_s3_bucket.ecs_logs.arn
-    buffering_size     = 64
-    buffering_interval = 300
-    prefix             = "${local.env}/firelens-logs/"
-    compression_format = "GZIP"
-  }
-
-  server_side_encryption {
-    enabled  = true
-    key_type = "AWS_OWNED_CMK"
-  }
-
-  lifecycle {
-    prevent_destroy = false
-  }
-
-  tags = {
-    Name = "${local.project}-${local.env}-adf-firelens-logs-to-s3"
-  }
-}
