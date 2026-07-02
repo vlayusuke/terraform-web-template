@@ -40,6 +40,13 @@ data "aws_iam_policy_document" "ecr_docker" {
     resources = [
       "*",
     ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
   }
 }
 
@@ -89,6 +96,13 @@ data "aws_iam_policy_document" "ecr_api" {
     resources = [
       "*",
     ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
   }
 }
 
@@ -135,6 +149,13 @@ data "aws_iam_policy_document" "ssm" {
     resources = [
       "*",
     ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
   }
 }
 
@@ -181,6 +202,13 @@ data "aws_iam_policy_document" "ssm_messages" {
     resources = [
       "*",
     ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
   }
 }
 
@@ -227,6 +255,13 @@ data "aws_iam_policy_document" "ec2_messages" {
     resources = [
       "*",
     ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
   }
 }
 
@@ -267,5 +302,12 @@ data "aws_iam_policy_document" "s3_gateway" {
     resources = [
       "*",
     ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
   }
 }
