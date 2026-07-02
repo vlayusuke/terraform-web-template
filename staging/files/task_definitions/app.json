@@ -26,12 +26,10 @@
       }
     ],
     "logConfiguration": {
-      "logDriver": "awsfirelens",
+      "logDriver": "awslogs",
       "options": {
-        "Name": "cloudwatch",
         "awslogs-region": "${region}",
         "awslogs-group": "${log_group_prefix}-cw-app-nginx-cwlog",
-        "auto-create-group": "true",
         "awslogs-stream-prefix": "nginx"
       }
     },
@@ -66,10 +64,8 @@
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "Name": "cloudwatch",
         "awslogs-region": "${region}",
         "awslogs-group": "${log_group_prefix}-cw-app-app-cwlog",
-        "auto-create-group": "true",
         "awslogs-stream-prefix": "app"
       }
     },
