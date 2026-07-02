@@ -774,16 +774,6 @@ resource "aws_s3_object" "prefix_migrate" {
   }
 }
 
-resource "aws_s3_object" "prefix_firelens" {
-  bucket = aws_s3_bucket.ecs_logs.bucket
-  key    = "firelens/"
-  acl    = "private"
-
-  tags = {
-    Name = "${local.project}-${local.env}-s3-prefix-firelens"
-  }
-}
-
 resource "aws_s3_bucket_ownership_controls" "ecs_logs" {
   bucket = aws_s3_bucket.ecs_logs.id
 
