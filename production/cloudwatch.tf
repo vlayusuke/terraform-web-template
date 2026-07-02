@@ -32,6 +32,10 @@ resource "aws_cloudwatch_log_subscription_filter" "fargate_app_to_firehose" {
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ecs_logs_app[each.key].arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudwatch_logs_to_amazon_data_firehose,
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "fargate_nginx" {
@@ -65,6 +69,10 @@ resource "aws_cloudwatch_log_subscription_filter" "fargate_nginx_to_firehose" {
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ecs_logs_nginx[each.key].arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudwatch_logs_to_amazon_data_firehose,
+  ]
 }
 
 
@@ -102,6 +110,10 @@ resource "aws_cloudwatch_log_subscription_filter" "rds_to_firehose" {
   filter_pattern  = ""
   destination_arn = each.value
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudwatch_logs_to_amazon_data_firehose,
+  ]
 }
 
 
@@ -135,6 +147,10 @@ resource "aws_cloudwatch_log_subscription_filter" "elasticache_to_firehose" {
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.elasticache_logs.arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudwatch_logs_to_amazon_data_firehose,
+  ]
 }
 
 
@@ -172,6 +188,10 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_function_to_firehose" 
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.lambda_logs[each.key].arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudwatch_logs_to_amazon_data_firehose,
+  ]
 }
 
 
@@ -205,6 +225,10 @@ resource "aws_cloudwatch_log_subscription_filter" "ses_to_firehose" {
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.ses_event_logs.arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudwatch_logs_to_amazon_data_firehose,
+  ]
 }
 
 
@@ -238,6 +262,10 @@ resource "aws_cloudwatch_log_subscription_filter" "sns_to_firehose" {
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.sns_event_logs.arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudwatch_logs_to_amazon_data_firehose,
+  ]
 }
 
 
@@ -289,6 +317,10 @@ resource "aws_cloudwatch_log_subscription_filter" "ec2_bastion_to_firehose" {
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.bastion_logs.arn
   role_arn        = aws_iam_role.cloudwatch_logs_to_amazon_data_firehose.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudwatch_logs_to_amazon_data_firehose,
+  ]
 }
 
 
