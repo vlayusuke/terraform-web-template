@@ -83,23 +83,6 @@ resource "aws_kms_key_policy" "application" {
 
 data "aws_iam_policy_document" "application_kms_policy" {
   statement {
-    sid    = "ApplicationAssume"
-    effect = "Allow"
-    actions = [
-      "sts:AssumeRole",
-    ]
-    principals {
-      type = "Service"
-      identifiers = [
-        "ecs.amazonaws.com",
-        "ecs-tasks.amazonaws.com",
-        "ec2.amazonaws.com",
-        "secretsmanager.amazonaws.com",
-      ]
-    }
-  }
-
-  statement {
     sid    = "ApplicationKMS"
     effect = "Allow"
     actions = [
@@ -135,7 +118,6 @@ data "aws_iam_policy_document" "application_kms_policy" {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:group/${local.iam_infra_group}",
       ]
     }
   }
@@ -151,20 +133,6 @@ resource "aws_kms_key_policy" "aurora" {
 }
 
 data "aws_iam_policy_document" "aurora_kms_policy" {
-  statement {
-    sid    = "AuroraAssume"
-    effect = "Allow"
-    actions = [
-      "sts:AssumeRole",
-    ]
-    principals {
-      type = "Service"
-      identifiers = [
-        "rds.amazonaws.com",
-      ]
-    }
-  }
-
   statement {
     sid    = "AuroraKMS"
     effect = "Allow"
@@ -198,7 +166,6 @@ data "aws_iam_policy_document" "aurora_kms_policy" {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:group/${local.iam_infra_group}",
       ]
     }
   }
@@ -214,20 +181,6 @@ resource "aws_kms_key_policy" "elasticache" {
 }
 
 data "aws_iam_policy_document" "elasticache_kms_policy" {
-  statement {
-    sid    = "ElasticacheAssume"
-    effect = "Allow"
-    actions = [
-      "sts:AssumeRole",
-    ]
-    principals {
-      type = "Service"
-      identifiers = [
-        "elasticache.amazonaws.com",
-      ]
-    }
-  }
-
   statement {
     sid    = "ElasticacheKMS"
     effect = "Allow"
@@ -261,7 +214,6 @@ data "aws_iam_policy_document" "elasticache_kms_policy" {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:group/${local.iam_infra_group}",
       ]
     }
   }
@@ -278,35 +230,37 @@ resource "aws_kms_key_policy" "efs" {
 
 data "aws_iam_policy_document" "efs_kms_policy" {
   statement {
-    sid    = "EFSAssume"
-    effect = "Allow"
-    actions = [
-      "sts:AssumeRole",
-    ]
-    principals {
-      type = "Service"
-      identifiers = [
-        "efs.amazonaws.com",
-      ]
-    }
-  }
-
-  statement {
     sid    = "EFSKMS"
     effect = "Allow"
     actions = [
       "kms:Encrypt",
       "kms:Decrypt",
+      "kms:ReEncrypt*",
       "kms:GenerateDataKey*",
+      "kms:CreateGrant",
       "kms:DescribeKey",
     ]
     resources = [
-      aws_kms_key.efs.arn,
+      "*",
     ]
     principals {
-      type = "Service"
+      type = "AWS"
       identifiers = [
-        "efs.amazonaws.com",
+        "*",
+      ]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values = [
+        "elasticfilesystem.${local.region}.amazonaws.com",
+      ]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "kms:CallerAccount"
+      values = [
+        data.aws_caller_identity.current.account_id,
       ]
     }
   }
@@ -324,7 +278,6 @@ data "aws_iam_policy_document" "efs_kms_policy" {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:group/${local.iam_infra_group}",
       ]
     }
   }
@@ -340,20 +293,6 @@ resource "aws_kms_key_policy" "ebs" {
 }
 
 data "aws_iam_policy_document" "ebs_kms_policy" {
-  statement {
-    sid    = "EBSAssume"
-    effect = "Allow"
-    actions = [
-      "sts:AssumeRole",
-    ]
-    principals {
-      type = "Service"
-      identifiers = [
-        "ebs.amazonaws.com",
-      ]
-    }
-  }
-
   statement {
     sid    = "EBSKMS"
     effect = "Allow"
@@ -387,7 +326,6 @@ data "aws_iam_policy_document" "ebs_kms_policy" {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:group/${local.iam_infra_group}",
       ]
     }
   }
