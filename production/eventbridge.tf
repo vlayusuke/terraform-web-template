@@ -55,18 +55,6 @@ resource "aws_scheduler_schedule" "rds_control_stop" {
   }
 }
 
-resource "aws_cloudwatch_event_target" "rds_control_start" {
-  rule      = aws_scheduler_schedule.rds_control_start.name
-  target_id = aws_sns_topic.event_notifications.name
-  arn       = aws_sns_topic.event_notifications.arn
-}
-
-resource "aws_cloudwatch_event_target" "rds_control_stop" {
-  rule      = aws_scheduler_schedule.rds_control_stop.name
-  target_id = aws_sns_topic.event_notifications.name
-  arn       = aws_sns_topic.event_notifications.arn
-}
-
 
 # ===============================================================================
 # Amazon EventBridge (Amazon ECR Image Scan Notification)
