@@ -33,6 +33,6 @@ locals {
   base_domain = "vlayusuke.net"
 
   # database info
-  database_name             = "tf-web"
+  database_name             = "tfweb"
   database_master_user_name = "admin"
 }
