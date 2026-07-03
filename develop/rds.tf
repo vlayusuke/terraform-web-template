@@ -13,7 +13,7 @@ resource "aws_rds_cluster" "aurora" {
   iam_database_authentication_enabled   = true
   backup_retention_period               = 14
   preferred_backup_window               = "20:00-21:00"
-  preferred_maintenance_window          = "sat:21:10-sat:22:10"
+  preferred_maintenance_window          = "sat:21:30-sat:22:30"
   database_insights_mode                = "standard"
   performance_insights_enabled          = true
   performance_insights_kms_key_id       = aws_kms_key.aurora.arn
