@@ -13,7 +13,7 @@ resource "aws_elasticache_replication_group" "redis" {
   port                       = 6379
   parameter_group_name       = aws_elasticache_parameter_group.redis.id
   subnet_group_name          = aws_elasticache_subnet_group.redis.name
-  maintenance_window         = "sat:21:10-sat:22:10"
+  maintenance_window         = "sat:21:30-sat:22:30"
   snapshot_retention_limit   = 14
   snapshot_window            = "20:00-21:00"
   notification_topic_arn     = aws_sns_topic.event_notifications.arn
