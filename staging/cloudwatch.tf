@@ -58,7 +58,7 @@ resource "aws_cloudwatch_log_subscription_filter" "fargate_nginx_to_lambda" {
   for_each        = local.fargate_nginx_cloudwatch_log_group
   name            = "${local.project}-${local.env}-cwt-${each.key}-to-lmd"
   log_group_name  = "${local.project}-${local.env}-cwt-${each.key}-cwtlog"
-  filter_pattern  = "{ $.status = \"5*\" || $.request_time >= 3.000 }"
+  filter_pattern  = "{ $.status = \"4*\" || $.status = \"5*\" || $.request_time >= 3.000 }"
   destination_arn = aws_lambda_function.lambda_log_error_alert.arn
 }
 
