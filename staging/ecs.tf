@@ -36,6 +36,7 @@ resource "aws_ecs_service" "fargate_app" {
   name                               = "fargate-app"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = data.aws_ecs_task_definition.fargate_app.arn
+  availability_zone_rebalancing      = "ENABLED"
   desired_count                      = 2
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
@@ -58,6 +59,10 @@ resource "aws_ecs_service" "fargate_app" {
   deployment_circuit_breaker {
     enable   = true
     rollback = true
+  }
+
+  deployment_configuration {
+    strategy = "ROLLING"
   }
 
   deployment_controller {
@@ -237,6 +242,7 @@ resource "aws_ecs_service" "fargate_cron" {
   name                               = "fargate-cron"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = data.aws_ecs_task_definition.fargate_cron.arn
+  availability_zone_rebalancing      = "ENABLED"
   desired_count                      = 1
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
@@ -253,6 +259,10 @@ resource "aws_ecs_service" "fargate_cron" {
   deployment_circuit_breaker {
     enable   = true
     rollback = true
+  }
+
+  deployment_configuration {
+    strategy = "ROLLING"
   }
 
   deployment_controller {
@@ -338,6 +348,7 @@ resource "aws_ecs_service" "fargate_queue" {
   name                               = "fargate-queue"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = data.aws_ecs_task_definition.fargate_queue.arn
+  availability_zone_rebalancing      = "ENABLED"
   desired_count                      = 1
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
@@ -354,6 +365,10 @@ resource "aws_ecs_service" "fargate_queue" {
   deployment_circuit_breaker {
     enable   = true
     rollback = true
+  }
+
+  deployment_configuration {
+    strategy = "ROLLING"
   }
 
   deployment_controller {
