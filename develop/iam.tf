@@ -1882,6 +1882,107 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_logs_to_amazon_data_fireho
 }
 
 
+# ===============================================================================
+# AWS IAM for Amazon CloudWatch Synthetics
+# ===============================================================================
+resource "aws_iam_role" "cloudwatch_synthetics" {
+  name               = "${local.project}-${local.env}-iam-cwt-syn-role"
+  assume_role_policy = data.aws_iam_policy_document.cloudwatch_synthetics_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-cwt-syn-role"
+  }
+}
+
+data "aws_iam_policy_document" "cloudwatch_synthetics_assume" {
+  statement {
+    sid    = "CloudWatchSyntheticsAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "lambda.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_policy" "cloudwatch_synthetics" {
+  name   = "${local.project}-${local.env}-iam-cwt-syn-policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.cloudwatch_synthetics.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-cwt-syn-policy"
+  }
+}
+
+data "aws_iam_policy_document" "cloudwatch_synthetics" {
+  statement {
+    sid    = "LogAccess"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:CreateLogGroup",
+      "logs:PutLogEvents",
+    ]
+    resources = [
+      "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/cwssyn-${aws_synthetics_canary.top_page.name}-*",
+    ]
+  }
+
+  statement {
+    sid    = "S3StoreeCanaryResultsAccess"
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketLocation",
+    ]
+    resources = [
+      aws_s3_bucket.synthetics_results.arn,
+    ]
+  }
+
+  statement {
+    sid    = "S3StoreCanaryResults"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+    resources = [
+      "${aws_s3_bucket.synthetics_results.arn}/canary/results/*",
+    ]
+  }
+
+  statement {
+    sid    = "KMSAccess"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey",
+    ]
+    resources = [
+      aws_kms_key.synthetics.arn,
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values = [
+        "s3.${local.region}.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_synthetics" {
+  role       = aws_iam_role.cloudwatch_synthetics.name
+  policy_arn = aws_iam_policy.cloudwatch_synthetics.arn
+}
+
+
 # ================================================================================
 # Amazon EC2 Instance Profile for Bastion
 # ================================================================================
