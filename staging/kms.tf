@@ -74,6 +74,21 @@ resource "aws_kms_key" "ebs" {
 
 
 # ===============================================================================
+# AWS KMS for Amazon CloudWatch Synthetics
+# ===============================================================================
+resource "aws_kms_key" "synthetics" {
+  description             = "${local.project}-${local.env}-kms-cwt-syn-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-cwt-syn-key"
+  }
+}
+
+
+# ===============================================================================
 # AWS KMS Key Policy for Application
 # ===============================================================================
 resource "aws_kms_key_policy" "application" {
@@ -321,6 +336,56 @@ data "aws_iam_policy_document" "ebs_kms_policy" {
     ]
     resources = [
       aws_kms_key.ebs.arn,
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+  }
+}
+
+
+
+
+# ===============================================================================
+# AWS KMS Key Policy for Amazon CloudWatch Synthetics
+# ===============================================================================
+resource "aws_kms_key_policy" "synthetics" {
+  key_id = aws_kms_key.synthetics.key_id
+  policy = data.aws_iam_policy_document.synthetics_kms_policy.json
+}
+
+data "aws_iam_policy_document" "synthetics_kms_policy" {
+  statement {
+    sid    = "SyntheticsKMS"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      aws_kms_key.synthetics.arn,
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "lambda.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AllowAccountAccess"
+    effect = "Allow"
+    actions = [
+      "kms:*",
+    ]
+    resources = [
+      aws_kms_key.synthetics.arn,
     ]
     principals {
       type = "AWS"
