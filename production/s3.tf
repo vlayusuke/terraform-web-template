@@ -2172,6 +2172,193 @@ data "aws_iam_policy_document" "waf_logs" {
 }
 
 
+# ===============================================================================
+# Amazon S3 Bucket for Amazon CloudWatch Synthetics Artifacts
+# ===============================================================================
+resource "aws_s3_bucket" "synthetics_artifacts" {
+  bucket = "${local.project}-${local.env}-s3-cwt-syn-artifacts-bucket"
+
+  tags = {
+    Name = "${local.project}-${local.env}-s3-cwt-syn-artifacts-bucket"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "synthetics_artifacts" {
+  bucket = aws_s3_bucket.synthetics_artifacts.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "synthetics_artifacts" {
+  bucket = aws_s3_bucket.synthetics_artifacts.bucket
+
+  rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+    bucket_key_enabled = false
+  }
+}
+
+resource "aws_s3_bucket_versioning" "synthetics_artifacts" {
+  bucket = aws_s3_bucket.synthetics_artifacts.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_policy" "synthetics_artifacts" {
+  bucket = aws_s3_bucket.synthetics_artifacts.id
+  policy = data.aws_iam_policy_document.synthetics_artifacts_bucket_policy.json
+}
+
+data "aws_iam_policy_document" "synthetics_artifacts_bucket_policy" {
+  statement {
+    sid    = "EnforceSSL"
+    effect = "Deny"
+    actions = [
+      "s3:*",
+    ]
+    resources = [
+      aws_s3_bucket.synthetics_artifacts.arn,
+      "${aws_s3_bucket.synthetics_artifacts.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
+      ]
+    }
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
+  }
+}
+
+
+# ===============================================================================
+# Amazon S3 Bucket for Amazon CloudWatch Synthetics Results
+# ===============================================================================
+resource "aws_s3_bucket" "synthetics_results" {
+  bucket = "${local.project}-${local.env}-s3-cwt-syn-results-bucket"
+
+  tags = {
+    Name = "${local.project}-${local.env}-s3-cwt-syn-results-bucket"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "synthetics_results" {
+  bucket = aws_s3_bucket.synthetics_results.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "synthetics_results" {
+  bucket = aws_s3_bucket.synthetics_results.bucket
+
+  rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+    bucket_key_enabled = false
+  }
+}
+
+resource "aws_s3_bucket_versioning" "synthetics_results" {
+  bucket = aws_s3_bucket.synthetics_results.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_policy" "synthetics_results" {
+  bucket = aws_s3_bucket.synthetics_results.id
+  policy = data.aws_iam_policy_document.synthetics_results_bucket_policy.json
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "synthetics_results" {
+  bucket = aws_s3_bucket.synthetics_results.id
+
+  rule {
+    id     = "transition-and-delete-object"
+    status = "Enabled"
+
+    filter {
+      object_size_greater_than = 0
+    }
+
+    transition {
+      days          = local.transition_days
+      storage_class = "GLACIER"
+    }
+
+    expiration {
+      days = local.expire_days
+    }
+
+    noncurrent_version_transition {
+      noncurrent_days = local.transition_days
+      storage_class   = "GLACIER"
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = local.expire_days
+    }
+  }
+
+  depends_on = [
+    aws_s3_bucket_versioning.synthetics_results,
+  ]
+}
+
+data "aws_iam_policy_document" "synthetics_results_bucket_policy" {
+  statement {
+    sid    = "EnforceSSL"
+    effect = "Deny"
+    actions = [
+      "s3:*",
+    ]
+    resources = [
+      aws_s3_bucket.synthetics_results.arn,
+      "${aws_s3_bucket.synthetics_results.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
+      ]
+    }
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
+  }
+}
+
+
 # ================================================================================
 # Amazon S3 Bucket for Amazon EC2 Bastion
 # ================================================================================
