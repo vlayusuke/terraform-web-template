@@ -174,15 +174,15 @@ dig +noall +answer {env}.app.example.org. ns
 
 ### 本番環境
 
-![本番環境](./terraform-web-template-v1.4-en-prd.png)
+![本番環境](./terraform-web-template-v2.0-en-prd.png)
 
 ### ステージング環境
 
-![ステージング環境](./terraform-web-template-v1.4-en-stg.png)
+![ステージング環境](./terraform-web-template-v2.0-en-stg.png)
 
 ### 開発環境
 
-![開発環境](./terraform-web-template-v1.4-en-dev.png)
+![開発環境](./terraform-web-template-v2.0-en-dev.png)
 
 ## コスト
 
