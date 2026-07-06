@@ -57,9 +57,9 @@ Pythonのバージョンについては、macOS上でHomebrewでパッケージ�
 
 | Environmtnt | Resource | Notice           |
 | :---------- | -------: | :--------------- |
-| develop     |      577 | N/A              |
-| staging     |      577 | N/A              |
-| production  |      577 | N/A              |
+| develop     |      584 | N/A              |
+| staging     |      584 | N/A              |
+| production  |      584 | N/A              |
 | audit       |      135 | Each AWS account |
 
 ## 環境構築をする際の注意事項
@@ -174,15 +174,15 @@ dig +noall +answer {env}.app.example.org. ns
 
 ### 本番環境
 
-![本番環境](./terraform-web-template-v1.3-en-prd.png)
+![本番環境](./terraform-web-template-v1.4-en-prd.png)
 
 ### ステージング環境
 
-![ステージング環境](./terraform-web-template-v1.3-en-stg.png)
+![ステージング環境](./terraform-web-template-v1.4-en-stg.png)
 
 ### 開発環境
 
-![開発環境](./terraform-web-template-v1.3-en-dev.png)
+![開発環境](./terraform-web-template-v1.4-en-dev.png)
 
 ## コスト
 
