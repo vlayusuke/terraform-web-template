@@ -9,7 +9,7 @@ logger.setLevel(logging.INFO)
 
 def top_page_monitoring():
     browser = webdriver.Chrome()
-    browser.get('https://dev.app.vlayusuke.net/')
+    browser.get('https://dev.app.vlayusuke.net/')  # Replace with the actual URL you want to check
     browser.save_screenshot(f'loaded_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.png')
     browser.quit()
 
@@ -34,4 +34,3 @@ def canary_handler(event, context):
             "statusCode": 500,
             "message": 'An error occurred at top page monitoring.'
         }
-
