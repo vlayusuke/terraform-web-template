@@ -9,17 +9,27 @@ resource "aws_synthetics_group" "main" {
   }
 }
 
+resource "aws_synthetics_group_association" "check_access_top_page" {
+  group_name = aws_synthetics_group.main.name
+  canary_arn = aws_synthetics_canary.check_access_top_page.arn
+}
+
+resource "aws_synthetics_group_association" "check_input_top_page" {
+  group_name = aws_synthetics_group.main.name
+  canary_arn = aws_synthetics_canary.check_input_top_page.arn
+}
+
 
 # ===============================================================================
-# Amazon CloudWatch Synthetics Canary for Top Page Monitoring
+# Amazon CloudWatch Synthetics Canary for Check Access Top Page Monitoring
 # ===============================================================================
-resource "aws_synthetics_canary" "top_page" {
-  name                 = "${local.project}-${local.env}-cwt-syn-top-page"
+resource "aws_synthetics_canary" "check_access_top_page" {
+  name                 = "${local.project}-${local.env}-cwt-syn-check-access-top-page"
   artifact_s3_location = aws_s3_bucket.synthetics_artifacts.arn
   execution_role_arn   = aws_iam_role.cloudwatch_synthetics.arn
-  handler              = "canary_top_page.function.canary_handler"
-  runtime_version      = "syn-python-selenium-1.0"
-  zip_file             = "artifact/canary-top-page.zip"
+  handler              = "canary_check_access_top_page.function.canary_handler"
+  runtime_version      = "syn-python-selenium-11.0"
+  zip_file             = "artifact/canary-check-access-top-page.zip"
 
   schedule {
     expression = "rate(5 minutes)"
@@ -33,12 +43,46 @@ resource "aws_synthetics_canary" "top_page" {
   }
 
   tags = {
-    Name = "${local.project}-${local.env}-cwt-syn-top-page"
+    Name = "${local.project}-${local.env}-cwt-syn-check-access-top-page"
   }
 }
 
-data "archive_file" "canary_top_page" {
+data "archive_file" "canary_check_access_top_page" {
   type        = "zip"
-  source_dir  = "${path.cwd}/files/canary/canary-top-page"
-  output_path = "${path.module}/artifacts/canary-top-page.zip"
+  source_dir  = "${path.cwd}/files/canary/canary-check-access-top-page"
+  output_path = "${path.module}/artifacts/canary-check-access-top-page.zip"
+}
+
+
+# ===============================================================================
+# Amazon CloudWatch Synthetics Canary for Check Input Top Page Monitoring
+# ===============================================================================
+resource "aws_synthetics_canary" "check_input_top_page" {
+  name                 = "${local.project}-${local.env}-cwt-syn-check-input-top-page"
+  artifact_s3_location = aws_s3_bucket.synthetics_artifacts.arn
+  execution_role_arn   = aws_iam_role.cloudwatch_synthetics.arn
+  handler              = "canary_check_input_top_page.function.canary_handler"
+  runtime_version      = "syn-python-selenium-11.0"
+  zip_file             = "artifact/canary-check-input-top-page.zip"
+
+  schedule {
+    expression = "rate(5 minutes)"
+  }
+
+  artifact_config {
+    s3_encryption {
+      encryption_mode = "SSE_KMS"
+      kms_key_arn     = aws_kms_key.synthetics.arn
+    }
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-cwt-syn-check-input-top-page"
+  }
+}
+
+data "archive_file" "canary_check_input_top_page" {
+  type        = "zip"
+  source_dir  = "${path.cwd}/files/canary/canary-check-input-top-page"
+  output_path = "${path.module}/artifacts/canary-check-input-top-page.zip"
 }
