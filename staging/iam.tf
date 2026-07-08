@@ -1930,7 +1930,8 @@ data "aws_iam_policy_document" "cloudwatch_synthetics" {
       "logs:PutLogEvents",
     ]
     resources = [
-      "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/cwssyn-${aws_synthetics_canary.top_page.name}-*",
+      "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/cwssyn-${aws_synthetics_canary.check_access_top_page.name}-*",
+      "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/cwssyn-${aws_synthetics_canary.check_input_top_page.name}-*",
     ]
   }
 
