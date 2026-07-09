@@ -183,7 +183,7 @@ resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
     variables = {
       EXECUTE_LAMBDA_ARN   = aws_lambda_function.lambda_execute_ecs_force_deployment.arn
       SCHEDULER_ROLE_ARN   = aws_iam_role.eventbridge_scheduler_maintenance_ecs.arn
-      ECS_MAINTENANCE_TIME = local.ecs_maintenance_time
+      ECS_MAINTENANCE_TIME = local.ecs_maintenance_start_time
     }
   }
 

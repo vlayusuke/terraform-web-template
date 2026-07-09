@@ -29,7 +29,7 @@ locals {
 
 
 # ================================================================================
-# Amazon Aurora
+# Amazon Aurora (for MySQL)
 # ================================================================================
 locals {
   aurora_mysql_version = "8.0.mysql_aurora.3.12.0"
@@ -38,7 +38,7 @@ locals {
 
 
 # ================================================================================
-# Amazon ElastiCache
+# Amazon ElastiCache (for Redis OSS)
 # ================================================================================
 locals {
   elasticache_redis_version = "7.1"
@@ -93,7 +93,7 @@ locals {
 # ================================================================================
 locals {
   ssm_parameter_store_timeout_millis = 3000
-  ecs_maintenance_time               = 2
+  ecs_maintenance_start_time         = 2
 }
 
 
