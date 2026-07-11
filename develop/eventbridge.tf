@@ -10,10 +10,11 @@ resource "aws_scheduler_schedule_group" "rds_control" {
 }
 
 resource "aws_scheduler_schedule" "rds_control_start" {
-  name        = "${local.project}-${local.env}-ebd-scheduler-rds-control-start"
-  description = "Amazon RDS Control Start Schedule"
-  group_name  = aws_scheduler_schedule_group.rds_control.name
-  state       = "ENABLED"
+  name                    = "${local.project}-${local.env}-ebd-scheduler-rds-control-start"
+  description             = "Amazon RDS Control Start Schedule"
+  group_name              = aws_scheduler_schedule_group.rds_control.name
+  state                   = "ENABLED"
+  action_after_completion = "NONE"
 
   schedule_expression          = "cron(0 9 ? * MON-FRI *)"
   schedule_expression_timezone = "Asia/Tokyo"
@@ -29,14 +30,20 @@ resource "aws_scheduler_schedule" "rds_control_start" {
     input = jsonencode({
       "DbClusterIdentifier" : aws_rds_cluster.aurora.cluster_identifier
     })
+
+    retry_policy {
+      maximum_event_age_in_seconds = 60
+      maximum_retry_attempts       = 2
+    }
   }
 }
 
 resource "aws_scheduler_schedule" "rds_control_stop" {
-  name        = "${local.project}-${local.env}-ebd-scheduler-rds-control-stop"
-  description = "Amazon RDS Control Stop Schedule"
-  group_name  = aws_scheduler_schedule_group.rds_control.name
-  state       = "ENABLED"
+  name                    = "${local.project}-${local.env}-ebd-scheduler-rds-control-stop"
+  description             = "Amazon RDS Control Stop Schedule"
+  group_name              = aws_scheduler_schedule_group.rds_control.name
+  state                   = "ENABLED"
+  action_after_completion = "NONE"
 
   schedule_expression          = "cron(0 18 ? * MON-FRI *)"
   schedule_expression_timezone = "Asia/Tokyo"
@@ -52,6 +59,11 @@ resource "aws_scheduler_schedule" "rds_control_stop" {
     input = jsonencode({
       "DbClusterIdentifier" : aws_rds_cluster.aurora.cluster_identifier
     })
+
+    retry_policy {
+      maximum_event_age_in_seconds = 60
+      maximum_retry_attempts       = 2
+    }
   }
 }
 
