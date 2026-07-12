@@ -14,81 +14,6 @@ resource "aws_kms_key" "application" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon Aurora
-# ===============================================================================
-resource "aws_kms_key" "aurora" {
-  description             = "${local.project}-${local.env}-kms-aur-key"
-  enable_key_rotation     = true
-  key_usage               = "ENCRYPT_DECRYPT"
-  deletion_window_in_days = 7
-
-  tags = {
-    Name = "${local.project}-${local.env}-kms-aur-key"
-  }
-}
-
-
-# ===============================================================================
-# AWS KMS for Amazon ElastCache
-# ===============================================================================
-resource "aws_kms_key" "elasticache" {
-  description             = "${local.project}-${local.env}-kms-elc-key"
-  enable_key_rotation     = true
-  key_usage               = "ENCRYPT_DECRYPT"
-  deletion_window_in_days = 7
-
-  tags = {
-    Name = "${local.project}-${local.env}-kms-elc-key"
-  }
-}
-
-
-# ===============================================================================
-# AWS KMS for Amazon EFS
-# ===============================================================================
-resource "aws_kms_key" "efs" {
-  description             = "${local.project}-${local.env}-kms-efs-key"
-  enable_key_rotation     = true
-  key_usage               = "ENCRYPT_DECRYPT"
-  deletion_window_in_days = 7
-
-  tags = {
-    Name = "${local.project}-${local.env}-kms-efs-key"
-  }
-}
-
-
-# ===============================================================================
-# AWS KMS for Amazon EBS
-# ===============================================================================
-resource "aws_kms_key" "ebs" {
-  description             = "${local.project}-${local.env}-kms-ebs-key"
-  enable_key_rotation     = true
-  key_usage               = "ENCRYPT_DECRYPT"
-  deletion_window_in_days = 7
-
-  tags = {
-    Name = "${local.project}-${local.env}-kms-ebs-key"
-  }
-}
-
-
-# ===============================================================================
-# AWS KMS for Amazon CloudWatch Synthetics
-# ===============================================================================
-resource "aws_kms_key" "synthetics" {
-  description             = "${local.project}-${local.env}-kms-cwt-syn-key"
-  enable_key_rotation     = true
-  key_usage               = "ENCRYPT_DECRYPT"
-  deletion_window_in_days = 7
-
-  tags = {
-    Name = "${local.project}-${local.env}-kms-cwt-syn-key"
-  }
-}
-
-
-# ===============================================================================
 # AWS KMS Key Policy for Application
 # ===============================================================================
 resource "aws_kms_key_policy" "application" {
@@ -135,6 +60,21 @@ data "aws_iam_policy_document" "application_kms_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS for Amazon Aurora
+# ===============================================================================
+resource "aws_kms_key" "aurora" {
+  description             = "${local.project}-${local.env}-kms-aur-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-aur-key"
   }
 }
 
@@ -188,6 +128,21 @@ data "aws_iam_policy_document" "aurora_kms_policy" {
 
 
 # ===============================================================================
+# AWS KMS for Amazon ElastCache
+# ===============================================================================
+resource "aws_kms_key" "elasticache" {
+  description             = "${local.project}-${local.env}-kms-elc-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-elc-key"
+  }
+}
+
+
+# ===============================================================================
 # AWS KMS Key Policy for Amazon Elasticache
 # ===============================================================================
 resource "aws_kms_key_policy" "elasticache" {
@@ -231,6 +186,21 @@ data "aws_iam_policy_document" "elasticache_kms_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS for Amazon EFS
+# ===============================================================================
+resource "aws_kms_key" "efs" {
+  description             = "${local.project}-${local.env}-kms-efs-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-efs-key"
   }
 }
 
@@ -300,6 +270,21 @@ data "aws_iam_policy_document" "efs_kms_policy" {
 
 
 # ===============================================================================
+# AWS KMS for Amazon EBS
+# ===============================================================================
+resource "aws_kms_key" "ebs" {
+  description             = "${local.project}-${local.env}-kms-ebs-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-ebs-key"
+  }
+}
+
+
+# ===============================================================================
 # AWS KMS Key Policy for Amazon EBS
 # ===============================================================================
 resource "aws_kms_key_policy" "ebs" {
@@ -343,6 +328,21 @@ data "aws_iam_policy_document" "ebs_kms_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS for Amazon CloudWatch Synthetics
+# ===============================================================================
+resource "aws_kms_key" "synthetics" {
+  description             = "${local.project}-${local.env}-kms-cwt-syn-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-cwt-syn-key"
   }
 }
 
