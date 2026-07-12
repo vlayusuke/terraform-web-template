@@ -12,6 +12,10 @@ resource "aws_kms_key" "cloudtrail" {
   }
 }
 
+
+# ===============================================================================
+# AWS KMS Key Policy for AWS CloudTrail
+# ===============================================================================
 resource "aws_kms_key_policy" "cloudtrail" {
   key_id = aws_kms_key.cloudtrail.key_id
   policy = data.aws_iam_policy_document.cloudtrail_kms_policy.json
@@ -75,6 +79,10 @@ resource "aws_kms_key" "guardduty" {
   }
 }
 
+
+# ===============================================================================
+# AWS KMS Key Policy for Amazon GuardDuty
+# ===============================================================================
 resource "aws_kms_key_policy" "guardduty" {
   key_id = aws_kms_key.guardduty.key_id
   policy = data.aws_iam_policy_document.guardduty_kms_policy.json
