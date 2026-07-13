@@ -2547,6 +2547,17 @@ resource "aws_s3_object" "aws_ec2_ssh_conf" {
   }
 }
 
+resource "aws_s3_object" "amazon_cloudwatch_agent_json" {
+  bucket                 = aws_s3_bucket.bastion.id
+  key                    = "amazon-cloudwatch-agent.json"
+  content                = local.amazon_cloudwatch_agent_json
+  server_side_encryption = "AES256"
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
 locals {
   bastion_ssh = templatefile(
     "files/startup_scripts/bastion.sh",
@@ -2576,6 +2587,13 @@ locals {
     {
       project    = local.project
       account-id = data.aws_caller_identity.current.account_id
+    }
+  )
+
+  amazon_cloudwatch_agent_json = templatefile(
+    "files/startup_scripts/amazon-cloudwatch-agent.json",
+    {
+      log_group_name = aws_cloudwatch_log_group.ec2_bastion.name
     }
   )
 }
