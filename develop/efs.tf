@@ -9,6 +9,10 @@ resource "aws_efs_file_system" "main" {
   performance_mode = "generalPurpose"
   throughput_mode  = "bursting"
 
+  lifecycle_policy {
+    transition_to_ia = "AFTER_365_DAYS"
+  }
+
   protection {
     replication_overwrite = "ENABLED"
   }
