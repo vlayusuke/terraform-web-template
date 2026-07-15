@@ -1060,10 +1060,10 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_status_check_failed" {
 
 
 # ================================================================================
-# Amazon CloudWatch Metrics for Amazon CloudWatch Synthetics Canary
+# Amazon CloudWatch Metrics for Amazon CloudWatch Synthetics Canary Check Access Top Page
 # ================================================================================
-resource "aws_cloudwatch_metric_alarm" "synthetics_canary_failed" {
-  alarm_name          = "${local.project}-${local.env}-cwt-syn-canary-failed-alarm"
+resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_access_top_page_failed" {
+  alarm_name          = "${local.project}-${local.env}-cwt-syn-canary-check-access-top-page-failed-alarm"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "SuccessPercent"
@@ -1072,10 +1072,10 @@ resource "aws_cloudwatch_metric_alarm" "synthetics_canary_failed" {
   statistic           = "Average"
   threshold           = 90
   treat_missing_data  = "notBreaching"
-  alarm_description   = "Alarm when the Synthetics Canary success percent is less than 90%"
+  alarm_description   = "Alarm when the Synthetics Canary check access top page success percent is less than 90%"
 
   dimensions = {
-    CanaryName = aws_synthetics_canary.main.name
+    CanaryName = aws_synthetics_canary.check_access_top_page.name
   }
 
   alarm_actions = [
@@ -1087,7 +1087,40 @@ resource "aws_cloudwatch_metric_alarm" "synthetics_canary_failed" {
   ]
 
   tags = {
-    Name = "${local.project}-${local.env}-cwt-syn-canary-failed-alarm"
+    Name = "${local.project}-${local.env}-cwt-syn-canary-check-access-top-page-failed-alarm"
+  }
+}
+
+
+# ================================================================================
+# Amazon CloudWatch Metrics for Amazon CloudWatch Synthetics Canary Check Input Top Page
+# ================================================================================
+resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_input_top_page_failed" {
+  alarm_name          = "${local.project}-${local.env}-cwt-syn-canary-check-input-top-page-failed-alarm"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "SuccessPercent"
+  namespace           = "CloudWatchSynthetics"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 90
+  treat_missing_data  = "notBreaching"
+  alarm_description   = "Alarm when the Synthetics Canary check input top page success percent is less than 90%"
+
+  dimensions = {
+    CanaryName = aws_synthetics_canary.check_input_top_page.name
+  }
+
+  alarm_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  ok_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  tags = {
+    Name = "${local.project}-${local.env}-cwt-syn-canary-check-input-top-page-failed-alarm"
   }
 }
 
