@@ -6,6 +6,7 @@ resource "aws_vpc_endpoint" "ecr_docker" {
   service_name        = "com.amazonaws.${local.region}.ecr.dkr"
   service_region      = local.region
   vpc_endpoint_type   = "Interface"
+  ip_address_type     = "ipv4"
   private_dns_enabled = true
 
   security_group_ids = [
@@ -16,6 +17,10 @@ resource "aws_vpc_endpoint" "ecr_docker" {
     for subnet in aws_subnet.main_private :
     subnet.id
   ]
+
+  dns_options {
+    dns_record_ip_type = "ipv4"
+  }
 
   tags = {
     Name = "${local.project}-${local.env}-vpce-ecr-dkr"
@@ -59,6 +64,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
   service_name        = "com.amazonaws.${local.region}.ecr.api"
   service_region      = local.region
   vpc_endpoint_type   = "Interface"
+  ip_address_type     = "ipv4"
   private_dns_enabled = true
 
   security_group_ids = [
@@ -69,6 +75,10 @@ resource "aws_vpc_endpoint" "ecr_api" {
     for subnet in aws_subnet.main_private :
     subnet.id
   ]
+
+  dns_options {
+    dns_record_ip_type = "ipv4"
+  }
 
   tags = {
     Name = "${local.project}-${local.env}-vpce-ecr-api"
@@ -115,6 +125,7 @@ resource "aws_vpc_endpoint" "ssm" {
   service_name        = "com.amazonaws.${local.region}.ssm"
   service_region      = local.region
   vpc_endpoint_type   = "Interface"
+  ip_address_type     = "ipv4"
   private_dns_enabled = true
 
   security_group_ids = [
@@ -125,6 +136,10 @@ resource "aws_vpc_endpoint" "ssm" {
     for subnet in aws_subnet.main_private :
     subnet.id
   ]
+
+  dns_options {
+    dns_record_ip_type = "ipv4"
+  }
 
   tags = {
     Name = "${local.project}-${local.env}-vpce-ssm"
@@ -168,6 +183,7 @@ resource "aws_vpc_endpoint" "ssm_messages" {
   service_name        = "com.amazonaws.${local.region}.ssmmessages"
   service_region      = local.region
   vpc_endpoint_type   = "Interface"
+  ip_address_type     = "ipv4"
   private_dns_enabled = true
 
   security_group_ids = [
@@ -178,6 +194,10 @@ resource "aws_vpc_endpoint" "ssm_messages" {
     for subnet in aws_subnet.main_private :
     subnet.id
   ]
+
+  dns_options {
+    dns_record_ip_type = "ipv4"
+  }
 
   tags = {
     Name = "${local.project}-${local.env}-vpce-ssm-messages"
@@ -221,6 +241,7 @@ resource "aws_vpc_endpoint" "ec2_messages" {
   service_name        = "com.amazonaws.${local.region}.ec2messages"
   service_region      = local.region
   vpc_endpoint_type   = "Interface"
+  ip_address_type     = "ipv4"
   private_dns_enabled = true
 
   security_group_ids = [
@@ -231,6 +252,10 @@ resource "aws_vpc_endpoint" "ec2_messages" {
     for subnet in aws_subnet.main_private :
     subnet.id
   ]
+
+  dns_options {
+    dns_record_ip_type = "ipv4"
+  }
 
   tags = {
     Name = "${local.project}-${local.env}-vpce-ec2-messages"
@@ -273,6 +298,16 @@ resource "aws_vpc_endpoint" "s3_gateway" {
   vpc_id            = aws_vpc.main.id
   service_name      = "com.amazonaws.${local.region}.s3"
   vpc_endpoint_type = "Gateway"
+  ip_address_type   = "ipv4"
+
+  route_table_ids = [
+    for route_table in aws_route_table.main_private :
+    route_table.id
+  ]
+
+  dns_options {
+    dns_record_ip_type = "ipv4"
+  }
 
   tags = {
     Name = "${local.project}-${local.env}-vpce-s3"
