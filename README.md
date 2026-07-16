@@ -77,21 +77,6 @@ Pythonのバージョンについては、macOS上でHomebrewでパッケージ�
 - Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。このテンプレートでは、サンプルとして、GitHubリモートリポジトリ上での管理対象としない代表的な値のみを実装しています。利用方法に応じて適宜修正をしてください。
 - `base_locals.tf`の`# project info`に設定している、`project`、`author`、`email`の値を修正してください。
 
-### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
-
-Terraformや各種Providerのバージョンのアップデートを行なうため、`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるProviderのチェックサムの値がずれてしまうことを防止する目的で、`terraform plan`コマンドを実行する前に、ターミナル上で必ず、以下のコマンドを実行してください。
-
-```bash
-terraform providers lock \
-  -platform=windows_amd64 \
-  -platform=darwin_amd64 \
-  -platform=linux_amd64  \
-  -platform=darwin_arm64 \
-  -platform=linux_arm64
-```
-
-- 出典: [複数のプラットフォームで terraform initする際の注意点](https://dev.classmethod.jp/articles/multiplatform-terraform-init-lock/)
-
 ## 環境構築準備手順
 
 環境構築準備手順は以下の通りです。(macOSのTerminal上でTerraformコマンドを実行することを前提としています)
@@ -149,6 +134,21 @@ terraform init \
   -backend-config="profile=terraform-template" \
   -backend-config="key=state/audit.terraform.tfstate"
 ```
+
+### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
+
+Terraformや各種Providerのバージョンのアップデートを行なうため、`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるProviderのチェックサムの値がずれてしまうことを防止する目的で、`terraform plan`コマンドを実行する前に、ターミナル上で必ず、以下のコマンドを実行してください。
+
+```bash
+terraform providers lock \
+  -platform=windows_amd64 \
+  -platform=darwin_amd64 \
+  -platform=linux_amd64  \
+  -platform=darwin_arm64 \
+  -platform=linux_arm64
+```
+
+- 出典: [複数のプラットフォームで terraform initする際の注意点](https://dev.classmethod.jp/articles/multiplatform-terraform-init-lock/)
 
 ### 踏み台サーバー用EC2インスタンスのKey Pairの作成
 
