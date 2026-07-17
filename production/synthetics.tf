@@ -27,9 +27,9 @@ resource "aws_synthetics_canary" "check_access_top_page" {
   name                     = "${local.project}-${local.env}-cwt-syn-check-access-top-page"
   artifact_s3_location     = aws_s3_bucket.synthetics_artifacts.arn
   execution_role_arn       = aws_iam_role.cloudwatch_synthetics.arn
-  handler                  = "canary_check_access_top_page.function.canary_handler"
+  handler                  = "function.canary_handler"
   runtime_version          = "syn-python-selenium-11.1"
-  zip_file                 = "artifact/canary-check-access-top-page.zip"
+  zip_file                 = data.archive_file.canary_check_access_top_page.output_path
   success_retention_period = 31
   failure_retention_period = 31
 
@@ -70,9 +70,9 @@ resource "aws_synthetics_canary" "check_input_top_page" {
   name                     = "${local.project}-${local.env}-cwt-syn-check-input-top-page"
   artifact_s3_location     = aws_s3_bucket.synthetics_artifacts.arn
   execution_role_arn       = aws_iam_role.cloudwatch_synthetics.arn
-  handler                  = "canary_check_input_top_page.function.canary_handler"
+  handler                  = "function.canary_handler"
   runtime_version          = "syn-python-selenium-11.1"
-  zip_file                 = "artifact/canary-check-input-top-page.zip"
+  zip_file                 = data.archive_file.canary_check_input_top_page.output_path
   success_retention_period = 31
   failure_retention_period = 31
 
