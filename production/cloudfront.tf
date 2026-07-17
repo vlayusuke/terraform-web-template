@@ -221,14 +221,14 @@ resource "aws_cloudfront_origin_access_control" "uploads" {
 
 
 # ===============================================================================
-# CloudFront Functions
+# CloudFront Function
 # ===============================================================================
 resource "aws_cloudfront_function" "basic_auth" {
   name    = "${local.project}-${local.env}-cft-fnc-basic-auth"
   runtime = "cloudfront-js-2.0"
-  comment = "${local.project}-${local.env} CloudFront Functions for basic authentication"
+  comment = "${local.project}-${local.env} CloudFront Function for basic authentication"
   publish = true
-  code    = file("${path.module}/files/cloudfront_functions/basic_auth.js")
+  code    = file("${path.module}/files/cloudfront_function/basic_auth.js")
 
   key_value_store_associations = [
     aws_cloudfront_key_value_store.basic_auth.arn,
