@@ -23,21 +23,23 @@ resource "aws_wafv2_web_acl" "main" {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
 
-        rule_action_override {
-          action_to_use {
-            count {}
-          }
-
-          name = "SizeRestrictions_BODY"
-        }
-
-        rule_action_override {
-          action_to_use {
-            count {}
-          }
-
-          name = "CrossSiteScripting_BODY"
-        }
+        # If you encountered an error as over 8,192 bytes request body, you can override the action to count instead of block. Uncomment the following lines to enable this feature.
+        #        rule_action_override {
+        #          action_to_use {
+        #            count {}
+        #          }
+        #
+        #          name = "SizeRestrictions_BODY"
+        #        }
+        #
+        #        rule_action_override {
+        #        rule_action_override {
+        #          action_to_use {
+        #            count {}
+        #          }
+        #
+        #          name = "CrossSiteScripting_BODY"
+        #        }
       }
     }
 
@@ -83,13 +85,14 @@ resource "aws_wafv2_web_acl" "main" {
         name        = "AWSManagedRulesSQLiRuleSet"
         vendor_name = "AWS"
 
-        rule_action_override {
-          action_to_use {
-            count {}
-          }
-
-          name = "SQLi_BODY"
-        }
+        # If you encountered an error as wrong recognized as SQL Injection, you can override the action to count instead of block. Uncomment the following lines to enable this feature.
+        #        rule_action_override {
+        #          action_to_use {
+        #            count {}
+        #          }
+        #
+        #          name = "SQLi_BODY"
+        #        }
       }
     }
 
