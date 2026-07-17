@@ -110,7 +110,7 @@ aws_secret_access_key = ********************
 
 ### Terraformコマンドを実行する際に必要な事前準備
 
-Terraformコマンドを実行する前に、AWS CLIやTerraform CLIなどの必要なツールをインストールしてください。また、`terraform.tf`で実装している`terraform.tfstate`ファイルはS3バックエンドで保管するという設定にしているため、事前に各環境のAWSアカウントに紐づくAWSマネージメントコンソールの、Amazon S3コンソール内で、
+Terraformコマンドを実行する前に、AWS CLIやTerraform CLIなどの必要なツールを、macOSデバイスまたはWindowsデバイスにインストールしてください。また、`terraform.tf`で実装している`terraform.tfstate`ファイルはS3バックエンドで保管するという設定にしているため、事前に各環境のAWSアカウントに紐づくAWSマネージメントコンソールの、Amazon S3コンソール内で、
 
 ```hcl:terraform.tf
 backend "s3" {
@@ -134,6 +134,8 @@ terraform init \
   -backend-config="profile=terraform-template" \
   -backend-config="key=state/audit.terraform.tfstate"
 ```
+
+また、Amazon Q Developer in chat applications(AWS Chatbot)コンソールより、使用するチャットクライアントの初期設定を行い、有効化した上でワークスペースIDを取得できる状態にしてください。ワークスペースIDの値は、`terraform.tfvars`に設定します。
 
 ### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
 
