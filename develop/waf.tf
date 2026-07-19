@@ -2,9 +2,10 @@
 # AWS WAFv2 Web ACLs
 # ===============================================================================
 resource "aws_wafv2_web_acl" "main" {
-  name     = "${local.project}-${local.env}-waf-web-acls-main"
-  scope    = "CLOUDFRONT"
-  provider = aws.virginia
+  name        = "${local.project}-${local.env}-waf-web-acls-main"
+  description = "AWS WAFv2 Web ACLs for ${local.project}-${local.env}"
+  scope       = "CLOUDFRONT"
+  provider    = aws.virginia
 
   default_action {
     allow {}
@@ -24,6 +25,8 @@ resource "aws_wafv2_web_acl" "main" {
         vendor_name = "AWS"
 
         # If you encountered an error as over 8,192 bytes request body, you can override the action to count instead of block. Uncomment the following lines to enable this feature.
+        # Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/wafv2_web_acl#size_constraint_statement-block
+        #
         #        rule_action_override {
         #          action_to_use {
         #            count {}
@@ -86,6 +89,8 @@ resource "aws_wafv2_web_acl" "main" {
         vendor_name = "AWS"
 
         # If you encountered an error as wrong recognized as SQL Injection, you can override the action to count instead of block. Uncomment the following lines to enable this feature.
+        # Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/wafv2_web_acl#sqli_match_statement-block
+        #
         #        rule_action_override {
         #          action_to_use {
         #            count {}
