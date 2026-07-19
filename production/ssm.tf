@@ -3,7 +3,7 @@
 # ===============================================================================
 resource "aws_ssm_parameter" "mysql_username" {
   name        = "/${local.project}/${local.env}/mysql-username"
-  description = "The parameter for MySQL username"
+  description = "The parameter for ${local.project}-${local.env} MySQL username"
   key_id      = aws_kms_key.application.key_id
   type        = "SecureString"
   value       = "PleaseChange!"
@@ -21,7 +21,7 @@ resource "aws_ssm_parameter" "mysql_username" {
 
 resource "aws_ssm_parameter" "mysql_password" {
   name        = "/${local.project}/${local.env}/mysql-password"
-  description = "The parameter for MySQL password"
+  description = "The parameter for ${local.project}-${local.env} MySQL password"
   key_id      = aws_kms_key.application.key_id
   type        = "SecureString"
   value       = "PleaseChange!"
