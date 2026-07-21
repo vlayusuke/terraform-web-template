@@ -10,9 +10,9 @@ resource "aws_sns_topic" "metric_alarm" {
   delivery_policy = jsonencode({
     "http" : {
       "defaultHealthyRetryPolicy" : {
-        "minDelayTarget" : 20,
-        "maxDelayTarget" : 20,
-        "numRetries" : 3,
+        "minDelayTarget" : 10,
+        "maxDelayTarget" : 30,
+        "numRetries" : 5,
         "numMaxDelayRetries" : 0,
         "numNoDelayRetries" : 0,
         "numMinDelayRetries" : 0,
@@ -96,9 +96,9 @@ resource "aws_sns_topic" "event_alarm" {
   delivery_policy = jsonencode({
     "http" : {
       "defaultHealthyRetryPolicy" : {
-        "minDelayTarget" : 20,
-        "maxDelayTarget" : 20,
-        "numRetries" : 3,
+        "minDelayTarget" : 10,
+        "maxDelayTarget" : 30,
+        "numRetries" : 5,
         "numMaxDelayRetries" : 0,
         "numNoDelayRetries" : 0,
         "numMinDelayRetries" : 0,
@@ -182,9 +182,9 @@ resource "aws_sns_topic" "inspector_notifications" {
   delivery_policy = jsonencode({
     "http" : {
       "defaultHealthyRetryPolicy" : {
-        "minDelayTarget" : 20,
-        "maxDelayTarget" : 20,
-        "numRetries" : 3,
+        "minDelayTarget" : 10,
+        "maxDelayTarget" : 30,
+        "numRetries" : 5,
         "numMaxDelayRetries" : 0,
         "numNoDelayRetries" : 0,
         "numMinDelayRetries" : 0,
@@ -268,9 +268,9 @@ resource "aws_sns_topic" "event_notifications" {
   delivery_policy = jsonencode({
     "http" : {
       "defaultHealthyRetryPolicy" : {
-        "minDelayTarget" : 20,
-        "maxDelayTarget" : 20,
-        "numRetries" : 3,
+        "minDelayTarget" : 10,
+        "maxDelayTarget" : 30,
+        "numRetries" : 5,
         "numMaxDelayRetries" : 0,
         "numNoDelayRetries" : 0,
         "numMinDelayRetries" : 0,
