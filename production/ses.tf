@@ -10,13 +10,49 @@ resource "aws_ses_domain_dkim" "main" {
 }
 
 resource "aws_ses_domain_mail_from" "main" {
-  domain           = aws_ses_domain_identity.main.domain
-  mail_from_domain = "bounce.${aws_ses_domain_identity.main.domain}"
+  domain                 = aws_ses_domain_identity.main.domain
+  mail_from_domain       = "bounce.${aws_ses_domain_identity.main.domain}"
+  behavior_on_mx_failure = "UseDefaultValue"
 }
 
 resource "aws_ses_configuration_set" "main_event" {
   name                       = "${local.project}-${local.env}-ses-event"
   reputation_metrics_enabled = true
+}
+
+resource "aws_ses_identity_policy" "main" {
+  identity = aws_ses_domain_identity.main.arn
+  name     = "${local.project}-${local.env}-ses-identity-policy"
+  policy   = data.aws_iam_policy_document.ses_identity_policy.json
+}
+
+data "aws_iam_policy_document" "ses_identity_policy" {
+  statement {
+    sid    = "AllowSESSendEmail"
+    effect = "Allow"
+    actions = [
+      "ses:SendEmail",
+      "ses:SendRawEmail",
+    ]
+    resources = [
+      aws_ses_domain_identity.main.arn,
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceOwner"
+      values = [
+        data.aws_caller_identity.current.account_id,
+      ]
+    }
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
+  }
 }
 
 
