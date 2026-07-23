@@ -4,6 +4,7 @@
 resource "aws_acm_certificate" "main_alb" {
   domain_name       = local.domain
   validation_method = "DNS"
+  key_algorithm     = "RSA_2048"
 
   subject_alternative_names = [
     "*.${local.domain}",
@@ -65,6 +66,7 @@ resource "aws_acm_certificate" "main_cloudfront" {
   provider          = aws.virginia
   domain_name       = local.domain
   validation_method = "DNS"
+  key_algorithm     = "RSA_2048"
 
   subject_alternative_names = [
     "*.${local.domain}",
