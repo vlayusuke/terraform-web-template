@@ -246,6 +246,10 @@ resource "aws_cloudfront_function" "basic_auth" {
 resource "aws_cloudfront_key_value_store" "basic_auth" {
   name    = "${local.project}-${local.env}-cft-kvs-basic-auth"
   comment = "${local.project}-${local.env} CloudFront Key-Value Store for basic authentication"
+
+  tags = {
+    Name = "${local.project}-${local.env}-cft-kvs-basic-auth"
+  }
 }
 
 resource "aws_cloudfrontkeyvaluestore_key" "basic_auth_username" {
