@@ -65,6 +65,69 @@ data "aws_iam_policy_document" "application_kms_policy" {
 
 
 # ===============================================================================
+# AWS KMS for Amazon ECR
+# ===============================================================================
+resource "aws_kms_key" "ecr" {
+  description             = "${local.project}-${local.env}-kms-ecr-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-ecr-key"
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS Key Policy for Amazon ECR
+# ===============================================================================
+resource "aws_kms_key_policy" "ecr" {
+  key_id = aws_kms_key.ecr.key_id
+  policy = data.aws_iam_policy_document.ecr_kms_policy.json
+}
+
+data "aws_iam_policy_document" "ecr_kms_policy" {
+  statement {
+    sid    = "ECRKMS"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      aws_kms_key.ecr.arn,
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "ecr.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AllowAccountAccess"
+    effect = "Allow"
+    actions = [
+      "kms:*",
+    ]
+    resources = [
+      aws_kms_key.ecr.arn,
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+  }
+}
+
+
+# ===============================================================================
 # AWS KMS for Amazon Aurora
 # ===============================================================================
 resource "aws_kms_key" "aurora" {
