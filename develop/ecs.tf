@@ -115,10 +115,14 @@ resource "aws_appautoscaling_target" "fargate_app" {
       min_capacity,
     ]
   }
+
+  tags = {
+    Name = "${local.project}-${local.env}-ecs-app-autoscaling-target"
+  }
 }
 
 resource "aws_appautoscaling_policy" "fargate_app_scale_out" {
-  name               = "scale-out"
+  name               = "${local.project}-${local.env}-ecs-app-scale-out"
   policy_type        = "StepScaling"
   resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.fargate_app.name}"
   scalable_dimension = "ecs:service:DesiredCount"
@@ -147,7 +151,7 @@ resource "aws_appautoscaling_policy" "fargate_app_scale_out" {
 }
 
 resource "aws_appautoscaling_policy" "fargate_app_scale_in" {
-  name               = "scale-in"
+  name               = "${local.project}-${local.env}-ecs-app-scale-in"
   policy_type        = "StepScaling"
   resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.fargate_app.name}"
   scalable_dimension = "ecs:service:DesiredCount"
