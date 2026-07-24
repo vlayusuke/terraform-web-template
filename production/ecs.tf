@@ -191,6 +191,7 @@ resource "aws_ecs_task_definition" "fargate_app" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_service.arn
   task_role_arn            = aws_iam_role.ecs_task.arn
+  skip_destroy             = false
 
   container_definitions = templatefile(
     "files/task_definitions/app.json",
@@ -308,6 +309,7 @@ resource "aws_ecs_task_definition" "fargate_cron" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_service.arn
   task_role_arn            = aws_iam_role.ecs_task.arn
+  skip_destroy             = false
 
   container_definitions = templatefile(
     "files/task_definitions/cron.json",
@@ -414,6 +416,7 @@ resource "aws_ecs_task_definition" "fargate_queue" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_service.arn
   task_role_arn            = aws_iam_role.ecs_task.arn
+  skip_destroy             = false
 
   container_definitions = templatefile(
     "files/task_definitions/queue.json",
@@ -462,6 +465,7 @@ resource "aws_ecs_task_definition" "fargate_migrate" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_service.arn
   task_role_arn            = aws_iam_role.ecs_task.arn
+  skip_destroy             = false
 
   container_definitions = templatefile(
     "files/task_definitions/migrate.json",
