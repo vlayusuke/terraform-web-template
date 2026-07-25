@@ -2,10 +2,12 @@
 # Application Load Balancer
 # ===============================================================================
 resource "aws_lb" "main_external" {
-  name                       = "${local.project}-${local.env}-alb-external"
-  internal                   = false
-  load_balancer_type         = "application"
-  enable_deletion_protection = false
+  name                             = "${local.project}-${local.env}-alb-external"
+  internal                         = false
+  load_balancer_type               = "application"
+  enable_http2                     = true
+  enable_cross_zone_load_balancing = true
+  enable_deletion_protection       = false
 
   subnets = [
     for subnet in aws_subnet.main_public :
@@ -18,6 +20,19 @@ resource "aws_lb" "main_external" {
 
   access_logs {
     bucket  = aws_s3_bucket.alb_logs.bucket
+    prefix  = "${local.env}/alb-access-logs/"
+    enabled = true
+  }
+
+  connection_logs {
+    bucket  = aws_s3_bucket.alb_logs.bucket
+    prefix  = "${local.env}/alb-connection-logs/"
+    enabled = true
+  }
+
+  health_check_logs {
+    bucket  = aws_s3_bucket.alb_logs.bucket
+    prefix  = "${local.env}/alb-health-check-logs/"
     enabled = true
   }
 
