@@ -49,11 +49,13 @@ resource "aws_lb_listener" "alb_external_listener" {
   load_balancer_arn = aws_lb.main_external.arn
   port              = 443
   protocol          = "HTTPS"
+  alpn_policy       = "HTTP2Preferred"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
   certificate_arn   = aws_acm_certificate.main_alb.arn
 
   default_action {
     type = "fixed-response"
+
     fixed_response {
       content_type = "text/html"
       status_code  = 404
@@ -77,41 +79,6 @@ resource "aws_lb_listener_certificate" "alb_listener_cert" {
   depends_on = [
     aws_lb_listener.alb_external_listener,
   ]
-}
-
-
-# ===============================================================================
-# Application Load Balancer Target Group
-# ===============================================================================
-resource "aws_lb_target_group" "alb_external_tg" {
-  name                 = "${local.project}-${local.env}-alb-external-tg"
-  target_type          = "ip"
-  port                 = 80
-  protocol             = "HTTP"
-  vpc_id               = aws_vpc.main.id
-  deregistration_delay = 115
-
-  stickiness {
-    type            = "lb_cookie"
-    cookie_duration = 600
-    enabled         = false
-  }
-
-  health_check {
-    healthy_threshold   = 5
-    unhealthy_threshold = 2
-    path                = "/healthcheck"
-    interval            = 30
-    timeout             = 5
-  }
-
-  depends_on = [
-    aws_lb.main_external,
-  ]
-
-  tags = {
-    Name = "${local.project}-${local.env}-alb-external-tg"
-  }
 }
 
 
@@ -167,5 +134,40 @@ resource "aws_lb_listener_rule" "naked" {
 
   tags = {
     Name = "${local.project}-${local.env}-alb-external-listener-rule-redirect"
+  }
+}
+
+
+# ===============================================================================
+# Application Load Balancer Target Group
+# ===============================================================================
+resource "aws_lb_target_group" "alb_external_tg" {
+  name                 = "${local.project}-${local.env}-alb-external-tg"
+  target_type          = "ip"
+  port                 = 80
+  protocol             = "HTTP"
+  vpc_id               = aws_vpc.main.id
+  deregistration_delay = 115
+
+  stickiness {
+    type            = "lb_cookie"
+    cookie_duration = 600
+    enabled         = false
+  }
+
+  health_check {
+    healthy_threshold   = 5
+    unhealthy_threshold = 2
+    path                = "/healthcheck"
+    interval            = 30
+    timeout             = 5
+  }
+
+  depends_on = [
+    aws_lb.main_external,
+  ]
+
+  tags = {
+    Name = "${local.project}-${local.env}-alb-external-tg"
   }
 }
