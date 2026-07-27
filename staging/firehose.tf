@@ -12,6 +12,8 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
     buffering_interval = 300
     prefix             = "${local.env}/audit-logs/"
     compression_format = "GZIP"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
   }
 
   server_side_encryption {
@@ -38,6 +40,8 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_error" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/error-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -65,6 +69,8 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_general" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/general-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -92,6 +98,8 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_slowquery" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/slowquery-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -119,6 +127,8 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" 
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/auth-error-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -150,6 +160,8 @@ resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -182,6 +194,8 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_app" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/${each.key}-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -214,6 +228,8 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_nginx" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/${each.key}-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -246,6 +262,8 @@ resource "aws_kinesis_firehose_delivery_stream" "lambda_logs" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/${each.key}-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -277,6 +295,8 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_logs" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/ses-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -308,6 +328,8 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_event_logs" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/ses-event-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
 
     cloudwatch_logging_options {
@@ -345,6 +367,8 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_logs" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/sns-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -376,6 +400,8 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_event_logs" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/sns-event-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
@@ -407,6 +433,8 @@ resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
     buffering_size     = 64
     buffering_interval = 300
     prefix             = "${local.env}/ec2-bastion-logs/"
+    file_extension     = ".json"
+    custom_time_zone   = "Asia/Tokyo"
     compression_format = "GZIP"
   }
 
