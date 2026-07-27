@@ -87,6 +87,7 @@ resource "aws_lb_listener_certificate" "alb_listener_cert" {
 # ===============================================================================
 resource "aws_lb_listener_rule" "main" {
   listener_arn = aws_lb_listener.alb_external_listener.arn
+  priority     = 1
 
   condition {
     host_header {
@@ -112,6 +113,7 @@ resource "aws_lb_listener_rule" "main" {
 # ===============================================================================
 resource "aws_lb_listener_rule" "naked" {
   listener_arn = aws_lb_listener.alb_external_listener.arn
+  priority     = 2
 
   condition {
     host_header {
@@ -142,25 +144,27 @@ resource "aws_lb_listener_rule" "naked" {
 # Application Load Balancer Target Group
 # ===============================================================================
 resource "aws_lb_target_group" "alb_external_tg" {
-  name                 = "${local.project}-${local.env}-alb-external-tg"
-  target_type          = "ip"
-  port                 = 80
-  protocol             = "HTTP"
-  vpc_id               = aws_vpc.main.id
-  deregistration_delay = 115
+  name                              = "${local.project}-${local.env}-alb-external-tg"
+  target_type                       = "ip"
+  port                              = 80
+  protocol                          = "HTTP"
+  vpc_id                            = aws_vpc.main.id
+  load_balancing_algorithm_type     = "round_robin"
+  load_balancing_cross_zone_enabled = "use_load_balancer_configuration"
+  deregistration_delay              = 115
 
   stickiness {
     type            = "lb_cookie"
-    cookie_duration = 600
-    enabled         = false
+    cookie_duration = 86400
+    enabled         = true
   }
 
   health_check {
-    healthy_threshold   = 5
-    unhealthy_threshold = 2
-    path                = "/healthcheck"
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
+    path                = "/"
     interval            = 30
-    timeout             = 5
+    timeout             = 6
   }
 
   depends_on = [
@@ -171,4 +175,3 @@ resource "aws_lb_target_group" "alb_external_tg" {
     Name = "${local.project}-${local.env}-alb-external-tg"
   }
 }
-
