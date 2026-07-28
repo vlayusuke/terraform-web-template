@@ -8,6 +8,7 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_log_error_alert_audit.output_path
   source_code_hash = data.archive_file.lambda_log_error_alert_audit.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -20,6 +21,12 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
     variables = {
       hook_url = var.audit_hook_url
     }
+  }
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_log_error_alert_audit.function_name}"
   }
 
   lifecycle {
@@ -58,6 +65,7 @@ resource "aws_lambda_function" "lambda_root_login_monitoring" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_root_login_monitoring.output_path
   source_code_hash = data.archive_file.lambda_root_login_monitoring.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -71,6 +79,12 @@ resource "aws_lambda_function" "lambda_root_login_monitoring" {
       account_name = local.project
       hook_url     = var.audit_hook_url
     }
+  }
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_root_login_monitoring.function_name}"
   }
 
   lifecycle {
@@ -109,6 +123,7 @@ resource "aws_lambda_function" "lambda_error" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_error.output_path
   source_code_hash = data.archive_file.lambda_error.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -121,6 +136,12 @@ resource "aws_lambda_function" "lambda_error" {
     variables = {
       hook_url = var.audit_hook_url
     }
+  }
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_error.function_name}"
   }
 
   lifecycle {
@@ -159,6 +180,7 @@ resource "aws_lambda_function" "lambda_security_notice" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_security_notice.output_path
   source_code_hash = data.archive_file.lambda_security_notice.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -171,6 +193,12 @@ resource "aws_lambda_function" "lambda_security_notice" {
     variables = {
       hook_url = var.audit_hook_url
     }
+  }
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_security_notice.function_name}"
   }
 
   lifecycle {
