@@ -8,6 +8,7 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_log_error_alert.output_path
   source_code_hash = data.archive_file.lambda_log_error_alert.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -20,6 +21,12 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
     variables = {
       hook_url = var.hook_url_app
     }
+  }
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_log_error_alert.function_name}"
   }
 
   lifecycle {
@@ -58,6 +65,7 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_metric_alarm.output_path
   source_code_hash = data.archive_file.lambda_metric_alarm.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -71,6 +79,12 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
       hook_url = var.hook_url_app
       region   = local.region
     }
+  }
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_metric_alarm.function_name}"
   }
 
   lifecycle {
@@ -109,6 +123,7 @@ resource "aws_lambda_function" "lambda_rds_control" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_rds_control.output_path
   source_code_hash = data.archive_file.lambda_rds_control.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -116,6 +131,12 @@ resource "aws_lambda_function" "lambda_rds_control" {
   architectures = [
     "arm64",
   ]
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_rds_control.function_name}"
+  }
 
   lifecycle {
     ignore_changes = [
@@ -171,6 +192,7 @@ resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_schedule_ecs_maintenance.output_path
   source_code_hash = data.archive_file.lambda_schedule_ecs_maintenance.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -185,6 +207,12 @@ resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
       SCHEDULER_ROLE_ARN   = aws_iam_role.eventbridge_scheduler_maintenance_ecs.arn
       ECS_MAINTENANCE_TIME = local.ecs_maintenance_start_time
     }
+  }
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_schedule_ecs_maintenance.function_name}"
   }
 
   lifecycle {
@@ -249,6 +277,7 @@ resource "aws_lambda_function" "lambda_execute_ecs_force_deployment" {
   handler          = "lambda_function.lambda_handler"
   filename         = data.archive_file.lambda_execute_ecs_force_deployment.output_path
   source_code_hash = data.archive_file.lambda_execute_ecs_force_deployment.output_base64sha256
+  kms_key_arn      = aws_kms_key.lambda.arn
   runtime          = "python3.14"
   timeout          = 10
   memory_size      = 128
@@ -256,6 +285,12 @@ resource "aws_lambda_function" "lambda_execute_ecs_force_deployment" {
   architectures = [
     "arm64",
   ]
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = "/aws/lambda/${aws_lambda_function.lambda_execute_ecs_force_deployment.function_name}"
+  }
 
   lifecycle {
     ignore_changes = [
