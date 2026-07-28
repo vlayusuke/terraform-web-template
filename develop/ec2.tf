@@ -4,13 +4,15 @@
 resource "aws_instance" "ec2_bastion" {
   ami                         = data.aws_ssm_parameter.arm64_al2023_ami.value
   instance_type               = "t4g.nano"
-  key_name                    = aws_key_pair.ec2_bastion.key_name
   disable_api_stop            = false
   disable_api_termination     = false
   monitoring                  = true
   associate_public_ip_address = true
+  availability_zone           = local.availability_zones[0]
   subnet_id                   = aws_subnet.main_public[0].id
   iam_instance_profile        = aws_iam_instance_profile.bastion.name
+  key_name                    = aws_key_pair.ec2_bastion.key_name
+  tenancy                     = "default"
 
   vpc_security_group_ids = [
     aws_security_group.bastion.id,
@@ -27,11 +29,17 @@ resource "aws_instance" "ec2_bastion" {
     cpu_credits = "standard"
   }
 
+  ephemeral_block_device {
+    device_name  = "/dev/xvda"
+    virtual_name = "ephemeral0"
+  }
+
   root_block_device {
-    volume_size = "8"
-    volume_type = "gp3"
-    encrypted   = true
-    kms_key_id  = aws_kms_key.ebs.arn
+    volume_type           = "gp3"
+    volume_size           = "8"
+    encrypted             = true
+    kms_key_id            = aws_kms_key.ebs.arn
+    delete_on_termination = true
 
     tags = {
       Name   = "${local.project}-${local.env}-ec2-bastion-root-volume"
@@ -40,11 +48,12 @@ resource "aws_instance" "ec2_bastion" {
   }
 
   ebs_block_device {
-    device_name = "/dev/xvdf"
-    volume_size = "64"
-    volume_type = "gp3"
-    encrypted   = true
-    kms_key_id  = aws_kms_key.ebs.arn
+    device_name           = "/dev/xvdf"
+    volume_type           = "gp3"
+    volume_size           = "64"
+    encrypted             = true
+    kms_key_id            = aws_kms_key.ebs.arn
+    delete_on_termination = true
 
     tags = {
       Name   = "${local.project}-${local.env}-ec2-bastion-ebs-volume"
