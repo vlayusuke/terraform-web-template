@@ -459,6 +459,69 @@ data "aws_iam_policy_document" "ebs_kms_policy" {
 
 
 # ===============================================================================
+# AWS KMS for Amazon EventBridge
+# ===============================================================================
+resource "aws_kms_key" "event_bridge" {
+  description             = "${local.project}-${local.env}-kms-eb-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-eb-key"
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS Key Policy for Amazon EventBridge
+# ===============================================================================
+resource "aws_kms_key_policy" "event_bridge" {
+  key_id = aws_kms_key.event_bridge.key_id
+  policy = data.aws_iam_policy_document.event_bridge_kms_policy.json
+}
+
+data "aws_iam_policy_document" "event_bridge_kms_policy" {
+  statement {
+    sid    = "EventBridgeKMS"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      aws_kms_key.event_bridge.arn,
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "events.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AllowAccountAccess"
+    effect = "Allow"
+    actions = [
+      "kms:*",
+    ]
+    resources = [
+      aws_kms_key.event_bridge.arn,
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+  }
+}
+
+
+# ===============================================================================
 # AWS KMS for Amazon CloudWatch Synthetics
 # ===============================================================================
 resource "aws_kms_key" "synthetics" {
