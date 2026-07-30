@@ -15,6 +15,7 @@ resource "aws_scheduler_schedule" "rds_control_start" {
   group_name              = aws_scheduler_schedule_group.rds_control.name
   state                   = "ENABLED"
   action_after_completion = "NONE"
+  kms_key_arn             = aws_kms_key.event_bridge.arn
 
   schedule_expression          = "cron(0 9 ? * MON-FRI *)"
   schedule_expression_timezone = "Asia/Tokyo"
@@ -42,6 +43,7 @@ resource "aws_scheduler_schedule" "rds_control_stop" {
   name                    = "${local.project}-${local.env}-ebd-scheduler-rds-control-stop"
   description             = "Amazon RDS Control Stop Schedule"
   group_name              = aws_scheduler_schedule_group.rds_control.name
+  kms_key_arn             = aws_kms_key.event_bridge.arn
   state                   = "ENABLED"
   action_after_completion = "NONE"
 
@@ -75,6 +77,8 @@ resource "aws_cloudwatch_event_rule" "ecr_image_scan" {
   name           = "${local.project}-${local.env}-ebd-ecr-image-scan"
   description    = "Amazon ECR Image Scan Notification"
   event_bus_name = "default"
+  state          = "ENABLED"
+  force_destroy  = true
 
   event_pattern = jsonencode({
     "source" : [
@@ -104,6 +108,8 @@ resource "aws_cloudwatch_event_rule" "detect_ecs_task_retirement" {
   name           = "${local.project}-${local.env}-ebd-detect-ecs-task-retirement"
   description    = "Detect Amazon ECS Task Retirement"
   event_bus_name = "default"
+  state          = "ENABLED"
+  force_destroy  = true
 
   event_pattern = jsonencode({
     "source" : [
@@ -141,6 +147,8 @@ resource "aws_cloudwatch_event_rule" "detect_ses_bounce" {
   name           = "${local.project}-${local.env}-ebd-detect-ses-bounce"
   description    = "Detect Amazon SES Bounce"
   event_bus_name = "default"
+  state          = "ENABLED"
+  force_destroy  = true
 
   event_pattern = jsonencode({
     "source" : [
@@ -170,6 +178,8 @@ resource "aws_cloudwatch_event_rule" "detect_ses_complaint" {
   name           = "${local.project}-${local.env}-ebd-detect-ses-complaint"
   description    = "Detect Amazon SES Complaint"
   event_bus_name = "default"
+  state          = "ENABLED"
+  force_destroy  = true
 
   event_pattern = jsonencode({
     "source" : [
