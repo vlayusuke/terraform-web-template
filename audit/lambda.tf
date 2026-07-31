@@ -23,12 +23,6 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
     }
   }
 
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_log_error_alert_audit.function_name}"
-  }
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
@@ -79,12 +73,6 @@ resource "aws_lambda_function" "lambda_root_login_monitoring" {
       account_name = local.project
       hook_url     = var.audit_hook_url
     }
-  }
-
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_root_login_monitoring.function_name}"
   }
 
   lifecycle {
@@ -138,12 +126,6 @@ resource "aws_lambda_function" "lambda_error" {
     }
   }
 
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_error.function_name}"
-  }
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
@@ -193,12 +175,6 @@ resource "aws_lambda_function" "lambda_security_notice" {
     variables = {
       hook_url = var.audit_hook_url
     }
-  }
-
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_security_notice.function_name}"
   }
 
   lifecycle {
