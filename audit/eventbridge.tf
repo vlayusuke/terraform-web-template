@@ -5,6 +5,8 @@ resource "aws_cloudwatch_event_rule" "config_check_compliance" {
   name           = "${local.project}-${local.env}-ebd-cfg-check-compliance"
   description    = "EventBridge rule to capture AWS Config compliance check events"
   event_bus_name = "default"
+  state          = "ENABLED"
+  force_destroy  = true
 
   event_pattern = jsonencode({
     "source" : [
@@ -39,6 +41,8 @@ resource "aws_cloudwatch_event_rule" "config_non_compliance" {
   name           = "${local.project}-${local.env}-ebd-cfg-non-compliance"
   description    = "EventBridge rule to capture AWS Config non-compliance events"
   event_bus_name = "default"
+  state          = "ENABLED"
+  force_destroy  = true
 
   event_pattern = jsonencode({
     "source" : [
@@ -73,6 +77,8 @@ resource "aws_cloudwatch_event_rule" "config_item_change" {
   name           = "${local.project}-${local.env}-ebd-cfg-item-change"
   description    = "EventBridge rule to capture AWS Config configuration item changes"
   event_bus_name = "default"
+  state          = "ENABLED"
+  force_destroy  = true
 
   event_pattern = jsonencode({
     "source" : [
@@ -103,6 +109,8 @@ resource "aws_cloudwatch_event_rule" "cloudtrail_check_api_calls" {
   name           = "${local.project}-${local.env}-ebd-ctl-check-api-calls"
   description    = "EventBridge rule to capture AWS CloudTrail API call events"
   event_bus_name = "default"
+  state          = "ENABLED"
+  force_destroy  = true
 
   event_pattern = jsonencode({
     "source" : [
