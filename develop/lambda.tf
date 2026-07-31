@@ -23,12 +23,6 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
     }
   }
 
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_log_error_alert.function_name}"
-  }
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
@@ -81,12 +75,6 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
     }
   }
 
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_metric_alarm.function_name}"
-  }
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
@@ -131,12 +119,6 @@ resource "aws_lambda_function" "lambda_rds_control" {
   architectures = [
     "arm64",
   ]
-
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_rds_control.function_name}"
-  }
 
   lifecycle {
     ignore_changes = [
@@ -209,12 +191,6 @@ resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
     }
   }
 
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_schedule_ecs_maintenance.function_name}"
-  }
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
@@ -285,12 +261,6 @@ resource "aws_lambda_function" "lambda_execute_ecs_force_deployment" {
   architectures = [
     "arm64",
   ]
-
-  logging_config {
-    application_log_level = "INFO"
-    log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.lambda_execute_ecs_force_deployment.function_name}"
-  }
 
   lifecycle {
     ignore_changes = [
