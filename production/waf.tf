@@ -262,6 +262,14 @@ resource "aws_wafv2_web_acl" "main" {
     }
   }
 
+  association_config {
+    request_body {
+      cloudfront {
+        default_size_inspection_limit = "KB_64"
+      }
+    }
+  }
+
   visibility_config {
     cloudwatch_metrics_enabled = true
     metric_name                = "${local.project}-${local.env}-waf-web-acls-main"
