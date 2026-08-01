@@ -491,10 +491,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "alb_logs" {
       storage_class = "GLACIER"
     }
 
-    expiration {
-      days = local.expire_days
-    }
-
     noncurrent_version_transition {
       noncurrent_days = local.transition_days
       storage_class   = "GLACIER"
@@ -658,10 +654,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "vpc_flow_log" {
     transition {
       days          = local.transition_days
       storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
     }
 
     noncurrent_version_transition {
@@ -845,10 +837,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "ecs_logs" {
       storage_class = "GLACIER"
     }
 
-    expiration {
-      days = local.expire_days
-    }
-
     noncurrent_version_transition {
       noncurrent_days = local.transition_days
       storage_class   = "GLACIER"
@@ -989,10 +977,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "lambda_logs" {
     transition {
       days          = local.transition_days
       storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
     }
 
     noncurrent_version_transition {
@@ -1176,10 +1160,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "aurora_logs" {
       storage_class = "GLACIER"
     }
 
-    expiration {
-      days = local.expire_days
-    }
-
     noncurrent_version_transition {
       noncurrent_days = local.transition_days
       storage_class   = "GLACIER"
@@ -1309,10 +1289,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "elasticache_logs" {
     transition {
       days          = local.transition_days
       storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
     }
 
     noncurrent_version_transition {
@@ -1446,10 +1422,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "ses_logs" {
       storage_class = "GLACIER"
     }
 
-    expiration {
-      days = local.expire_days
-    }
-
     noncurrent_version_transition {
       noncurrent_days = local.transition_days
       storage_class   = "GLACIER"
@@ -1579,10 +1551,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "ses_event_logs" {
     transition {
       days          = local.transition_days
       storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
     }
 
     noncurrent_version_transition {
@@ -1716,10 +1684,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "sns_logs" {
       storage_class = "GLACIER"
     }
 
-    expiration {
-      days = local.expire_days
-    }
-
     noncurrent_version_transition {
       noncurrent_days = local.transition_days
       storage_class   = "GLACIER"
@@ -1847,10 +1811,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "sns_event_logs" {
     transition {
       days          = local.transition_days
       storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
     }
 
     noncurrent_version_transition {
@@ -1984,10 +1944,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "cloudfront_logs" {
       storage_class = "GLACIER"
     }
 
-    expiration {
-      days = local.expire_days
-    }
-
     noncurrent_version_transition {
       noncurrent_days = local.transition_days
       storage_class   = "GLACIER"
@@ -2117,10 +2073,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "waf_logs" {
     transition {
       days          = local.transition_days
       storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
     }
 
     noncurrent_version_transition {
@@ -2311,10 +2263,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "synthetics_results" {
       storage_class = "GLACIER"
     }
 
-    expiration {
-      days = local.expire_days
-    }
-
     noncurrent_version_transition {
       noncurrent_days = local.transition_days
       storage_class   = "GLACIER"
@@ -2443,16 +2391,13 @@ resource "aws_s3_bucket_lifecycle_configuration" "bastion" {
     status = "Enabled"
 
     filter {
+      prefix                   = "bastion-logs/"
       object_size_greater_than = 0
     }
 
     transition {
       days          = local.transition_days
       storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
     }
 
     noncurrent_version_transition {
@@ -2681,10 +2626,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3_server_access_logs" {
       storage_class = "GLACIER"
     }
 
-    expiration {
-      days = local.expire_days
-    }
-
     noncurrent_version_transition {
       noncurrent_days = local.transition_days
       storage_class   = "GLACIER"
@@ -2909,10 +2850,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3_logs" {
     transition {
       days          = local.transition_days
       storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = local.expire_days
     }
 
     noncurrent_version_transition {
