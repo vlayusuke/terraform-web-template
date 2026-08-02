@@ -31,6 +31,12 @@ resource "aws_elasticache_replication_group" "redis" {
     aws_security_group.redis.id,
   ]
 
+  depends_on = [
+    aws_kms_key.elasticache,
+    aws_elasticache_parameter_group.redis,
+    aws_elasticache_subnet_group.redis,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-elc-redis-cluster"
   }
