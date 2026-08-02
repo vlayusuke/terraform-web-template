@@ -37,6 +37,11 @@ resource "aws_scheduler_schedule" "rds_control_start" {
       maximum_retry_attempts       = 2
     }
   }
+
+  depends_on = [
+    aws_iam_role.event_bridge_scheduler,
+    aws_kms_key.event_bridge,
+  ]
 }
 
 resource "aws_scheduler_schedule" "rds_control_stop" {
@@ -67,6 +72,11 @@ resource "aws_scheduler_schedule" "rds_control_stop" {
       maximum_retry_attempts       = 2
     }
   }
+
+  depends_on = [
+    aws_iam_role.event_bridge_scheduler,
+    aws_kms_key.event_bridge,
+  ]
 }
 
 
