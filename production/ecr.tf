@@ -14,6 +14,10 @@ resource "aws_ecr_repository" "nginx_base" {
     kms_key         = aws_kms_key.ecr.arn
   }
 
+  depends_on = [
+    aws_kms_key.ecr,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-ecr-nginx-base"
   }
@@ -56,6 +60,10 @@ resource "aws_ecr_repository" "app_base" {
     encryption_type = "KMS"
     kms_key         = aws_kms_key.ecr.arn
   }
+
+  depends_on = [
+    aws_kms_key.ecr,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-ecr-app-base"
@@ -100,6 +108,10 @@ resource "aws_ecr_repository" "nginx" {
     kms_key         = aws_kms_key.ecr.arn
   }
 
+  depends_on = [
+    aws_kms_key.ecr,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-ecr-nginx"
   }
@@ -142,6 +154,10 @@ resource "aws_ecr_repository" "app" {
     encryption_type = "KMS"
     kms_key         = aws_kms_key.ecr.arn
   }
+
+  depends_on = [
+    aws_kms_key.ecr,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-ecr-app"

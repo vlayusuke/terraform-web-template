@@ -17,6 +17,10 @@ resource "aws_efs_file_system" "main" {
     replication_overwrite = "ENABLED"
   }
 
+  depends_on = [
+    aws_kms_key.efs,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-efs"
   }

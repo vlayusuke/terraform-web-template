@@ -51,6 +51,11 @@ resource "aws_synthetics_canary" "check_access_top_page" {
     ephemeral_storage  = 2048
   }
 
+  depends_on = [
+    aws_iam_role.cloudwatch_synthetics,
+    aws_kms_key.synthetics,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-cwt-syn-check-access-top-page"
   }
@@ -93,6 +98,11 @@ resource "aws_synthetics_canary" "check_input_top_page" {
     timeout_in_seconds = 60
     ephemeral_storage  = 2048
   }
+
+  depends_on = [
+    aws_iam_role.cloudwatch_synthetics,
+    aws_kms_key.synthetics,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-cwt-syn-check-input-top-page"
