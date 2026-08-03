@@ -254,7 +254,7 @@ data "aws_iam_policy_document" "aurora_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon ElastCache
+# AWS KMS for Amazon ElastiCache
 # ===============================================================================
 resource "aws_kms_key" "elasticache" {
   description             = "${local.project}-${local.env}-kms-elc-key"
@@ -269,7 +269,7 @@ resource "aws_kms_key" "elasticache" {
 
 
 # ===============================================================================
-# AWS KMS Key Policy for Amazon Elasticache
+# AWS KMS Key Policy for Amazon ElastiCache
 # ===============================================================================
 resource "aws_kms_key_policy" "elasticache" {
   key_id = aws_kms_key.elasticache.key_id
