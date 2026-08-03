@@ -4,6 +4,7 @@
 resource "aws_cloudwatch_log_group" "lambda_root_login_monitoring" {
   name              = "/aws/lambda/${aws_lambda_function.lambda_root_login_monitoring.function_name}-cwtlog"
   retention_in_days = local.retention_in_days
+  log_group_class   = "STANDARD"
 
   tags = {
     Name = "/aws/lambda/${aws_lambda_function.lambda_root_login_monitoring.function_name}-cwtlog"
@@ -29,6 +30,7 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_root_login_monitoring"
 resource "aws_cloudwatch_log_group" "lambda_error" {
   name              = "/aws/lambda/${aws_lambda_function.lambda_error.function_name}-cwtlog"
   retention_in_days = local.retention_in_days
+  log_group_class   = "STANDARD"
 
   tags = {
     Name = "/aws/lambda/${aws_lambda_function.lambda_error.function_name}-cwtlog"
@@ -54,6 +56,7 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_error" {
 resource "aws_cloudwatch_log_group" "lambda_security_notice" {
   name              = "/aws/lambda/${aws_lambda_function.lambda_security_notice.function_name}-cwtlog"
   retention_in_days = local.retention_in_days
+  log_group_class   = "STANDARD"
 
   tags = {
     Name = "/aws/lambda/${aws_lambda_function.lambda_security_notice.function_name}-cwtlog"
@@ -79,6 +82,7 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_security_notice" {
 resource "aws_cloudwatch_log_group" "lambda_log_error_alert_audit" {
   name              = "/aws/lambda/${aws_lambda_function.lambda_log_error_alert_audit.function_name}-cwtlog"
   retention_in_days = local.retention_in_days
+  log_group_class   = "STANDARD"
 
   tags = {
     Name = "/aws/lambda/${aws_lambda_function.lambda_log_error_alert_audit.function_name}-cwtlog"
@@ -104,6 +108,7 @@ resource "aws_cloudwatch_log_subscription_filter" "lambda_log_error_alert_audit"
 resource "aws_cloudwatch_log_group" "cloudtrail" {
   name              = "${local.project}-${local.env}-cwt-ctl-cwtlog"
   retention_in_days = local.retention_in_days
+  log_group_class   = "STANDARD"
 
   tags = {
     Name = "${local.project}-${local.env}-cwt-ctl-cwtlog"
@@ -129,6 +134,7 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudtrail" {
 resource "aws_cloudwatch_log_group" "sns" {
   name              = "${local.project}-${local.env}-cwt-sns-cwtlog"
   retention_in_days = local.retention_in_days
+  log_group_class   = "STANDARD"
 
   tags = {
     Name = "${local.project}-${local.env}-cwt-sns-cwtlog"
