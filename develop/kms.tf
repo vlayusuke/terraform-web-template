@@ -1,5 +1,5 @@
 # ===============================================================================
-# AWS KMS for Application
+# AWS KMS Key for Application
 # ===============================================================================
 resource "aws_kms_key" "application" {
   description             = "${local.project}-${local.env}-kms-application-key"
@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "application_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon ECR
+# AWS KMS Key for Amazon ECR
 # ===============================================================================
 resource "aws_kms_key" "ecr" {
   description             = "${local.project}-${local.env}-kms-ecr-key"
@@ -128,7 +128,7 @@ data "aws_iam_policy_document" "ecr_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for AWS Lambda
+# AWS KMS Key for AWS Lambda
 # ===============================================================================
 resource "aws_kms_key" "lambda" {
   description             = "${local.project}-${local.env}-kms-lmd-key"
@@ -191,7 +191,7 @@ data "aws_iam_policy_document" "lambda_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon Aurora
+# AWS KMS Key for Amazon Aurora
 # ===============================================================================
 resource "aws_kms_key" "aurora" {
   description             = "${local.project}-${local.env}-kms-aur-key"
@@ -254,7 +254,7 @@ data "aws_iam_policy_document" "aurora_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon ElastiCache
+# AWS KMS Key for Amazon ElastiCache
 # ===============================================================================
 resource "aws_kms_key" "elasticache" {
   description             = "${local.project}-${local.env}-kms-elc-key"
@@ -317,7 +317,7 @@ data "aws_iam_policy_document" "elasticache_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon EFS
+# AWS KMS Key for Amazon EFS
 # ===============================================================================
 resource "aws_kms_key" "efs" {
   description             = "${local.project}-${local.env}-kms-efs-key"
@@ -396,7 +396,7 @@ data "aws_iam_policy_document" "efs_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon EBS
+# AWS KMS Key for Amazon EBS
 # ===============================================================================
 resource "aws_kms_key" "ebs" {
   description             = "${local.project}-${local.env}-kms-ebs-key"
@@ -459,7 +459,7 @@ data "aws_iam_policy_document" "ebs_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon EventBridge
+# AWS KMS Key for Amazon EventBridge
 # ===============================================================================
 resource "aws_kms_key" "event_bridge" {
   description             = "${local.project}-${local.env}-kms-eb-key"
@@ -522,7 +522,7 @@ data "aws_iam_policy_document" "event_bridge_kms_policy" {
 
 
 # ===============================================================================
-# AWS KMS for Amazon CloudWatch Synthetics
+# AWS KMS Key for Amazon CloudWatch Synthetics
 # ===============================================================================
 resource "aws_kms_key" "synthetics" {
   description             = "${local.project}-${local.env}-kms-cwt-syn-key"
