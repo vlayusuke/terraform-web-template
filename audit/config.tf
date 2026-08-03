@@ -9,6 +9,10 @@ resource "aws_config_configuration_recorder" "default" {
   recording_group {
     all_supported                 = true
     include_global_resource_types = true
+
+    recording_strategy {
+      use_only = "ALL_SUPPORTED_RESOURCE_TYPES"
+    }
   }
 
   recording_mode {
@@ -21,13 +25,13 @@ resource "aws_config_delivery_channel" "default" {
   s3_bucket_name = aws_s3_bucket.config_logs.bucket
   sns_topic_arn  = aws_sns_topic.event_notifications_audit.arn
 
-  depends_on = [
-    aws_config_configuration_recorder.default,
-  ]
-
   snapshot_delivery_properties {
     delivery_frequency = "Six_Hours"
   }
+
+  depends_on = [
+    aws_config_configuration_recorder.default,
+  ]
 }
 
 resource "aws_config_configuration_recorder_status" "default" {
