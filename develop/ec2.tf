@@ -67,6 +67,11 @@ resource "aws_instance" "ec2_bastion" {
     ]
   }
 
+  depends_on = [
+    aws_iam_instance_profile.bastion,
+    aws_kms_key.ebs,
+  ]
+
   tags = {
     Name   = "${local.project}-${local.env}-ec2-bastion"
     Backup = "true"
