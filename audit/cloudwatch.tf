@@ -159,6 +159,7 @@ resource "aws_cloudwatch_log_subscription_filter" "sns" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   alarm_name          = "${local.project}-${local.env}-cwt-lmd-errors-alarm"
+  alarm_description   = "Alarm when the Lambda function has errors"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Errors"
@@ -183,6 +184,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
 
 resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
   alarm_name          = "${local.project}-${local.env}-cwt-lmd-throttles-alarm"
+  alarm_description   = "Alarm when the Lambda function is throttled"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Throttles"
@@ -207,6 +209,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
 
 resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
   alarm_name          = "${local.project}-${local.env}-cwt-lmd-concurrent-executions-alarm"
+  alarm_description   = "Alarm when the Lambda function has high concurrent executions"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "ConcurrentExecutions"
