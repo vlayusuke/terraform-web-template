@@ -346,6 +346,7 @@ resource "aws_cloudwatch_log_subscription_filter" "ec2_bastion_to_firehose" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "app_cpu_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ecs-app-cpu-high-alarm"
+  alarm_description   = "Alarm when ECS app CPUUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -376,6 +377,7 @@ resource "aws_cloudwatch_metric_alarm" "app_cpu_high" {
 
 resource "aws_cloudwatch_metric_alarm" "app_cpu_low" {
   alarm_name          = "${local.project}-${local.env}-cwt-ecs-app-cpu-low-alarm"
+  alarm_description   = "Alarm when ECS app CPUUtilization is below 15%"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 10
   metric_name         = "CPUUtilization"
@@ -407,6 +409,7 @@ resource "aws_cloudwatch_metric_alarm" "app_cpu_low" {
 
 resource "aws_cloudwatch_metric_alarm" "app_memory_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ecs-app-memory-high-alarm"
+  alarm_description   = "Alarm when ECS app MemoryUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "MemoryUtilization"
@@ -441,6 +444,7 @@ resource "aws_cloudwatch_metric_alarm" "app_memory_high" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "cron_cpu_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ecs-cron-cpu-high-alarm"
+  alarm_description   = "Alarm when ECS cron CPUUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -470,6 +474,7 @@ resource "aws_cloudwatch_metric_alarm" "cron_cpu_high" {
 
 resource "aws_cloudwatch_metric_alarm" "cron_memory_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ecs-cron-memory-high-alarm"
+  alarm_description   = "Alarm when ECS cron MemoryUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "MemoryUtilization"
@@ -503,6 +508,7 @@ resource "aws_cloudwatch_metric_alarm" "cron_memory_high" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "queue_cpu_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ecs-queue-cpu-high-alarm"
+  alarm_description   = "Alarm when ECS queue CPUUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -532,6 +538,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_cpu_high" {
 
 resource "aws_cloudwatch_metric_alarm" "queue_memory_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ecs-queue-memory-high-alarm"
+  alarm_description   = "Alarm when ECS queue MemoryUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "MemoryUtilization"
@@ -565,6 +572,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_memory_high" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "alb_healthy_host_count" {
   alarm_name          = "${local.project}-${local.env}-cwt-alb-healthy-host-count-alarm"
+  alarm_description   = "Alarm when ALB HealthyHostCount is less than or equal to 0"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "HealthyHostCount"
@@ -594,6 +602,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_healthy_host_count" {
 
 resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host_count" {
   alarm_name          = "${local.project}-${local.env}-cwt-alb-un-healthy-host-count-alarm"
+  alarm_description   = "Alarm when ALB UnHealthyHostCount is greater than or equal to 1"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "UnHealthyHostCount"
@@ -623,6 +632,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host_count" {
 
 resource "aws_cloudwatch_metric_alarm" "alb_rejected_connection" {
   alarm_name          = "${local.project}-${local.env}-cwt-alb-rejected-connection-alarm"
+  alarm_description   = "Alarm when ALB RejectedConnectionCount is greater than or equal to 1"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "RejectedConnectionCount"
@@ -656,6 +666,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_rejected_connection" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "rds_cpu_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-rds-cpu-high-alarm"
+  alarm_description   = "Alarm when RDS CPUUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -684,6 +695,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu_high" {
 
 resource "aws_cloudwatch_metric_alarm" "rds_memory_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-rds-memory-high-alarm"
+  alarm_description   = "Alarm when RDS FreeableMemory is less than or equal to 256000000"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "FreeableMemory"
@@ -712,6 +724,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_memory_high" {
 
 resource "aws_cloudwatch_metric_alarm" "rds_connections_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-rds-connections-high-alarm"
+  alarm_description   = "Alarm when RDS DatabaseConnections is greater than or equal to 80% of max connections"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "DatabaseConnections"
@@ -744,6 +757,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_connections_high" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "elasticache_cpu_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-elc-cpu-high-alarm"
+  alarm_description   = "Alarm when ElastiCache CPUUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -772,6 +786,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_cpu_high" {
 
 resource "aws_cloudwatch_metric_alarm" "elasticache_memory_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-elc-memory-high-alarm"
+  alarm_description   = "Alarm when ElastiCache DatabaseMemoryUsagePercentage exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "DatabaseMemoryUsagePercentage"
@@ -800,6 +815,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_memory_high" {
 
 resource "aws_cloudwatch_metric_alarm" "elasticache_swap_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-elc-swap-high-alarm"
+  alarm_description   = "Alarm when ElastiCache SwapUsage exceeds 50000000 bytes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "SwapUsage"
@@ -832,6 +848,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_swap_high" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "ses_complaint_rate" {
   alarm_name          = "${local.project}-${local.env}-cwt-ses-complaint-rate-alarm"
+  alarm_description   = "Alarm when SES ComplaintRate exceeds 0.001"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Reputation.ComplaintRate"
@@ -856,6 +873,7 @@ resource "aws_cloudwatch_metric_alarm" "ses_complaint_rate" {
 
 resource "aws_cloudwatch_metric_alarm" "ses_bounce_rate" {
   alarm_name          = "${local.project}-${local.env}-cwt-ses-bounce-rate-alarm"
+  alarm_description   = "Alarm when SES BounceRate exceeds 0.001"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Reputation.BounceRate"
@@ -884,6 +902,7 @@ resource "aws_cloudwatch_metric_alarm" "ses_bounce_rate" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   alarm_name          = "${local.project}-${local.env}-cwt-lmd-errors-alarm"
+  alarm_description   = "Alarm when Lambda Errors exceeds 1"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Errors"
@@ -908,6 +927,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
 
 resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
   alarm_name          = "${local.project}-${local.env}-cwt-lmd-throttles-alarm"
+  alarm_description   = "Alarm when Lambda Throttles exceeds 1"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Throttles"
@@ -932,6 +952,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
 
 resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
   alarm_name          = "${local.project}-${local.env}-cwt-lmd-concurrent-executions-alarm"
+  alarm_description   = "Alarm when Lambda ConcurrentExecutions exceeds 80% of the quota"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "ConcurrentExecutions"
@@ -965,6 +986,7 @@ data "aws_servicequotas_service_quota" "lambda_concurrent_executions" {
 # ================================================================================
 resource "aws_cloudwatch_metric_alarm" "ec2_bastion_cpu_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ec2-bastion-cpu-high-alarm"
+  alarm_description   = "Alarm when EC2 Bastion CPUUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -993,6 +1015,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_cpu_high" {
 
 resource "aws_cloudwatch_metric_alarm" "ec2_bastion_memory_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ec2-bastion-memory-high-alarm"
+  alarm_description   = "Alarm when EC2 Bastion MemoryUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "MemoryUtilization"
@@ -1021,6 +1044,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_memory_high" {
 
 resource "aws_cloudwatch_metric_alarm" "ec2_bastion_disk_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-ec2-bastion-disk-high-alarm"
+  alarm_description   = "Alarm when EC2 Bastion DiskUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "DiskUtilization"
@@ -1049,6 +1073,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_disk_high" {
 
 resource "aws_cloudwatch_metric_alarm" "ec2_bastion_status_check_failed" {
   alarm_name          = "${local.project}-${local.env}-cwt-ec2-bastion-status-check-failed-alarm"
+  alarm_description   = "Alarm when EC2 Bastion StatusCheckFailed is greater than or equal to 1"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "StatusCheckFailed"
@@ -1081,6 +1106,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_status_check_failed" {
 # ================================================================================
 resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_access_top_page_failed" {
   alarm_name          = "${local.project}-${local.env}-cwt-syn-canary-check-access-top-page-failed-alarm"
+  alarm_description   = "Alarm when the Synthetics Canary check access top page success percent is less than 90%"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "SuccessPercent"
@@ -1089,7 +1115,6 @@ resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_access_top_page_
   statistic           = "Average"
   threshold           = 90
   treat_missing_data  = "notBreaching"
-  alarm_description   = "Alarm when the Synthetics Canary check access top page success percent is less than 90%"
 
   dimensions = {
     CanaryName = aws_synthetics_canary.check_access_top_page.name
@@ -1114,6 +1139,7 @@ resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_access_top_page_
 # ================================================================================
 resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_input_top_page_failed" {
   alarm_name          = "${local.project}-${local.env}-cwt-syn-canary-check-input-top-page-failed-alarm"
+  alarm_description   = "Alarm when the Synthetics Canary check input top page success percent is less than 90%"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "SuccessPercent"
@@ -1122,7 +1148,6 @@ resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_input_top_page_f
   statistic           = "Average"
   threshold           = 90
   treat_missing_data  = "notBreaching"
-  alarm_description   = "Alarm when the Synthetics Canary check input top page success percent is less than 90%"
 
   dimensions = {
     CanaryName = aws_synthetics_canary.check_input_top_page.name
