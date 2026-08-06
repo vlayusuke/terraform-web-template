@@ -30,7 +30,6 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_cloudwatch,
     aws_kms_key.lambda,
   ]
 
@@ -87,7 +86,6 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_cloudwatch,
     aws_kms_key.lambda,
   ]
 
@@ -137,7 +135,6 @@ resource "aws_lambda_function" "lambda_rds_control" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_rds_control,
     aws_kms_key.lambda,
   ]
 
@@ -213,7 +210,6 @@ resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_schedule_ecs_maintenance,
     aws_kms_key.lambda,
   ]
 
@@ -289,7 +285,6 @@ resource "aws_lambda_function" "lambda_execute_ecs_force_deployment" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_execute_ecs_force_deployment,
     aws_kms_key.lambda,
   ]
 
