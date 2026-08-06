@@ -52,11 +52,11 @@ locals {
   retention_in_days = 180
 
   lambda_functions = toset([
-    aws_lambda_function.lambda_rds_control.function_name,
-    aws_lambda_function.lambda_log_error_alert.function_name,
-    aws_lambda_function.lambda_metric_alarm.function_name,
-    aws_lambda_function.lambda_schedule_ecs_maintenance.function_name,
-    aws_lambda_function.lambda_execute_ecs_force_deployment.function_name,
+    "lmd-rds-control",
+    "lmd-cwt-log-error-alert",
+    "lmd-cwt-metric-alarm",
+    "lmd-schedule-ecs-maintenance",
+    "lmd-execute-ecs-force-deployment",
   ])
 
   fargate_app_cloudwatch_log_group = toset([
