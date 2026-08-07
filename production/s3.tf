@@ -2391,7 +2391,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "bastion" {
     status = "Enabled"
 
     filter {
-      prefix                   = "bastion-logs/"
       object_size_greater_than = 0
     }
 
