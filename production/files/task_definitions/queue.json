@@ -3,7 +3,7 @@
     "name": "queue",
     "image": "php:8.5.7-fpm-bookworm",
     "repositoryCredentials": {
-      "credentialsParameter": "arn:aws:secretsmanager:${region}:${account_id}:secret:tf-web-prd-smg-dockerhub-credentials"
+      "credentialsParameter": "${credentials_parameters_arn}"
     },
     "cpu": 256,
     "memoryReservation": 512,
