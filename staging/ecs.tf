@@ -85,6 +85,14 @@ resource "aws_ecs_service" "fargate_app" {
     ]
   }
 
+  alarms {
+    enable   = true
+    rollback = true
+    alarm_names = [
+      aws_cloudwatch_metric_alarm.app_deployment_failed.alarm_name,
+    ]
+  }
+
   lifecycle {
     ignore_changes = [
       capacity_provider_strategy,
@@ -285,6 +293,14 @@ resource "aws_ecs_service" "fargate_cron" {
     ]
   }
 
+  alarms {
+    enable   = true
+    rollback = true
+    alarm_names = [
+      aws_cloudwatch_metric_alarm.cron_deployment_failed.alarm_name,
+    ]
+  }
+
   lifecycle {
     ignore_changes = [
       capacity_provider_strategy,
@@ -390,6 +406,14 @@ resource "aws_ecs_service" "fargate_queue" {
     ]
     security_groups = [
       aws_security_group.fargate_queue.id,
+    ]
+  }
+
+  alarms {
+    enable   = true
+    rollback = true
+    alarm_names = [
+      aws_cloudwatch_metric_alarm.queue_deployment_failed.alarm_name,
     ]
   }
 
