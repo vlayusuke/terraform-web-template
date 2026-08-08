@@ -196,11 +196,12 @@ resource "aws_ecs_task_definition" "fargate_app" {
   container_definitions = templatefile(
     "files/task_definitions/app.json",
     {
-      account_id       = data.aws_caller_identity.current.account_id
-      project          = local.project
-      env              = local.env
-      region           = local.region
-      log_group_prefix = "${local.project}-${local.env}"
+      account_id                 = data.aws_caller_identity.current.account_id
+      project                    = local.project
+      env                        = local.env
+      region                     = local.region
+      log_group_prefix           = "${local.project}-${local.env}"
+      credentials_parameters_arn = aws_secretsmanager_secret.dockerhub.arn
     }
   )
 
@@ -314,11 +315,12 @@ resource "aws_ecs_task_definition" "fargate_cron" {
   container_definitions = templatefile(
     "files/task_definitions/cron.json",
     {
-      account_id       = data.aws_caller_identity.current.account_id
-      project          = local.project
-      env              = local.env
-      region           = local.region
-      log_group_prefix = "${local.project}-${local.env}"
+      account_id                 = data.aws_caller_identity.current.account_id
+      project                    = local.project
+      env                        = local.env
+      region                     = local.region
+      log_group_prefix           = "${local.project}-${local.env}"
+      credentials_parameters_arn = aws_secretsmanager_secret.dockerhub.arn
     }
   )
 
@@ -421,11 +423,12 @@ resource "aws_ecs_task_definition" "fargate_queue" {
   container_definitions = templatefile(
     "files/task_definitions/queue.json",
     {
-      account_id       = data.aws_caller_identity.current.account_id
-      project          = local.project
-      env              = local.env
-      region           = local.region
-      log_group_prefix = "${local.project}-${local.env}"
+      account_id                 = data.aws_caller_identity.current.account_id
+      project                    = local.project
+      env                        = local.env
+      region                     = local.region
+      log_group_prefix           = "${local.project}-${local.env}"
+      credentials_parameters_arn = aws_secretsmanager_secret.dockerhub.arn
     }
   )
 
@@ -470,11 +473,12 @@ resource "aws_ecs_task_definition" "fargate_migrate" {
   container_definitions = templatefile(
     "files/task_definitions/migrate.json",
     {
-      account_id       = data.aws_caller_identity.current.account_id
-      project          = local.project
-      env              = local.env
-      region           = local.region
-      log_group_prefix = "${local.project}-${local.env}"
+      account_id                 = data.aws_caller_identity.current.account_id
+      project                    = local.project
+      env                        = local.env
+      region                     = local.region
+      log_group_prefix           = "${local.project}-${local.env}"
+      credentials_parameters_arn = aws_secretsmanager_secret.dockerhub.arn
     }
   )
 
