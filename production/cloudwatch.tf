@@ -438,6 +438,32 @@ resource "aws_cloudwatch_metric_alarm" "app_memory_high" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "app_deployment_failed" {
+  alarm_name          = "${local.project}-${local.env}-cwt-ecs-app-deployment-failed-alarm"
+  alarm_description   = "Alarm when ECS app deployment failed"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "DeploymentFailed"
+  namespace           = "AWS/ECS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.main.name
+    ServiceName = aws_ecs_service.fargate_app.name
+  }
+
+  alarm_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  tags = {
+    Name = "${local.project}-${local.env}-cwt-ecs-app-deployment-failed-alarm"
+  }
+}
+
 
 # ===============================================================================
 # Amazon CloudWatch Metrics for Amazon ECS (cron)
@@ -502,6 +528,32 @@ resource "aws_cloudwatch_metric_alarm" "cron_memory_high" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "cron_deployment_failed" {
+  alarm_name          = "${local.project}-${local.env}-cwt-ecs-cron-deployment-failed-alarm"
+  alarm_description   = "Alarm when ECS cron deployment failed"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "DeploymentFailed"
+  namespace           = "AWS/ECS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.main.name
+    ServiceName = aws_ecs_service.fargate_cron.name
+  }
+
+  alarm_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  tags = {
+    Name = "${local.project}-${local.env}-cwt-ecs-cron-deployment-failed-alarm"
+  }
+}
+
 
 # ===============================================================================
 # Amazon CloudWatch Metrics for Amazon ECS (queue)
@@ -563,6 +615,32 @@ resource "aws_cloudwatch_metric_alarm" "queue_memory_high" {
 
   tags = {
     Name = "${local.project}-${local.env}-cwt-ecs-queue-memory-high-alarm"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "queue_deployment_failed" {
+  alarm_name          = "${local.project}-${local.env}-cwt-ecs-queue-deployment-failed-alarm"
+  alarm_description   = "Alarm when ECS queue deployment failed"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "DeploymentFailed"
+  namespace           = "AWS/ECS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.main.name
+    ServiceName = aws_ecs_service.fargate_queue.name
+  }
+
+  alarm_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  tags = {
+    Name = "${local.project}-${local.env}-cwt-ecs-queue-deployment-failed-alarm"
   }
 }
 
