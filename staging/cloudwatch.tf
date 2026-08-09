@@ -452,7 +452,7 @@ resource "aws_cloudwatch_metric_alarm" "app_deployment_failed" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.fargate_app.name
+    ServiceName = "fargate-app"
   }
 
   alarm_actions = [
@@ -542,7 +542,7 @@ resource "aws_cloudwatch_metric_alarm" "cron_deployment_failed" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.fargate_cron.name
+    ServiceName = "fargate-cron"
   }
 
   alarm_actions = [
@@ -632,7 +632,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_deployment_failed" {
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.fargate_queue.name
+    ServiceName = "fargate-queue"
   }
 
   alarm_actions = [
