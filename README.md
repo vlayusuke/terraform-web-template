@@ -35,7 +35,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 ### PythonのVersionについて
 
-Pythonのバージョンについては、macOS上でHomebrewでパッケージを管理している場合は、定期的に`brew outdated`コマンド実行して更新状況を能動的に確認してください。
+Pythonのバージョンは、macOS上でHomebrewでパッケージを管理している場合には、定期的に`brew outdated`コマンドを実行して、更新状況を能動的に確認するようにしてください。
 
 ### Terraformや各種ProviderのVersion
 
@@ -57,9 +57,9 @@ Pythonのバージョンについては、macOS上でHomebrewでパッケージ�
 
 | Environmtnt | Resource | Notice           |
 | :---------- | -------: | :--------------- |
-| develop     |      597 | N/A              |
-| staging     |      597 | N/A              |
-| production  |      597 | N/A              |
+| develop     |      600 | N/A              |
+| staging     |      600 | N/A              |
+| production  |      600 | N/A              |
 | audit       |      138 | Each AWS account |
 
 ## 環境構築をする際の注意事項
