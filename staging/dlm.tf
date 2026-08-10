@@ -11,6 +11,10 @@ resource "aws_dlm_lifecycle_policy" "ebs_backup_policy" {
       "VOLUME",
     ]
 
+    resource_locations = [
+      "CLOUD",
+    ]
+
     target_tags = {
       Backup = "true"
     }
