@@ -14,6 +14,10 @@ resource "aws_ssm_parameter" "mysql_username" {
     ]
   }
 
+  depends_on = [
+    aws_kms_key.application,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-ssm-mysql-username"
   }
@@ -31,6 +35,10 @@ resource "aws_ssm_parameter" "mysql_password" {
       value,
     ]
   }
+
+  depends_on = [
+    aws_kms_key.application,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-ssm-mysql-password"
@@ -54,6 +62,10 @@ resource "aws_ssm_parameter" "app_key" {
     ]
   }
 
+  depends_on = [
+    aws_kms_key.application,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-ssm-app-key"
   }
@@ -71,6 +83,10 @@ resource "aws_ssm_parameter" "jwt_secret" {
       value,
     ]
   }
+
+  depends_on = [
+    aws_kms_key.application,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-ssm-jwt-secret"
@@ -90,6 +106,10 @@ resource "aws_ssm_parameter" "aurora_writer_endpoint" {
     ]
   }
 
+  depends_on = [
+    aws_kms_key.application,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-ssm-aur-writer-endpoint"
   }
@@ -107,6 +127,10 @@ resource "aws_ssm_parameter" "aurora_reader_endpoint" {
       value,
     ]
   }
+
+  depends_on = [
+    aws_kms_key.application,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-ssm-aur-reader-endpoint"
@@ -126,6 +150,10 @@ resource "aws_ssm_parameter" "elasticache_writer_endpoint" {
     ]
   }
 
+  depends_on = [
+    aws_kms_key.application,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-ssm-elc-writer-endpoint"
   }
@@ -143,6 +171,10 @@ resource "aws_ssm_parameter" "elasticache_reader_endpoint" {
       value,
     ]
   }
+
+  depends_on = [
+    aws_kms_key.application,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-ssm-elc-reader-endpoint"
