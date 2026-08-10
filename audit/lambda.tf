@@ -23,6 +23,10 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
     }
   }
 
+  depends_on = [
+    aws_kms_key.lambda,
+  ]
+
   lifecycle {
     ignore_changes = [
       source_code_hash,
@@ -75,6 +79,10 @@ resource "aws_lambda_function" "lambda_root_login_monitoring" {
     }
   }
 
+  depends_on = [
+    aws_kms_key.lambda,
+  ]
+
   lifecycle {
     ignore_changes = [
       source_code_hash,
@@ -126,6 +134,10 @@ resource "aws_lambda_function" "lambda_error" {
     }
   }
 
+  depends_on = [
+    aws_kms_key.lambda,
+  ]
+
   lifecycle {
     ignore_changes = [
       source_code_hash,
@@ -176,6 +188,10 @@ resource "aws_lambda_function" "lambda_security_notice" {
       hook_url = var.audit_hook_url
     }
   }
+
+  depends_on = [
+    aws_kms_key.lambda,
+  ]
 
   lifecycle {
     ignore_changes = [
