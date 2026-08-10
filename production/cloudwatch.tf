@@ -355,6 +355,7 @@ resource "aws_cloudwatch_metric_alarm" "app_cpu_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -418,6 +419,7 @@ resource "aws_cloudwatch_metric_alarm" "app_memory_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -449,6 +451,7 @@ resource "aws_cloudwatch_metric_alarm" "app_deployment_failed" {
   statistic           = "Maximum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -479,6 +482,7 @@ resource "aws_cloudwatch_metric_alarm" "cron_cpu_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -509,6 +513,7 @@ resource "aws_cloudwatch_metric_alarm" "cron_memory_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -539,6 +544,7 @@ resource "aws_cloudwatch_metric_alarm" "cron_deployment_failed" {
   statistic           = "Maximum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -569,6 +575,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_cpu_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -599,6 +606,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_memory_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -629,6 +637,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_deployment_failed" {
   statistic           = "Maximum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
@@ -659,6 +668,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_healthy_host_count" {
   statistic           = "Minimum"
   threshold           = 0
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   dimensions = {
     LoadBalancer = aws_lb.main_external.arn
@@ -689,6 +699,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_un_healthy_host_count" {
   statistic           = "Maximum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   dimensions = {
     LoadBalancer = aws_lb.main_external.arn
@@ -719,6 +730,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_rejected_connection" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     LoadBalancer = aws_lb.main_external.arn
@@ -753,6 +765,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     DBClusterIdentifier = aws_rds_cluster.aurora.id
@@ -782,6 +795,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_memory_high" {
   statistic           = "Minimum"
   threshold           = 256000000
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     DBClusterIdentifier = aws_rds_cluster.aurora.id
@@ -811,6 +825,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_connections_high" {
   statistic           = "Maximum"
   threshold           = floor(local.rds_max_connections * 0.8)
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     DBClusterIdentifier = aws_rds_cluster.aurora.id
@@ -844,6 +859,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_cpu_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     CacheClusterId = aws_elasticache_replication_group.redis.replication_group_id
@@ -873,6 +889,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_memory_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     CacheClusterId = aws_elasticache_replication_group.redis.replication_group_id
@@ -902,6 +919,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_swap_high" {
   statistic           = "Maximum"
   threshold           = 50000000
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     CacheClusterId = aws_elasticache_replication_group.redis.replication_group_id
@@ -935,6 +953,7 @@ resource "aws_cloudwatch_metric_alarm" "ses_complaint_rate" {
   statistic           = "Maximum"
   threshold           = 0.001
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   alarm_actions = [
     aws_sns_topic.metric_alarm.arn,
@@ -960,6 +979,7 @@ resource "aws_cloudwatch_metric_alarm" "ses_bounce_rate" {
   statistic           = "Maximum"
   threshold           = 0.001
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   alarm_actions = [
     aws_sns_topic.metric_alarm.arn,
@@ -989,6 +1009,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   alarm_actions = [
     aws_sns_topic.metric_alarm.arn,
@@ -1014,6 +1035,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   alarm_actions = [
     aws_sns_topic.metric_alarm.arn,
@@ -1039,6 +1061,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
   statistic           = "Maximum"
   threshold           = data.aws_servicequotas_service_quota.lambda_concurrent_executions.value * 0.8
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   alarm_actions = [
     aws_sns_topic.metric_alarm.arn,
@@ -1073,6 +1096,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_cpu_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     InstanceId = aws_instance.ec2_bastion.id
@@ -1102,6 +1126,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_memory_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     InstanceId = aws_instance.ec2_bastion.id
@@ -1131,6 +1156,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_disk_high" {
   statistic           = "Maximum"
   threshold           = 80
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     InstanceId = aws_instance.ec2_bastion.id
@@ -1160,6 +1186,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_bastion_status_check_failed" {
   statistic           = "Minimum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 2
 
   dimensions = {
     InstanceId = aws_instance.ec2_bastion.id
@@ -1193,6 +1220,7 @@ resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_access_top_page_
   statistic           = "Average"
   threshold           = 90
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   dimensions = {
     CanaryName = aws_synthetics_canary.check_access_top_page.name
@@ -1226,6 +1254,7 @@ resource "aws_cloudwatch_metric_alarm" "synthetics_canary_check_input_top_page_f
   statistic           = "Average"
   threshold           = 90
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   dimensions = {
     CanaryName = aws_synthetics_canary.check_input_top_page.name
