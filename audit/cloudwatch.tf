@@ -168,6 +168,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   alarm_actions = [
     aws_sns_topic.event_notifications_audit.arn,
@@ -193,6 +194,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   alarm_actions = [
     aws_sns_topic.event_notifications_audit.arn,
@@ -218,6 +220,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_concurrent_executions" {
   statistic           = "Maximum"
   threshold           = data.aws_servicequotas_service_quota.lambda_concurrent_executions.value * 0.8
   treat_missing_data  = "notBreaching"
+  datapoints_to_alarm = 1
 
   alarm_actions = [
     aws_sns_topic.event_notifications_audit.arn,
