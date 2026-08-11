@@ -60,7 +60,9 @@ resource "aws_guardduty_publishing_destination" "main" {
   destination_type = "S3"
 
   depends_on = [
+    aws_s3_bucket.guardduty_logs,
     aws_s3_bucket_policy.guardduty_logs,
+    aws_kms_key.guardduty,
   ]
 
   tags = {
