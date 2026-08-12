@@ -35,7 +35,7 @@ Web3レイヤ構成のWebアプリケーション向けの開発環境を構築�
 
 ### PythonのVersionについて
 
-Pythonのバージョンは、macOS上でHomebrewでパッケージを管理している場合には、定期的に`brew outdated`コマンドを実行して、更新状況を能動的に確認するようにしてください。
+Pythonのバージョンは、macOS上でHomebrewでパッケージを管理している場合には、定期的に`brew outdated`コマンドを実行して、更新状況を能動的に確認し、適宜最新バージョンに追随するようにしてください。
 
 ### Terraformや各種ProviderのVersion
 
