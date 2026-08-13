@@ -6,7 +6,7 @@ resource "aws_sns_topic" "metric_alarm" {
   display_name                     = "Amazon SNS Topic for Metric Alarm"
   lambda_success_feedback_role_arn = aws_iam_role.lambda_cloudwatch.arn
   lambda_failure_feedback_role_arn = aws_iam_role.lambda_cloudwatch.arn
-  signature_version                = "SignatureVersion2"
+  signature_version                = 2
 
   delivery_policy = jsonencode({
     "http" : {
@@ -93,7 +93,7 @@ resource "aws_sns_topic" "event_alarm" {
   display_name                     = "Amazon SNS Topic for Event Alarm"
   lambda_success_feedback_role_arn = aws_iam_role.lambda_cloudwatch.arn
   lambda_failure_feedback_role_arn = aws_iam_role.lambda_cloudwatch.arn
-  signature_version                = "SignatureVersion2"
+  signature_version                = 2
 
   delivery_policy = jsonencode({
     "http" : {
@@ -180,7 +180,7 @@ resource "aws_sns_topic" "inspector_notifications" {
   display_name                     = "Amazon SNS Topic for Amazon Inspector Notifications"
   lambda_success_feedback_role_arn = aws_iam_role.lambda_cloudwatch.arn
   lambda_failure_feedback_role_arn = aws_iam_role.lambda_cloudwatch.arn
-  signature_version                = "SignatureVersion2"
+  signature_version                = 2
 
   delivery_policy = jsonencode({
     "http" : {
@@ -267,7 +267,7 @@ resource "aws_sns_topic" "event_notifications" {
   display_name                     = "Amazon SNS Topic for Event Notifications"
   lambda_success_feedback_role_arn = aws_iam_role.lambda_cloudwatch.arn
   lambda_failure_feedback_role_arn = aws_iam_role.lambda_cloudwatch.arn
-  signature_version                = "SignatureVersion2"
+  signature_version                = 2
 
   delivery_policy = jsonencode({
     "http" : {
