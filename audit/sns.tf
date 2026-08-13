@@ -6,6 +6,7 @@ resource "aws_sns_topic" "event_notifications_audit" {
   display_name                     = "Amazon SNS Event Notifications for Audit"
   lambda_failure_feedback_role_arn = aws_iam_role.lambda_cloudwatch_audit.arn
   lambda_success_feedback_role_arn = aws_iam_role.lambda_cloudwatch_audit.arn
+  signature_version                = 2
 
   delivery_policy = jsonencode({
     "http" : {
@@ -89,6 +90,7 @@ resource "aws_sns_topic" "config_notifications" {
   display_name                     = "Amazon SNS for AWS Config notifications for audit"
   lambda_failure_feedback_role_arn = aws_iam_role.lambda_cloudwatch_audit.arn
   lambda_success_feedback_role_arn = aws_iam_role.lambda_cloudwatch_audit.arn
+  signature_version                = 2
 
   tags = {
     Name = "${local.project}-${local.env}-sns-cfg-notifications"
