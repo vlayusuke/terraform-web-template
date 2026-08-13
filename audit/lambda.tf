@@ -23,15 +23,15 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
     }
   }
 
-  depends_on = [
-    aws_kms_key.lambda,
-  ]
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
     ]
   }
+
+  depends_on = [
+    aws_kms_key.lambda,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-lmd-cwt-log-error-alert-audit"
@@ -79,15 +79,15 @@ resource "aws_lambda_function" "lambda_root_login_monitoring" {
     }
   }
 
-  depends_on = [
-    aws_kms_key.lambda,
-  ]
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
     ]
   }
+
+  depends_on = [
+    aws_kms_key.lambda,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-lmd-root-login-monitoring"
@@ -134,15 +134,15 @@ resource "aws_lambda_function" "lambda_error" {
     }
   }
 
-  depends_on = [
-    aws_kms_key.lambda,
-  ]
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
     ]
   }
+
+  depends_on = [
+    aws_kms_key.lambda,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-lmd-lambda-error"
@@ -189,15 +189,15 @@ resource "aws_lambda_function" "lambda_security_notice" {
     }
   }
 
-  depends_on = [
-    aws_kms_key.lambda,
-  ]
-
   lifecycle {
     ignore_changes = [
       source_code_hash,
     ]
   }
+
+  depends_on = [
+    aws_kms_key.lambda,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-lmd-security-notice"
