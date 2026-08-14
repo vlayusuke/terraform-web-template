@@ -30,6 +30,7 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
   }
 
   depends_on = [
+    aws_iam_role.lambda_cloudwatch_audit,
     aws_kms_key.lambda,
   ]
 
@@ -86,6 +87,7 @@ resource "aws_lambda_function" "lambda_root_login_monitoring" {
   }
 
   depends_on = [
+    aws_iam_role.lambda_root_login_monitoring,
     aws_kms_key.lambda,
   ]
 
@@ -141,6 +143,7 @@ resource "aws_lambda_function" "lambda_error" {
   }
 
   depends_on = [
+    aws_iam_role.lambda_error,
     aws_kms_key.lambda,
   ]
 
@@ -196,6 +199,7 @@ resource "aws_lambda_function" "lambda_security_notice" {
   }
 
   depends_on = [
+    aws_iam_role.lambda_security_notice,
     aws_kms_key.lambda,
   ]
 
