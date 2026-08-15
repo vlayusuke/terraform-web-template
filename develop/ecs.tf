@@ -239,6 +239,12 @@ resource "aws_ecs_task_definition" "fargate_app" {
     ]
   }
 
+  depends_on = [
+    aws_efs_file_system.main,
+    aws_iam_role.ecs_task,
+    aws_iam_role.ecs_service,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-ecs-task-app"
   }
@@ -354,6 +360,11 @@ resource "aws_ecs_task_definition" "fargate_cron" {
       container_definitions,
     ]
   }
+
+  depends_on = [
+    aws_iam_role.ecs_task,
+    aws_iam_role.ecs_service,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-ecs-task-cron"
@@ -471,6 +482,11 @@ resource "aws_ecs_task_definition" "fargate_queue" {
     ]
   }
 
+  depends_on = [
+    aws_iam_role.ecs_task,
+    aws_iam_role.ecs_service,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-ecs-task-queue"
   }
@@ -514,6 +530,17 @@ resource "aws_ecs_task_definition" "fargate_migrate" {
   ephemeral_storage {
     size_in_gib = 64
   }
+
+  lifecycle {
+    ignore_changes = [
+      container_definitions,
+    ]
+  }
+
+  depends_on = [
+    aws_iam_role.ecs_task,
+    aws_iam_role.ecs_service,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-ecs-task-migrate"
