@@ -52,6 +52,7 @@ resource "aws_synthetics_canary" "check_access_top_page" {
   }
 
   depends_on = [
+    aws_s3_bucket.synthetics_artifacts,
     aws_iam_role.cloudwatch_synthetics,
     aws_kms_key.synthetics,
   ]
@@ -100,6 +101,7 @@ resource "aws_synthetics_canary" "check_input_top_page" {
   }
 
   depends_on = [
+    aws_s3_bucket.synthetics_artifacts,
     aws_iam_role.cloudwatch_synthetics,
     aws_kms_key.synthetics,
   ]
