@@ -81,6 +81,10 @@ resource "aws_acm_certificate" "main_cloudfront" {
     create_before_destroy = true
   }
 
+  depends_on = [
+    aws_route53_record.root_ns,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-acm-certificate-cft"
   }
