@@ -243,6 +243,7 @@ resource "aws_ecs_task_definition" "fargate_app" {
     aws_efs_file_system.main,
     aws_iam_role.ecs_task,
     aws_iam_role.ecs_service,
+    aws_secretsmanager_secret.dockerhub,
   ]
 
   tags = {
@@ -364,6 +365,7 @@ resource "aws_ecs_task_definition" "fargate_cron" {
   depends_on = [
     aws_iam_role.ecs_task,
     aws_iam_role.ecs_service,
+    aws_secretsmanager_secret.dockerhub,
   ]
 
   tags = {
@@ -485,6 +487,7 @@ resource "aws_ecs_task_definition" "fargate_queue" {
   depends_on = [
     aws_iam_role.ecs_task,
     aws_iam_role.ecs_service,
+    aws_secretsmanager_secret.dockerhub,
   ]
 
   tags = {
@@ -540,6 +543,7 @@ resource "aws_ecs_task_definition" "fargate_migrate" {
   depends_on = [
     aws_iam_role.ecs_task,
     aws_iam_role.ecs_service,
+    aws_secretsmanager_secret.dockerhub,
   ]
 
   tags = {
