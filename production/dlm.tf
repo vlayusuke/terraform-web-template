@@ -46,6 +46,10 @@ resource "aws_dlm_lifecycle_policy" "ebs_backup_policy" {
     ]
   }
 
+  depends_on = [
+    aws_iam_role.dlm,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-dlm-ebs-backup-policy"
   }
