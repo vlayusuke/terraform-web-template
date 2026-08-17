@@ -102,6 +102,11 @@ resource "aws_lb_listener_rule" "main" {
     target_group_arn = aws_lb_target_group.alb_external_tg.arn
   }
 
+  depends_on = [
+    aws_lb_listener.alb_external_listener,
+    aws_lb_target_group.alb_external_tg,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-alb-external-listener-rule"
   }
@@ -133,6 +138,11 @@ resource "aws_lb_listener_rule" "naked" {
       status_code = "HTTP_301"
     }
   }
+
+  depends_on = [
+    aws_lb_listener.alb_external_listener,
+    aws_lb_target_group.alb_external_tg,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-alb-external-listener-rule-redirect"
