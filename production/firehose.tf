@@ -25,6 +25,10 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
     prevent_destroy = false
   }
 
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-adf-aur-logs-audit-to-s3"
   }
@@ -53,6 +57,10 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_error" {
   lifecycle {
     prevent_destroy = false
   }
+
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-adf-aur-logs-error-to-s3"
@@ -83,6 +91,10 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_general" {
     prevent_destroy = false
   }
 
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-adf-aur-logs-general-to-s3"
   }
@@ -112,6 +124,10 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_slowquery" {
     prevent_destroy = false
   }
 
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-adf-aur-logs-slowquery-to-s3"
   }
@@ -140,6 +156,10 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" 
   lifecycle {
     prevent_destroy = false
   }
+
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-adf-aur-logs-auth-error-to-s3"
@@ -173,6 +193,10 @@ resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
   lifecycle {
     prevent_destroy = false
   }
+
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-adf-elc-logs-redis-to-s3"
@@ -208,6 +232,10 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_app" {
     prevent_destroy = false
   }
 
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-adf-ecs-logs-${each.key}-to-s3"
   }
@@ -241,6 +269,10 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_nginx" {
   lifecycle {
     prevent_destroy = false
   }
+
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-adf-ecs-logs-${each.key}-to-s3"
@@ -276,6 +308,10 @@ resource "aws_kinesis_firehose_delivery_stream" "lambda_logs" {
     prevent_destroy = false
   }
 
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-adf-lmd-logs-${each.key}-to-s3"
   }
@@ -308,6 +344,10 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_logs" {
   lifecycle {
     prevent_destroy = false
   }
+
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-adf-ses-logs-to-s3"
@@ -348,6 +388,10 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_event_logs" {
     prevent_destroy = false
   }
 
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-adf-ses-event-logs-to-s3"
   }
@@ -380,6 +424,10 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_logs" {
   lifecycle {
     prevent_destroy = false
   }
+
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-adf-sns-logs-to-s3"
@@ -414,6 +462,10 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_event_logs" {
     prevent_destroy = false
   }
 
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-adf-sns-event-logs-to-s3"
   }
@@ -446,6 +498,10 @@ resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
   lifecycle {
     prevent_destroy = false
   }
+
+  depends_on = [
+    aws_iam_role.amazon_data_firehose,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-adf-ec2-bastion-logs-to-s3"
