@@ -156,13 +156,14 @@ resource "aws_ses_event_destination" "cloudwatch" {
   enabled                = true
 
   matching_types = [
+    "reject",
     "bounce",
     "complaint",
   ]
 
   cloudwatch_destination {
+    dimension_name = "AmazonSES-SendEvent"
     default_value  = "default"
-    dimension_name = "dimension"
     value_source   = "emailHeader"
   }
 }
