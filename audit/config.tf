@@ -31,6 +31,9 @@ resource "aws_config_delivery_channel" "default" {
 
   depends_on = [
     aws_config_configuration_recorder.default,
+    aws_iam_role_policy_attachment.config,
+    aws_s3_bucket_policy.config_logs,
+    aws_sns_topic.event_notifications_audit
   ]
 }
 
