@@ -30,8 +30,8 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
   }
 
   depends_on = [
-    aws_iam_role.lambda_cloudwatch,
     aws_kms_key.lambda,
+    aws_iam_role_policy_attachment.lambda_cloudwatch,
   ]
 
   tags = {
@@ -87,8 +87,8 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
   }
 
   depends_on = [
-    aws_iam_role.lambda_cloudwatch,
     aws_kms_key.lambda,
+    aws_iam_role_policy_attachment.lambda_cloudwatch,
   ]
 
   tags = {
@@ -137,8 +137,8 @@ resource "aws_lambda_function" "lambda_rds_control" {
   }
 
   depends_on = [
-    aws_iam_role.lambda_rds_control,
     aws_kms_key.lambda,
+    aws_iam_role_policy_attachment.lambda_rds_control,
   ]
 
   tags = {
@@ -166,7 +166,7 @@ resource "aws_lambda_function_event_invoke_config" "lambda_rds_control" {
   }
 
   depends_on = [
-    aws_iam_role.lambda_rds_control,
+    aws_iam_role_policy_attachment.lambda_rds_control,
   ]
 }
 
@@ -213,8 +213,8 @@ resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
   }
 
   depends_on = [
-    aws_iam_role.lambda_schedule_ecs_maintenance,
     aws_kms_key.lambda,
+    aws_iam_role_policy_attachment.lambda_schedule_ecs_maintenance,
   ]
 
   tags = {
@@ -236,7 +236,7 @@ resource "aws_lambda_function_event_invoke_config" "lambda_schedule_ecs_maintena
   }
 
   depends_on = [
-    aws_iam_role.lambda_schedule_ecs_maintenance,
+    aws_iam_role_policy_attachment.lambda_schedule_ecs_maintenance,
   ]
 }
 
@@ -289,8 +289,8 @@ resource "aws_lambda_function" "lambda_execute_ecs_force_deployment" {
   }
 
   depends_on = [
-    aws_iam_role.lambda_execute_ecs_force_deployment,
     aws_kms_key.lambda,
+    aws_iam_role_policy_attachment.lambda_execute_ecs_force_deployment,
   ]
 
   tags = {
@@ -318,7 +318,7 @@ resource "aws_lambda_function_event_invoke_config" "lambda_execute_ecs_force_dep
   }
 
   depends_on = [
-    aws_iam_role.lambda_execute_ecs_force_deployment,
+    aws_iam_role_policy_attachment.lambda_execute_ecs_force_deployment,
   ]
 }
 
