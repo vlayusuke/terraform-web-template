@@ -241,8 +241,8 @@ resource "aws_ecs_task_definition" "fargate_app" {
 
   depends_on = [
     aws_efs_file_system.main,
-    aws_iam_role.ecs_task,
-    aws_iam_role.ecs_service,
+    aws_iam_role_policy_attachment.ecs_task,
+    aws_iam_role_policy_attachment.ecs_service,
     aws_secretsmanager_secret.dockerhub,
   ]
 
@@ -363,8 +363,8 @@ resource "aws_ecs_task_definition" "fargate_cron" {
   }
 
   depends_on = [
-    aws_iam_role.ecs_task,
-    aws_iam_role.ecs_service,
+    aws_iam_role_policy_attachment.ecs_task,
+    aws_iam_role_policy_attachment.ecs_service,
     aws_secretsmanager_secret.dockerhub,
   ]
 
@@ -485,8 +485,8 @@ resource "aws_ecs_task_definition" "fargate_queue" {
   }
 
   depends_on = [
-    aws_iam_role.ecs_task,
-    aws_iam_role.ecs_service,
+    aws_iam_role_policy_attachment.ecs_task,
+    aws_iam_role_policy_attachment.ecs_service,
     aws_secretsmanager_secret.dockerhub,
   ]
 
@@ -541,8 +541,8 @@ resource "aws_ecs_task_definition" "fargate_migrate" {
   }
 
   depends_on = [
-    aws_iam_role.ecs_task,
-    aws_iam_role.ecs_service,
+    aws_iam_role_policy_attachment.ecs_task,
+    aws_iam_role_policy_attachment.ecs_service,
     aws_secretsmanager_secret.dockerhub,
   ]
 
