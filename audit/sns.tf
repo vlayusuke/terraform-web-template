@@ -23,6 +23,10 @@ resource "aws_sns_topic" "event_notifications_audit" {
     }
   })
 
+  depends_on = [
+    aws_iam_role_policy_attachment.lambda_cloudwatch_audit,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-sns-event-notifications"
   }
@@ -91,6 +95,25 @@ resource "aws_sns_topic" "config_notifications" {
   lambda_failure_feedback_role_arn = aws_iam_role.lambda_cloudwatch_audit.arn
   lambda_success_feedback_role_arn = aws_iam_role.lambda_cloudwatch_audit.arn
   signature_version                = 2
+
+  delivery_policy = jsonencode({
+    "http" : {
+      "defaultHealthyRetryPolicy" : {
+        "minDelayTarget" : 20,
+        "maxDelayTarget" : 20,
+        "numRetries" : 3,
+        "numMaxDelayRetries" : 0,
+        "numNoDelayRetries" : 0,
+        "numMinDelayRetries" : 0,
+        "backoffFunction" : "linear"
+      },
+      "disableSubscriptionOverrides" : false
+    }
+  })
+
+  depends_on = [
+    aws_iam_role_policy_attachment.lambda_cloudwatch_audit,
+  ]
 
   tags = {
     Name = "${local.project}-${local.env}-sns-cfg-notifications"
