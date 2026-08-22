@@ -30,7 +30,7 @@ resource "aws_cloudtrail" "audit" {
     aws_s3_bucket.cloudtrail_logs,
     aws_s3_bucket_policy.cloudtrail_logs,
     aws_kms_key.cloudtrail,
-    aws_iam_role.cloudtrail,
+    aws_iam_role_policy_attachment.cloudtrail,
     aws_cloudwatch_log_group.cloudtrail,
     aws_sns_topic.event_notifications_audit,
   ]
