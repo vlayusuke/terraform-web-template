@@ -47,7 +47,7 @@ resource "aws_dlm_lifecycle_policy" "ebs_backup_policy" {
   }
 
   depends_on = [
-    aws_iam_role.dlm,
+    aws_iam_role_policy_attachment.dlm,
   ]
 
   tags = {
