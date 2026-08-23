@@ -276,6 +276,11 @@ resource "aws_wafv2_web_acl" "main" {
     sampled_requests_enabled   = true
   }
 
+  depends_on = [
+    aws_s3_bucket.waf_logs,
+    aws_wafv2_web_acl_logging_configuration.main,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-waf-web-acls-main"
   }
