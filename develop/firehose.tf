@@ -26,7 +26,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_audit" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
   ]
 
   tags = {
@@ -59,7 +59,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_error" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
   ]
 
   tags = {
@@ -92,7 +92,7 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_general" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
   ]
 
   tags = {
@@ -125,7 +125,8 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_slowquery" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.aurora_logs,
   ]
 
   tags = {
@@ -158,7 +159,8 @@ resource "aws_kinesis_firehose_delivery_stream" "aurora_logs_iam_db_auth_error" 
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.aurora_logs,
   ]
 
   tags = {
@@ -195,7 +197,8 @@ resource "aws_kinesis_firehose_delivery_stream" "elasticache_logs" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.elasticache_logs,
   ]
 
   tags = {
@@ -233,7 +236,8 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_app" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.ecs_logs,
   ]
 
   tags = {
@@ -271,7 +275,8 @@ resource "aws_kinesis_firehose_delivery_stream" "ecs_logs_nginx" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.ecs_logs,
   ]
 
   tags = {
@@ -309,7 +314,8 @@ resource "aws_kinesis_firehose_delivery_stream" "lambda_logs" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.lambda_logs,
   ]
 
   tags = {
@@ -346,7 +352,8 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_logs" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.ses_logs,
   ]
 
   tags = {
@@ -389,7 +396,8 @@ resource "aws_kinesis_firehose_delivery_stream" "ses_event_logs" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.ses_logs,
   ]
 
   tags = {
@@ -426,7 +434,8 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_logs" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.sns_logs,
   ]
 
   tags = {
@@ -463,7 +472,8 @@ resource "aws_kinesis_firehose_delivery_stream" "sns_event_logs" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.sns_logs,
   ]
 
   tags = {
@@ -500,7 +510,8 @@ resource "aws_kinesis_firehose_delivery_stream" "bastion_logs" {
   }
 
   depends_on = [
-    aws_iam_role.amazon_data_firehose,
+    aws_iam_role_policy_attachment.amazon_data_firehose,
+    aws_s3_bucket.bastion,
   ]
 
   tags = {
