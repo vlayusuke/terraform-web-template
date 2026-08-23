@@ -39,7 +39,7 @@ resource "aws_scheduler_schedule" "rds_control_start" {
   }
 
   depends_on = [
-    aws_iam_role.event_bridge_scheduler,
+    aws_iam_role_policy_attachment.event_bridge_scheduler,
     aws_kms_key.event_bridge,
   ]
 }
@@ -74,7 +74,7 @@ resource "aws_scheduler_schedule" "rds_control_stop" {
   }
 
   depends_on = [
-    aws_iam_role.event_bridge_scheduler,
+    aws_iam_role_policy_attachment.event_bridge_scheduler,
     aws_kms_key.event_bridge,
   ]
 }
