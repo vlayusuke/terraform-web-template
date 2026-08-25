@@ -309,6 +309,10 @@ resource "aws_vpc_endpoint" "s3_gateway" {
     dns_record_ip_type = "ipv4"
   }
 
+  depends_on = [
+    aws_route_table.main_private,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-vpce-s3"
   }
