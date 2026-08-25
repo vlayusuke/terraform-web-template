@@ -20,6 +20,10 @@ resource "aws_chatbot_slack_channel_configuration" "chatbot_notifications_for_sl
     aws_sns_topic.event_notifications.arn,
   ]
 
+  depends_on = [
+    aws_iam_role_policy_attachment.chatbot,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-chatbot-notifications-for-slack"
   }
@@ -43,6 +47,10 @@ resource "aws_chatbot_slack_channel_configuration" "chatbot_notifications_for_sl
 #     aws_sns_topic.event_alarm.arn,
 #     aws_sns_topic.inspector_notifications.arn,
 #     aws_sns_topic.event_notifications.arn,
+#   ]
+#
+#   depends_on = [
+#     aws_iam_role_policy_attachment.chatbot,
 #   ]
 #
 #   tags = {
