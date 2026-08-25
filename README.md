@@ -35,7 +35,7 @@ Web3レイヤー構成によるWebアプリケーション向けの開発環境�
 
 ### PythonのVersionについて
 
-Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用いてパッケージを管理している場合には、定期的に`brew outdated`コマンドを実行して、更新状況を能動的に確認し、適宜最新バージョンに追随するようにしてください。
+Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用いてパッケージを管理している場合には、定期的にterminalで`brew outdated`コマンドを実行して、更新状況を能動的に確認し、適宜最新バージョンに追随するようにしてください。
 
 ### Terraformや各種ProviderのVersion
 
@@ -74,12 +74,12 @@ Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用い�
 
 ### Terraformコマンドを実行する際の注意点
 
-- Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。このテンプレートでは、サンプルとして、GitHubリモートリポジトリ上での管理対象としない代表的な値のみを実装しています。利用方法に応じて適宜修正をしてください。
+- Terraformコマンドを実行する前に、各ディレクトリの`terraform.tfvars.sample`に記載されている内容に従って、`terraform.tfvars`を実装してください。このテンプレートでは、サンプルとして、GitHubリモートリポジトリ上での管理対象としない代表的な値のみを実装しています。利用方法に応じて適宜修正を行なってください。
 - `base_locals.tf`の`# project info`に設定している、`project`、`author`、`email`の値を修正してください。
 
 ## 環境構築準備手順
 
-環境構築準備手順は以下の通りです。(macOSのTerminal上でTerraformコマンドを実行することを前提としています)
+環境構築準備手順は以下の通りです。(ここでは、macOSのTerminal上でTerraformコマンドを実行することを前提としています)
 
 ### プロファイルの設定
 
@@ -94,7 +94,7 @@ output = json
 mfa_serial=arn:aws:iam::{aws-account}:mfa/{mfa-device-name}
 ```
 
-- {mfa-device-name}には、IAMコンソールのご自身のIAMユーザーの「多要素認証(MFA)」セクションに表示されている識別子の仮装MFAデバイス名を設定してください。
+- {mfa-device-name}には、AWSマネージメントコンソールのIAMコンソール上で設定した、ご自身のIAMユーザーの「多要素認証(MFA)」セクションに表示されている識別子の仮想MFAデバイス名を設定してください。
 
 #### `~/.aws/credentials`
 
@@ -104,13 +104,13 @@ aws_access_key_id = ********************
 aws_secret_access_key = ********************
 ```
 
-なお、Terraformコマンド実行時に利用するクレデンシャル情報の管理については、`aws-vault`の利用もご検討ください。
+なお、Terraformコマンド実行時に利用するクレデンシャル情報(アクセスキー & シークレットアクセスキー)の管理については、`aws-vault`の利用も検討してください。
 
 - [aws-vaultの使い方と仕組み](https://qiita.com/takuzo8679/items/6727f46b0aaf6df0a864)
 
 ### Terraformコマンドを実行する際に必要な事前準備
 
-Terraformコマンドを実行する前に、AWS CLIやTerraform CLIなどの必要なツールを、macOSデバイスまたはWindowsデバイスにインストールしてください。また、`terraform.tf`で実装している`terraform.tfstate`ファイルはS3バックエンドで保管するという設定にしているため、事前に各環境のAWSアカウントに紐づくAWSマネージメントコンソールの、Amazon S3コンソール内で、
+Terraformコマンドを実行する前に、AWS CLIやTerraform CLIなどの必要なツールを、macOSデバイスまたはWindowsデバイスにインストールしてください。また、`terraform.tf`で実装している`terraform.tfstate`ファイルはS3バックエンドで保管するという設定にしているため、事前に各環境のAWSアカウントに紐づくAWSマネージメントコンソールの、Amazon S3コンソール上で、
 
 ```hcl:terraform.tf
 backend "s3" {
@@ -139,7 +139,7 @@ terraform init \
 
 ### 複数のプラットフォームでTerraformコマンドを実行する際の注意点
 
-Terraformや各種Providerのバージョンのアップデートを行なうため、`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるProviderのチェックサムの値がずれてしまうことを防止する目的で、`terraform plan`コマンドを実行する前に、ターミナル上で必ず、以下のコマンドを実行してください。
+Terraformや各種Providerのバージョンのアップデートを行なうため、`terraform init -reconfigure`コマンドや`terraform init -upgrade`コマンドを実行する際に、macOSやWindowsなどの複数のプラットフォーム間で`.terraform.lock.hcl`に含まれるProviderのチェックサムの値がずれてしまうことを防止する目的で、`terraform plan`コマンドを実行する前に、Terminal上で必ず、以下のTerraformコマンドを実行してください。
 
 ```bash
 terraform providers lock \
@@ -154,7 +154,7 @@ terraform providers lock \
 
 ### 踏み台サーバー用EC2インスタンスのKey Pairの作成
 
-`terraform.tfvars`に設定する、踏み台サーバー用のEC2インスタンスのKey Pairの作成を行なってください。暗号化スイートは`ed25519`で固定します。
+`terraform.tfvars`に設定する、踏み台サーバー用のEC2インスタンスのKey Pairの作成を行なってください。暗号化スイートは`ed25519`で固定とします。
 
 ```bash
 ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_terraform-web-template -C "Key Pair for terraform-web-template"
@@ -164,7 +164,7 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_terraform-web-template -C "Key Pair f
 
 ### 親ドメインへのDNSのNSレコード追加確認方法
 
-親ドメインに対して、発行されたDNSのNSレコードが追加されていることを確認する際は、Amazon Route 53のNSレコード発行が完了したタイミングで、ターミナルより以下のコマンドを実行し、親ドメインへの追加確認をお願いします。`{env}`には、必要に応じて環境名を代入してください。
+親ドメインに対して、発行されたDNSのNSレコードが追加されていることを確認する際は、Amazon Route 53の、NSレコードの発行が完了したタイミングで、Terminalより以下のコマンドを実行し、親ドメインへの追加確認をお願いします。`{env}`には、必要に応じて環境名を代入してください。
 
 ```bash
 dig +noall +answer {env}.app.example.org. ns
