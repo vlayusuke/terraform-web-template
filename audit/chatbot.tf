@@ -45,6 +45,10 @@ resource "aws_chatbot_slack_channel_configuration" "chatbot_audit_notifications_
 #     aws_sns_topic.event_notifications_audit.arn,
 #   ]
 #
+#  depends_on = [
+#    aws_iam_role_policy_attachment.chatbot_audit,
+#  ]
+#
 #   tags = {
 #     Name = "${local.project}-${local.env}-chatbot-notifications-for-teams"
 #   }
