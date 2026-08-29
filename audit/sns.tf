@@ -23,10 +23,6 @@ resource "aws_sns_topic" "event_notifications_audit" {
     }
   })
 
-  depends_on = [
-    aws_iam_role_policy_attachment.lambda_cloudwatch_audit,
-  ]
-
   tags = {
     Name = "${local.project}-${local.env}-sns-event-notifications"
   }
@@ -110,10 +106,6 @@ resource "aws_sns_topic" "config_notifications" {
       "disableSubscriptionOverrides" : false
     }
   })
-
-  depends_on = [
-    aws_iam_role_policy_attachment.lambda_cloudwatch_audit,
-  ]
 
   tags = {
     Name = "${local.project}-${local.env}-sns-cfg-notifications"

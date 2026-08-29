@@ -199,7 +199,7 @@ resource "aws_lambda_function" "lambda_security_notice" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_security_notice,
+    aws_iam_role_policy_attachment.security_notice,
     aws_kms_key.lambda,
   ]
 
