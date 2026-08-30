@@ -637,6 +637,20 @@ data "aws_iam_policy_document" "ecs_task" {
       "arn:aws:secretsmanager:${local.region}:${data.aws_caller_identity.current.account_id}:secret:${local.project}-${local.env}-smg-dockerhub-credentials*",
     ]
   }
+
+  statement {
+    sid    = "AllowECSExec"
+    effect = "Allow"
+    actions = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel",
+    ]
+    resources = [
+      "*",
+    ]
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task" {
