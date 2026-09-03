@@ -39,11 +39,11 @@ Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用い�
 
 ### Terraformや各種ProviderのVersion
 
-| Resources                  | Version |
-| :------------------------- | ------: |
-| Terraform                  | 1.16.0  |
-| AWS Provider               | 6.62.0  |
-| AWS Cloud Control Provider | 1.99.0  |
+| Resources                  | Version  |
+| :------------------------- | -------: |
+| Terraform                  |  1.16.0  |
+| AWS Provider               |  6.63.0  |
+| AWS Cloud Control Provider | 1.100.0  |
 
 ### AWS Lambda関数に使用しているPythonのruntimeのVersion
 
