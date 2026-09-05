@@ -9,7 +9,7 @@ resource "aws_rds_cluster" "aurora" {
   port                                  = 3306
   database_name                         = local.database_name
   master_username                       = local.database_master_user_name
-  master_password                       = aws_ssm_parameter.mysql_password.value
+  manage_master_user_password           = true
   iam_database_authentication_enabled   = true
   backup_retention_period               = 14
   preferred_backup_window               = "20:00-21:00"
@@ -43,13 +43,11 @@ resource "aws_rds_cluster" "aurora" {
       engine_version,
       database_name,
       master_username,
-      master_password,
     ]
   }
 
   depends_on = [
     aws_kms_key.aurora,
-    aws_ssm_parameter.mysql_password,
     aws_rds_cluster_parameter_group.aurora,
   ]
 
