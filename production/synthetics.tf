@@ -32,6 +32,7 @@ resource "aws_synthetics_canary" "check_access_top_page" {
   zip_file                 = data.archive_file.canary_check_access_top_page.output_path
   success_retention_period = 31
   failure_retention_period = 31
+  kms_key_arn              = aws_kms_key.synthetics.arn
 
   schedule {
     duration_in_seconds = 0
@@ -80,6 +81,7 @@ resource "aws_synthetics_canary" "check_input_top_page" {
   zip_file                 = data.archive_file.canary_check_input_top_page.output_path
   success_retention_period = 31
   failure_retention_period = 31
+  kms_key_arn              = aws_kms_key.synthetics.arn
 
   schedule {
     duration_in_seconds = 0
