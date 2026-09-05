@@ -22,6 +22,12 @@ resource "aws_secretsmanager_secret_version" "dockerhub" {
     username = var.dockerhub_username
     password = var.dockerhub_password
   })
+
+  lifecycle {
+    ignore_changes = [
+      secret_string,
+    ]
+  }
 }
 
 resource "aws_secretsmanager_secret_rotation" "dockerhub" {
@@ -54,9 +60,19 @@ resource "aws_secretsmanager_secret_version" "mysql" {
     username = var.mysql_username
     password = var.mysql_password
   })
+
+  lifecycle {
+    ignore_changes = [
+      secret_string,
+    ]
+  }
 }
 
 resource "aws_secretsmanager_secret_rotation" "mysql" {
-  secret_id        = aws_secretsmanager_secret.mysql.id
+  secret_id        = aws_rds_cluster.aurora.master_user_secret[0].secret_arn
   rotation_enabled = false
+
+  depends_on = [
+    aws_rds_cluster.aurora,
+  ]
 }
