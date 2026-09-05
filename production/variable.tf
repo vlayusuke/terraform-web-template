@@ -43,6 +43,16 @@ variable "dockerhub_password" {
   sensitive = true
 }
 
+variable "mysql_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "mysql_password" {
+  type      = string
+  sensitive = true
+}
+
 
 # ================================================================================
 # Amazon CloudFront Key-Value Store Settings
