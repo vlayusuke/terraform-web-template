@@ -23,3 +23,8 @@ resource "aws_secretsmanager_secret_version" "dockerhub" {
     password = var.dockerhub_password
   })
 }
+
+resource "aws_secretsmanager_secret_rotation" "dockerhub" {
+  secret_id        = aws_secretsmanager_secret.dockerhub.id
+  rotation_enabled = false
+}
