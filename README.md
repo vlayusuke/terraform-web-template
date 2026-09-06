@@ -41,27 +41,27 @@ Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用い�
 
 | Resources                  | Version  |
 | :------------------------- | -------: |
-| Terraform                  |  1.16.0  |
-| AWS Provider               |  6.63.0  |
-| AWS Cloud Control Provider | 1.100.0  |
+| Terraform                  |   1.16.0 |
+| AWS Provider               |   6.63.0 |
+| AWS Cloud Control Provider |  1.100.0 |
 
 ### AWS Lambda関数に使用しているPythonのruntimeのVersion
 
-| Resources                  | Version |
-| :------------------------- | ------: |
-| Python                     | 3.14    |
+| Resources                  | Version  |
+| :------------------------- | -------: |
+| Python                     |     3.14 |
 
 ## 構築されるAWSリソースの数
 
 このテンプレートを実行することにより構築されるAWSリソースの数は、以下の表の通りです。
 
-| Environmtnt | Resource | Notice           |
-| :---------- | -------: | :--------------- |
-| Root        |        2 | N/A              |
-| develop     |      604 | N/A              |
-| staging     |      604 | N/A              |
-| production  |      604 | N/A              |
-| audit       |      138 | Each AWS account |
+| Environment | Resources | Notice           |
+| :---------- | --------: | :--------------- |
+| Root        |         2 | N/A              |
+| develop     |       604 | N/A              |
+| staging     |       604 | N/A              |
+| production  |       604 | N/A              |
+| audit       |       138 | Each AWS account |
 
 ## 環境構築をする際の注意事項
 
