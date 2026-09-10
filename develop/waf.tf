@@ -287,6 +287,19 @@ resource "aws_wafv2_web_acl" "main" {
 
 
 # ===============================================================================
+# AWS WAFv2 WebACL Association
+# ===============================================================================
+resource "aws_wafv2_web_acl_association" "main" {
+  resource_arn = aws_cloudfront_distribution.main.arn
+  web_acl_arn  = aws_wafv2_web_acl.main.arn
+
+  depends_on = [
+    aws_wafv2_web_acl.main,
+  ]
+}
+
+
+# ===============================================================================
 # AWS WAFv2 Logging Configuration
 # ===============================================================================
 resource "aws_wafv2_web_acl_logging_configuration" "main" {
