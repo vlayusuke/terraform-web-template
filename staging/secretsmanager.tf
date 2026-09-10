@@ -72,6 +72,10 @@ resource "aws_secretsmanager_secret_rotation" "mysql" {
   secret_id        = aws_rds_cluster.aurora.master_user_secret[0].secret_arn
   rotation_enabled = false
 
+  rotation_rules {
+    automatically_after_days = 30
+  }
+
   depends_on = [
     aws_rds_cluster.aurora,
   ]
