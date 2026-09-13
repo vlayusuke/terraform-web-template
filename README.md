@@ -58,9 +58,9 @@ Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用い�
 | Environment | Resources | Notice           |
 | :---------- | --------: | :--------------- |
 | Root        |         2 | N/A              |
-| develop     |       604 | N/A              |
-| staging     |       604 | N/A              |
-| production  |       604 | N/A              |
+| develop     |       603 | N/A              |
+| staging     |       603 | N/A              |
+| production  |       603 | N/A              |
 | audit       |       138 | Each AWS account |
 
 ## 環境構築をする際の注意事項
