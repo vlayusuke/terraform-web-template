@@ -384,23 +384,25 @@ data "aws_iam_policy_document" "ecs_service" {
   }
 
   statement {
-    sid    = "GetKeyAndParam"
+    sid    = "GetKeyAndParamAndSecrets"
     effect = "Allow"
     actions = [
       "kms:Decrypt",
       "ssm:GetParameters",
       "ssm:GetParameter",
+      "secretsmanager:GetSecretValue",
     ]
     resources = [
       aws_kms_key.application.arn,
       aws_kms_key.aurora.arn,
-      aws_ssm_parameter.mysql_password.arn,
       aws_ssm_parameter.jwt_secret.arn,
       aws_ssm_parameter.app_key.arn,
       aws_ssm_parameter.aurora_writer_endpoint.arn,
       aws_ssm_parameter.aurora_reader_endpoint.arn,
       aws_ssm_parameter.elasticache_writer_endpoint.arn,
       aws_ssm_parameter.elasticache_reader_endpoint.arn,
+      aws_secretsmanager_secret.mysql.arn,
+      aws_secretsmanager_secret_version.mysql.secret_arn,
     ]
   }
 
@@ -429,7 +431,8 @@ data "aws_iam_policy_document" "ecs_service" {
     ]
     resources = [
       aws_kms_key.application.arn,
-      "arn:aws:secretsmanager:${local.region}:${data.aws_caller_identity.current.account_id}:secret:${local.project}-${local.env}-smg-dockerhub-credentials*",
+      aws_secretsmanager_secret.dockerhub.arn,
+      aws_secretsmanager_secret_version.dockerhub.secret_arn,
     ]
   }
 }
