@@ -756,7 +756,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_rejected_connection" {
 # ===============================================================================
 resource "aws_cloudwatch_metric_alarm" "rds_cpu_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-rds-cpu-high-alarm"
-  alarm_description   = "Alarm when RDS CPUUtilization exceeds 80%"
+  alarm_description   = "Alarm when Aurora CPUUtilization exceeds 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -786,7 +786,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu_high" {
 
 resource "aws_cloudwatch_metric_alarm" "rds_memory_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-rds-memory-high-alarm"
-  alarm_description   = "Alarm when RDS FreeableMemory is less than or equal to 256000000"
+  alarm_description   = "Alarm when Aurora FreeableMemory is less than or equal to 256 MB"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "FreeableMemory"
@@ -816,7 +816,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_memory_high" {
 
 resource "aws_cloudwatch_metric_alarm" "rds_connections_high" {
   alarm_name          = "${local.project}-${local.env}-cwt-rds-connections-high-alarm"
-  alarm_description   = "Alarm when RDS DatabaseConnections is greater than or equal to 80% of max connections"
+  alarm_description   = "Alarm when Aurora DatabaseConnections is greater than or equal to 80% of max connections"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "DatabaseConnections"
