@@ -49,7 +49,7 @@ Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用い�
 
 | Resources                  | Version  |
 | :------------------------- | -------: |
-| Python                     |   3.14.6 |
+| Python                     |   3.14.8 |
 
 ## 構築されるAWSリソースの数
 
