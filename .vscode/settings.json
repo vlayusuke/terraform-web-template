@@ -45,6 +45,7 @@
     "!Split",
     "!Split sequence"
   ],
+  "biome.enabled": false,
   "editor.renderWhitespace": "all",
   "editor.tabSize": 2,
   "editor.autoIndent": "full",
