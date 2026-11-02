@@ -2004,6 +2004,41 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_synthetics" {
 
 
 # ================================================================================
+# AWS IAM for AWS Backup
+# ================================================================================
+resource "aws_iam_role" "backup" {
+  name               = "${local.project}-${local.env}-iam-backup-role"
+  assume_role_policy = data.aws_iam_policy_document.backup_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-backup-role"
+  }
+}
+
+data "aws_iam_policy_document" "backup_assume" {
+  statement {
+    sid    = "BackupAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "backup.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "backup" {
+  role       = aws_iam_role.backup.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+}
+
+
+# ================================================================================
 # Amazon EC2 Instance Profile for Bastion
 # ================================================================================
 resource "aws_iam_instance_profile" "bastion" {
