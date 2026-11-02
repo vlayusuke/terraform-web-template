@@ -2037,6 +2037,37 @@ resource "aws_iam_role_policy_attachment" "backup" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
 }
 
+resource "aws_iam_role" "backup_restore" {
+  name               = "${local.project}-${local.env}-iam-backup-restore-role"
+  assume_role_policy = data.aws_iam_policy_document.backup_restore_assume.json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-backup-restore-role"
+  }
+}
+
+data "aws_iam_policy_document" "backup_restore_assume" {
+  statement {
+    sid    = "BackupRestoreAssume"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "backup.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "backup_restore" {
+  role       = aws_iam_role.backup_restore.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
+}
+
 
 # ================================================================================
 # Amazon EC2 Instance Profile for Bastion
