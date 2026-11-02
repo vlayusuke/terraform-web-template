@@ -41,7 +41,7 @@ Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用い�
 
 | Resources                  | Version  |
 | :------------------------- | -------: |
-| Terraform                  |  1.16.6  |
+| Terraform                  |  1.17.1  |
 | AWS Provider               |  6.71.0  |
 | AWS Cloud Control Provider | 1.108.0  |
 
