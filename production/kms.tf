@@ -254,6 +254,71 @@ data "aws_iam_policy_document" "aurora_kms_policy" {
 
 
 # ===============================================================================
+# AWS KMS Key for Amazon Aurora (ap-northeast-3)
+# ===============================================================================
+resource "aws_kms_key" "aurora_osaka" {
+  provider                = aws.osaka
+  description             = "${local.project}-${local.env}-kms-aur-key-osaka"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-aur-key-osaka"
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS Key Policy for Amazon Aurora (ap-northeast-3)
+# ===============================================================================
+resource "aws_kms_key_policy" "aurora_osaka" {
+  provider = aws.osaka
+  key_id   = aws_kms_key.aurora_osaka.key_id
+  policy   = data.aws_iam_policy_document.aurora_osaka_kms_policy.json
+}
+
+data "aws_iam_policy_document" "aurora_osaka_kms_policy" {
+  statement {
+    sid    = "AuroraKMS"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      aws_kms_key.aurora_osaka.arn,
+    ]
+    principals {
+      type = "Service"
+      identifiers = [
+        "rds.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AllowAccountAccess"
+    effect = "Allow"
+    actions = [
+      "kms:*",
+    ]
+    resources = [
+      aws_kms_key.aurora_osaka.arn,
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+  }
+}
+
+
+# ===============================================================================
 # AWS KMS Key for Amazon ElastiCache
 # ===============================================================================
 resource "aws_kms_key" "elasticache" {
@@ -573,6 +638,94 @@ data "aws_iam_policy_document" "synthetics_kms_policy" {
     ]
     resources = [
       aws_kms_key.synthetics.arn,
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS Key for AWS Backup Vault (ap-northeast-1)
+# ===============================================================================
+resource "aws_kms_key" "backup_vault" {
+  description             = "${local.project}-${local.env}-kms-bak-key"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-bak-key"
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS Key Policy for AWS Backup Vault (ap-northeast-1)
+# ===============================================================================
+resource "aws_kms_key_policy" "backup_vault" {
+  key_id = aws_kms_key.backup_vault.key_id
+  policy = data.aws_iam_policy_document.backup_vault_kms_policy.json
+}
+
+data "aws_iam_policy_document" "backup_vault_kms_policy" {
+  statement {
+    sid    = "AllowAccountAccess"
+    effect = "Allow"
+    actions = [
+      "kms:*",
+    ]
+    resources = [
+      aws_kms_key.backup_vault.arn,
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS Key for AWS Backup Vault (ap-northeast-3)
+# ===============================================================================
+resource "aws_kms_key" "backup_vault_osaka" {
+  provider                = aws.osaka
+  description             = "${local.project}-${local.env}-kms-bak-key-osaka"
+  enable_key_rotation     = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = "${local.project}-${local.env}-kms-bak-key-osaka"
+  }
+}
+
+
+# ===============================================================================
+# AWS KMS Key Policy for AWS Backup Vault (ap-northeast-3)
+# ===============================================================================
+resource "aws_kms_key_policy" "backup_vault_osaka" {
+  provider = aws.osaka
+  key_id   = aws_kms_key.backup_vault_osaka.key_id
+  policy   = data.aws_iam_policy_document.backup_vault_osaka_kms_policy.json
+}
+
+data "aws_iam_policy_document" "backup_vault_osaka_kms_policy" {
+  statement {
+    sid    = "AllowAccountAccess"
+    effect = "Allow"
+    actions = [
+      "kms:*",
+    ]
+    resources = [
+      aws_kms_key.backup_vault_osaka.arn,
     ]
     principals {
       type = "AWS"
