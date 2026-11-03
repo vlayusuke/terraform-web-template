@@ -234,65 +234,7 @@ data "aws_iam_policy_document" "ssm_messages" {
 
 
 # ===============================================================================
-# VPC Endpoint (Amazon EC2 - Messages)
-# ===============================================================================
-resource "aws_vpc_endpoint" "ec2_messages" {
-  vpc_id              = aws_vpc.main.id
-  service_name        = "com.amazonaws.${local.region}.ec2messages"
-  service_region      = local.region
-  vpc_endpoint_type   = "Interface"
-  ip_address_type     = "ipv4"
-  private_dns_enabled = true
-
-  security_group_ids = [
-    aws_security_group.vpce_ssm.id,
-  ]
-
-  subnet_ids = [
-    for subnet in aws_subnet.main_private :
-    subnet.id
-  ]
-
-  dns_options {
-    dns_record_ip_type = "ipv4"
-  }
-
-  tags = {
-    Name = "${local.project}-${local.env}-vpce-ec2-messages"
-  }
-}
-
-resource "aws_vpc_endpoint_policy" "ec2_messages" {
-  vpc_endpoint_id = aws_vpc_endpoint.ec2_messages.id
-  policy          = data.aws_iam_policy_document.ec2_messages.json
-}
-
-data "aws_iam_policy_document" "ec2_messages" {
-  statement {
-    sid    = "AllowEC2MessagesAccess"
-    effect = "Allow"
-    actions = [
-      "ec2messages:CreateControlChannel",
-      "ec2messages:CreateDataChannel",
-      "ec2messages:OpenControlChannel",
-      "ec2messages:OpenDataChannel",
-    ]
-    resources = [
-      "*",
-    ]
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        "*",
-      ]
-    }
-  }
-}
-
-
-# ===============================================================================
-# VPC Endpoint (Amazon S3 Bucket)
+# VPC Endpoint (Amazon S3 Bucket - Gateway Endpoint)
 # ===============================================================================
 resource "aws_vpc_endpoint" "s3_gateway" {
   vpc_id            = aws_vpc.main.id
