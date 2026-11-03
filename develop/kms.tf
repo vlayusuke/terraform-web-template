@@ -34,6 +34,7 @@ data "aws_iam_policy_document" "application_kms_policy" {
     resources = [
       aws_kms_key.application.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -54,6 +55,7 @@ data "aws_iam_policy_document" "application_kms_policy" {
     resources = [
       aws_kms_key.application.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -100,6 +102,7 @@ data "aws_iam_policy_document" "ecr_kms_policy" {
     resources = [
       aws_kms_key.ecr.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -117,6 +120,7 @@ data "aws_iam_policy_document" "ecr_kms_policy" {
     resources = [
       aws_kms_key.ecr.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -163,6 +167,7 @@ data "aws_iam_policy_document" "lambda_kms_policy" {
     resources = [
       aws_kms_key.lambda.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -180,6 +185,7 @@ data "aws_iam_policy_document" "lambda_kms_policy" {
     resources = [
       aws_kms_key.lambda.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -226,6 +232,7 @@ data "aws_iam_policy_document" "aurora_kms_policy" {
     resources = [
       aws_kms_key.aurora.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -243,6 +250,7 @@ data "aws_iam_policy_document" "aurora_kms_policy" {
     resources = [
       aws_kms_key.aurora.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -291,6 +299,7 @@ data "aws_iam_policy_document" "aurora_osaka_kms_policy" {
     resources = [
       aws_kms_key.aurora_osaka.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -308,6 +317,7 @@ data "aws_iam_policy_document" "aurora_osaka_kms_policy" {
     resources = [
       aws_kms_key.aurora_osaka.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -354,6 +364,7 @@ data "aws_iam_policy_document" "elasticache_kms_policy" {
     resources = [
       aws_kms_key.elasticache.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -371,6 +382,7 @@ data "aws_iam_policy_document" "elasticache_kms_policy" {
     resources = [
       aws_kms_key.elasticache.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -419,12 +431,14 @@ data "aws_iam_policy_document" "efs_kms_policy" {
     resources = [
       "*",
     ]
+
     principals {
       type = "AWS"
       identifiers = [
         "*",
       ]
     }
+
     condition {
       test     = "StringEquals"
       variable = "kms:ViaService"
@@ -432,6 +446,7 @@ data "aws_iam_policy_document" "efs_kms_policy" {
         "elasticfilesystem.${local.region}.amazonaws.com",
       ]
     }
+
     condition {
       test     = "StringEquals"
       variable = "kms:CallerAccount"
@@ -450,6 +465,7 @@ data "aws_iam_policy_document" "efs_kms_policy" {
     resources = [
       aws_kms_key.efs.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -496,6 +512,7 @@ data "aws_iam_policy_document" "ebs_kms_policy" {
     resources = [
       aws_kms_key.ebs.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -513,6 +530,7 @@ data "aws_iam_policy_document" "ebs_kms_policy" {
     resources = [
       aws_kms_key.ebs.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -559,6 +577,7 @@ data "aws_iam_policy_document" "event_bridge_kms_policy" {
     resources = [
       aws_kms_key.event_bridge.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -576,6 +595,7 @@ data "aws_iam_policy_document" "event_bridge_kms_policy" {
     resources = [
       aws_kms_key.event_bridge.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -622,6 +642,7 @@ data "aws_iam_policy_document" "synthetics_kms_policy" {
     resources = [
       aws_kms_key.synthetics.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -639,6 +660,7 @@ data "aws_iam_policy_document" "synthetics_kms_policy" {
     resources = [
       aws_kms_key.synthetics.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -682,6 +704,7 @@ data "aws_iam_policy_document" "backup_vault_kms_policy" {
     resources = [
       aws_kms_key.backup_vault.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -727,6 +750,7 @@ data "aws_iam_policy_document" "backup_vault_osaka_kms_policy" {
     resources = [
       aws_kms_key.backup_vault_osaka.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
