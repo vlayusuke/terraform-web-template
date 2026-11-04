@@ -442,7 +442,7 @@ resource "aws_iam_role_policy_attachment" "ecs_service" {
   policy_arn = aws_iam_policy.ecs_service.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_exec_to_ecs_service" {
+resource "aws_iam_role_policy_attachment" "ecs_service_managed" {
   role       = aws_iam_role.ecs_service.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
@@ -661,7 +661,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task" {
   policy_arn = aws_iam_policy.ecs_task.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_to_ecr_read_only" {
+resource "aws_iam_role_policy_attachment" "ecs_task_managed" {
   role       = aws_iam_role.ecs_task.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
@@ -1721,7 +1721,7 @@ resource "aws_iam_role_policy_attachment" "chatbot" {
   policy_arn = aws_iam_policy.chatbot.arn
 }
 
-resource "aws_iam_role_policy_attachment" "chatbot_resource_read_only_access" {
+resource "aws_iam_role_policy_attachment" "chatbot_managed" {
   role       = aws_iam_role.chatbot.name
   policy_arn = "arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess"
 }
@@ -1752,6 +1752,11 @@ data "aws_iam_policy_document" "chatbot_guardrail" {
       "arn:aws:chatbot::${data.aws_caller_identity.current.account_id}:chat-configuration/teams-channel/*",
     ]
   }
+}
+
+resource "aws_iam_role_policy_attachment" "chatbot_guardrail" {
+  role       = aws_iam_role.chatbot.name
+  policy_arn = aws_iam_policy.chatbot_guardrail.arn
 }
 
 
@@ -2032,7 +2037,43 @@ data "aws_iam_policy_document" "backup_assume" {
   }
 }
 
+resource "aws_iam_policy" "backup" {
+  count  = length(aws_rds_cluster_instance.aurora)
+  name   = "${local.project}-${local.env}-iam-backup-policy"
+  policy = data.aws_iam_policy_document.backup[count.index].json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-backup-policy"
+  }
+}
+
+data "aws_iam_policy_document" "backup" {
+  count = length(aws_rds_cluster_instance.aurora)
+
+  statement {
+    sid    = "BackupAccess"
+    effect = "Allow"
+    actions = [
+      "backup:StartBackupJob",
+      "backup:StopBackupJob",
+      "backup:ListBackupJobs",
+      "backup:GetBackupVaultAccessPolicy",
+      "backup:ListBackupVaults",
+    ]
+    resources = [
+      aws_rds_cluster.aurora.arn,
+      aws_rds_cluster_instance.aurora[count.index].arn,
+    ]
+  }
+}
+
 resource "aws_iam_role_policy_attachment" "backup" {
+  count      = length(aws_rds_cluster_instance.aurora)
+  role       = aws_iam_role.backup.name
+  policy_arn = aws_iam_policy.backup[count.index].arn
+}
+
+resource "aws_iam_role_policy_attachment" "backup_managed" {
   role       = aws_iam_role.backup.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
 }
@@ -2063,7 +2104,41 @@ data "aws_iam_policy_document" "backup_restore_assume" {
   }
 }
 
+resource "aws_iam_policy" "backup_restore" {
+  count  = length(aws_rds_cluster_instance.aurora)
+  name   = "${local.project}-${local.env}-iam-backup-restore-policy"
+  policy = data.aws_iam_policy_document.backup_restore[count.index].json
+
+  tags = {
+    Name = "${local.project}-${local.env}-iam-backup-restore-policy"
+  }
+}
+
+data "aws_iam_policy_document" "backup_restore" {
+  count = length(aws_rds_cluster_instance.aurora)
+
+  statement {
+    sid    = "BackupRestoreAccess"
+    effect = "Allow"
+    actions = [
+      "backup:StartRestoreJob",
+      "backup:ListRestoreJobs",
+      "backup:GetRecoveryPointRestoreMetadata",
+    ]
+    resources = [
+      aws_rds_cluster.aurora.arn,
+      aws_rds_cluster_instance.aurora[count.index].arn,
+    ]
+  }
+}
+
 resource "aws_iam_role_policy_attachment" "backup_restore" {
+  count      = length(aws_rds_cluster_instance.aurora)
+  role       = aws_iam_role.backup_restore.name
+  policy_arn = aws_iam_policy.backup_restore[count.index].arn
+}
+
+resource "aws_iam_role_policy_attachment" "backup_restore_managed" {
   role       = aws_iam_role.backup_restore.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
 }
@@ -2175,7 +2250,7 @@ resource "aws_iam_role_policy_attachment" "bastion" {
   policy_arn = aws_iam_policy.bastion.arn
 }
 
-resource "aws_iam_role_policy_attachment" "bastion_to_ssm" {
+resource "aws_iam_role_policy_attachment" "bastion_managed" {
   role       = aws_iam_role.bastion.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
