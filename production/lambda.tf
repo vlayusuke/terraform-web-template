@@ -9,7 +9,7 @@ resource "aws_lambda_function" "lambda_log_error_alert" {
   filename         = data.archive_file.lambda_log_error_alert.output_path
   source_code_hash = data.archive_file.lambda_log_error_alert.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
@@ -64,7 +64,7 @@ resource "aws_lambda_function" "lambda_metric_alarm" {
   filename         = data.archive_file.lambda_metric_alarm.output_path
   source_code_hash = data.archive_file.lambda_metric_alarm.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
@@ -120,7 +120,7 @@ resource "aws_lambda_function" "lambda_rds_control" {
   filename         = data.archive_file.lambda_rds_control.output_path
   source_code_hash = data.archive_file.lambda_rds_control.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
@@ -187,7 +187,7 @@ resource "aws_lambda_function" "lambda_schedule_ecs_maintenance" {
   filename         = data.archive_file.lambda_schedule_ecs_maintenance.output_path
   source_code_hash = data.archive_file.lambda_schedule_ecs_maintenance.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
@@ -270,7 +270,7 @@ resource "aws_lambda_function" "lambda_execute_ecs_force_deployment" {
   filename         = data.archive_file.lambda_execute_ecs_force_deployment.output_path
   source_code_hash = data.archive_file.lambda_execute_ecs_force_deployment.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
