@@ -2308,6 +2308,117 @@ data "aws_iam_policy_document" "synthetics_results_bucket_policy" {
 
 
 # ================================================================================
+# Amazon S3 Bucket for AWS Backup Reports
+# ================================================================================
+resource "aws_s3_bucket" "backup_reports" {
+  bucket = "${local.project}-${local.env}-s3-backup-reports-bucket"
+
+  tags = {
+    Name = "${local.project}-${local.env}-s3-backup-reports-bucket"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "backup_reports" {
+  bucket = aws_s3_bucket.backup_reports.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "backup_reports" {
+  bucket = aws_s3_bucket.backup_reports.bucket
+
+  rule {
+    blocked_encryption_types = [
+      "SSE-C"
+    ]
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+    bucket_key_enabled = false
+  }
+}
+
+resource "aws_s3_bucket_versioning" "backup_reports" {
+  bucket = aws_s3_bucket.backup_reports.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "backup_reports" {
+  bucket = aws_s3_bucket.backup_reports.id
+
+  rule {
+    id     = "transition-and-delete-object"
+    status = "Enabled"
+
+    filter {
+      object_size_greater_than = 0
+    }
+
+    expiration {
+      days = local.expire_days
+    }
+
+    transition {
+      days          = local.transition_days
+      storage_class = "GLACIER"
+    }
+
+    noncurrent_version_transition {
+      noncurrent_days = local.transition_days
+      storage_class   = "GLACIER"
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = local.expire_days
+    }
+  }
+
+  depends_on = [
+    aws_s3_bucket_versioning.backup_reports,
+  ]
+}
+
+resource "aws_s3_bucket_policy" "backup_reports" {
+  bucket = aws_s3_bucket.backup_reports.id
+  policy = data.aws_iam_policy_document.backup_reports_bucket_policy.json
+}
+
+data "aws_iam_policy_document" "backup_reports_bucket_policy" {
+  statement {
+    sid    = "EnforceSSL"
+    effect = "Deny"
+    actions = [
+      "s3:*",
+    ]
+    resources = [
+      aws_s3_bucket.backup_reports.arn,
+      "${aws_s3_bucket.backup_reports.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
+      ]
+    }
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "*",
+      ]
+    }
+  }
+}
+
+
+# ================================================================================
 # Amazon S3 Bucket for Amazon EC2 Bastion
 # ================================================================================
 resource "aws_s3_bucket" "bastion" {
