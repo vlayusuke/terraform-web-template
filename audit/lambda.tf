@@ -9,7 +9,7 @@ resource "aws_lambda_function" "lambda_log_error_alert_audit" {
   filename         = data.archive_file.lambda_log_error_alert_audit.output_path
   source_code_hash = data.archive_file.lambda_log_error_alert_audit.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
@@ -65,7 +65,7 @@ resource "aws_lambda_function" "lambda_root_login_monitoring" {
   filename         = data.archive_file.lambda_root_login_monitoring.output_path
   source_code_hash = data.archive_file.lambda_root_login_monitoring.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
@@ -122,7 +122,7 @@ resource "aws_lambda_function" "lambda_error" {
   filename         = data.archive_file.lambda_error.output_path
   source_code_hash = data.archive_file.lambda_error.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
@@ -178,7 +178,7 @@ resource "aws_lambda_function" "lambda_security_notice" {
   filename         = data.archive_file.lambda_security_notice.output_path
   source_code_hash = data.archive_file.lambda_security_notice.output_base64sha256
   kms_key_arn      = aws_kms_key.lambda.arn
-  runtime          = "python3.14"
+  runtime          = "python3.15"
   timeout          = 10
   memory_size      = 128
 
