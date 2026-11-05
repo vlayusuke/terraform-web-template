@@ -49,19 +49,19 @@ Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用い�
 
 | Resources                  | Version  |
 | :------------------------- | -------: |
-| Python                     |  3.15.0  |
+| Python                     |  3.15.2  |
 
 ## 構築されるAWSリソースの数
 
 このテンプレートを実行することにより構築されるAWSリソースの数は、以下の表の通りです。
 
-| Environment | Resources | Notice           |
-| :---------- | --------: | :--------------- |
-| root        |         5 | N/A              |
-| develop     |       603 | N/A              |
-| staging     |       603 | N/A              |
-| production  |       603 | N/A              |
-| audit       |       138 | Each AWS account |
+| Environment | Resources  | Notice           |
+| :---------- | ---------: | :--------------- |
+| root        |         5  | N/A              |
+| develop     |       629  | N/A              |
+| staging     |       629  | N/A              |
+| production  |       629  | N/A              |
+| audit       |       138  | Each AWS account |
 
 ## 環境構築をする際の注意事項
 
