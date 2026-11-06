@@ -83,15 +83,53 @@ resource "aws_backup_selection" "aurora" {
   plan_id      = aws_backup_plan.aurora.id
 
   resources = [
-    aws_rds_cluster.aurora.arn
+    aws_rds_cluster.aurora.arn,
+    aws_rds_cluster_instance.aurora[*].arn,
   ]
 }
 
 resource "aws_backup_region_settings" "aurora" {
   region = local.region
+
   resource_type_opt_in_preference = {
     "Aurora" = true
   }
+}
+
+resource "aws_backup_report_plan" "aurora" {
+  region      = local.region
+  name        = "${local.project}-${local.env}-backup-report-plan-aurora"
+  description = "Backup report plan for AmazonAurora to ap-northeast-3."
+
+  report_delivery_channel {
+    formats = [
+      "CSV",
+      "JSON",
+    ]
+    s3_bucket_name = aws_s3_bucket.backup_reports.bucket
+  }
+
+  report_setting {
+    regions = [
+      local.region,
+    ]
+    report_template = "BACKUP_JOB_REPORT"
+  }
+
+  tags = {
+    Name = "${local.project}-${local.env}-backup-report-plan-aurora"
+  }
+}
+
+resource "aws_backup_vault_notifications" "aurora" {
+  region            = local.region
+  backup_vault_name = aws_backup_vault.aurora.name
+  sns_topic_arn     = aws_sns_topic.event_notifications.arn
+  backup_vault_events = [
+    "BACKUP_JOB_STARTED",
+    "BACKUP_JOB_COMPLETED",
+    "BACKUP_JOB_FAILED",
+  ]
 }
 
 
