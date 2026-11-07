@@ -78,14 +78,15 @@ resource "aws_backup_plan" "aurora" {
 }
 
 resource "aws_backup_selection" "aurora" {
+  count        = length(aws_rds_cluster_instance.aurora)
   region       = local.region
   iam_role_arn = aws_iam_role.backup.arn
-  name         = "${local.project}-${local.env}-backup-selection-aurora"
+  name         = "${local.project}-${local.env}-backup-selection-aurora-${count.index}"
   plan_id      = aws_backup_plan.aurora.id
 
   resources = [
     aws_rds_cluster.aurora.arn,
-    aws_rds_cluster_instance.aurora[*].arn,
+    aws_rds_cluster_instance.aurora[count.index].arn,
   ]
 }
 
@@ -99,7 +100,7 @@ resource "aws_backup_region_settings" "aurora" {
 
 resource "aws_backup_report_plan" "aurora" {
   region      = local.region
-  name        = "${local.project}-${local.env}-backup-report-plan-aurora"
+  name        = "backup_report_plan_aurora"
   description = "Backup report plan for AmazonAurora to ap-northeast-3."
 
   report_delivery_channel {
@@ -158,20 +159,22 @@ resource "aws_backup_vault_lock_configuration" "aurora_osaka" {
   changeable_for_days = 7
 }
 resource "aws_backup_selection" "aurora_osaka" {
+  count        = length(aws_rds_cluster_instance.aurora)
   provider     = aws.osaka
   region       = local.region
   iam_role_arn = aws_iam_role.backup.arn
-  name         = "${local.project}-${local.env}-backup-selection-aurora-osaka"
+  name         = "${local.project}-${local.env}-backup-selection-aurora-osaka-${count.index}"
   plan_id      = aws_backup_plan.aurora.id
 
   resources = [
     aws_rds_cluster.aurora.arn,
-    aws_rds_cluster_instance.aurora[*].arn,
+    aws_rds_cluster_instance.aurora[count.index].arn,
   ]
 }
 
 resource "aws_backup_region_settings" "aurora_osaka" {
   provider = aws.osaka
+
   resource_type_opt_in_preference = {
     "Aurora" = true
   }
