@@ -38,6 +38,7 @@ data "aws_iam_policy_document" "cloudtrail_kms_policy" {
     resources = [
       aws_kms_key.cloudtrail.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -55,6 +56,7 @@ data "aws_iam_policy_document" "cloudtrail_kms_policy" {
     resources = [
       aws_kms_key.cloudtrail.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -105,6 +107,7 @@ data "aws_iam_policy_document" "guardduty_kms_policy" {
     resources = [
       aws_kms_key.guardduty.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -122,6 +125,7 @@ data "aws_iam_policy_document" "guardduty_kms_policy" {
     resources = [
       aws_kms_key.guardduty.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
@@ -168,6 +172,7 @@ data "aws_iam_policy_document" "lambda_kms_policy" {
     resources = [
       aws_kms_key.lambda.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -185,6 +190,7 @@ data "aws_iam_policy_document" "lambda_kms_policy" {
     resources = [
       aws_kms_key.lambda.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
