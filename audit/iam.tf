@@ -18,6 +18,7 @@ data "aws_iam_policy_document" "lambda_cloudwatch_audit_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -87,6 +88,7 @@ data "aws_iam_policy_document" "lambda_root_login_monitoring_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -156,6 +158,7 @@ data "aws_iam_policy_document" "lambda_error_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -225,6 +228,7 @@ data "aws_iam_policy_document" "lambda_security_notice_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -293,6 +297,7 @@ data "aws_iam_policy_document" "chatbot_audit_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -434,6 +439,7 @@ data "aws_iam_policy_document" "config_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -535,6 +541,7 @@ data "aws_iam_policy_document" "cloudtrail_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -609,6 +616,7 @@ data "aws_iam_policy_document" "sns_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -681,6 +689,7 @@ data "aws_iam_policy_document" "eventbridge_to_sns_assume" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals {
       type = "Service"
       identifiers = [
