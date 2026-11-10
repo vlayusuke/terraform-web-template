@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "metric_alarm" {
     principals {
       type = "AWS"
       identifiers = [
-        "*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
 
@@ -144,7 +144,7 @@ data "aws_iam_policy_document" "event_alarm" {
     principals {
       type = "AWS"
       identifiers = [
-        "*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
 
@@ -234,7 +234,7 @@ data "aws_iam_policy_document" "inspector_notifications" {
     principals {
       type = "AWS"
       identifiers = [
-        "*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
 
@@ -324,7 +324,7 @@ data "aws_iam_policy_document" "event_notifications" {
     principals {
       type = "AWS"
       identifiers = [
-        "*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
 
