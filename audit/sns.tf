@@ -57,6 +57,14 @@ data "aws_iam_policy_document" "event_notifications_audit" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceOwner"
+      values = [
+        data.aws_caller_identity.current.account_id,
+      ]
+    }
   }
 
   statement {
@@ -139,6 +147,14 @@ data "aws_iam_policy_document" "config_notifications_policy" {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceOwner"
+      values = [
+        data.aws_caller_identity.current.account_id,
       ]
     }
   }
