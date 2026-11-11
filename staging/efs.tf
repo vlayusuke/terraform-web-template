@@ -44,18 +44,19 @@ data "aws_iam_policy_document" "efs_filesystem_policy" {
     resources = [
       aws_efs_file_system.main.arn,
     ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+
     condition {
       test     = "Bool"
       variable = "aws:SecureTransport"
       values = [
         "true",
-      ]
-    }
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        "*",
       ]
     }
   }
