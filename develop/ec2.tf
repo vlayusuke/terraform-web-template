@@ -29,12 +29,8 @@ resource "aws_instance" "ec2_bastion" {
     cpu_credits = "standard"
   }
 
-  ephemeral_block_device {
-    device_name  = "/dev/xvda"
-    virtual_name = "ephemeral0"
-  }
-
   root_block_device {
+    device_name           = "/dev/xvda"
     volume_type           = "gp3"
     volume_size           = "8"
     encrypted             = true
