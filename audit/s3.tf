@@ -42,6 +42,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_logs" 
     blocked_encryption_types = [
       "SSE-C"
     ]
+
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -83,11 +84,9 @@ resource "aws_s3_bucket_versioning" "cloudtrail_logs" {
 }
 
 resource "aws_s3_bucket_logging" "cloudtrail_logs" {
-  bucket = aws_s3_bucket.cloudtrail_logs.id
-
+  bucket        = aws_s3_bucket.cloudtrail_logs.id
   target_bucket = aws_s3_bucket.s3_logs.id
   target_prefix = "cloudtrail-logs/"
-
 }
 
 resource "aws_s3_bucket_policy" "cloudtrail_logs" {
@@ -153,18 +152,19 @@ data "aws_iam_policy_document" "cloudtrail_logs" {
       aws_s3_bucket.cloudtrail_logs.arn,
       "${aws_s3_bucket.cloudtrail_logs.arn}/*",
     ]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "false",
-      ]
-    }
 
     principals {
       type = "AWS"
       identifiers = [
         "*",
+      ]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
       ]
     }
   }
@@ -215,6 +215,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "config_logs" {
     blocked_encryption_types = [
       "SSE-C"
     ]
+
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -256,8 +257,7 @@ resource "aws_s3_bucket_versioning" "config_logs" {
 }
 
 resource "aws_s3_bucket_logging" "config_logs" {
-  bucket = aws_s3_bucket.config_logs.id
-
+  bucket        = aws_s3_bucket.config_logs.id
   target_bucket = aws_s3_bucket.s3_logs.id
   target_prefix = "config-logs/"
 
@@ -279,18 +279,19 @@ data "aws_iam_policy_document" "config_logs" {
       aws_s3_bucket.config_logs.arn,
       "${aws_s3_bucket.config_logs.arn}/*",
     ]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "false",
-      ]
-    }
 
     principals {
       type = "AWS"
       identifiers = [
         "*",
+      ]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
       ]
     }
   }
@@ -395,6 +396,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "guardduty_logs" {
     blocked_encryption_types = [
       "SSE-C"
     ]
+
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -436,8 +438,7 @@ resource "aws_s3_bucket_versioning" "guardduty_logs" {
 }
 
 resource "aws_s3_bucket_logging" "guardduty_logs" {
-  bucket = aws_s3_bucket.guardduty_logs.id
-
+  bucket        = aws_s3_bucket.guardduty_logs.id
   target_bucket = aws_s3_bucket.s3_logs.id
   target_prefix = "guardduty-logs/"
 
@@ -459,18 +460,19 @@ data "aws_iam_policy_document" "guardduty_logs" {
       aws_s3_bucket.guardduty_logs.arn,
       "${aws_s3_bucket.guardduty_logs.arn}/*",
     ]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "false",
-      ]
-    }
 
     principals {
       type = "AWS"
       identifiers = [
         "*",
+      ]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
       ]
     }
   }
@@ -578,6 +580,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "secure_info" {
     blocked_encryption_types = [
       "SSE-C"
     ]
+
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -594,8 +597,7 @@ resource "aws_s3_bucket_versioning" "secure_info" {
 }
 
 resource "aws_s3_bucket_logging" "secure_info" {
-  bucket = aws_s3_bucket.secure_info.id
-
+  bucket        = aws_s3_bucket.secure_info.id
   target_bucket = aws_s3_bucket.s3_logs.id
   target_prefix = "secure-info/"
 
@@ -652,18 +654,19 @@ data "aws_iam_policy_document" "secure_info" {
       aws_s3_bucket.secure_info.arn,
       "${aws_s3_bucket.secure_info.arn}/*",
     ]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "false",
-      ]
-    }
 
     principals {
       type = "AWS"
       identifiers = [
         "*",
+      ]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
       ]
     }
   }
@@ -714,6 +717,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_logs" {
     blocked_encryption_types = [
       "SSE-C"
     ]
+
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
@@ -780,18 +784,19 @@ data "aws_iam_policy_document" "s3_logs" {
       aws_s3_bucket.s3_logs.arn,
       "${aws_s3_bucket.s3_logs.arn}/*",
     ]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "false",
-      ]
-    }
 
     principals {
       type = "AWS"
       identifiers = [
         "*",
+      ]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false",
       ]
     }
   }
