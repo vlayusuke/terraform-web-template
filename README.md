@@ -42,8 +42,8 @@ Pythonのバージョンは、macOS上で[Homebrew](https://brew.sh/)を用い�
 | Resources                  | Version  |
 | :------------------------- | -------: |
 | Terraform                  |  1.17.1  |
-| AWS Provider               |  6.72.0  |
-| AWS Cloud Control Provider | 1.109.0  |
+| AWS Provider               |  6.73.0  |
+| AWS Cloud Control Provider | 1.110.0  |
 
 ### AWS Lambda関数に使用しているPythonのruntimeのVersion
 
