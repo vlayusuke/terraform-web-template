@@ -462,6 +462,10 @@ resource "aws_cloudwatch_metric_alarm" "app_deployment_failed" {
     aws_sns_topic.metric_alarm.arn,
   ]
 
+  ok_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-cwt-ecs-app-deployment-failed-alarm"
   }
@@ -555,6 +559,10 @@ resource "aws_cloudwatch_metric_alarm" "cron_deployment_failed" {
     aws_sns_topic.metric_alarm.arn,
   ]
 
+  ok_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-cwt-ecs-cron-deployment-failed-alarm"
   }
@@ -645,6 +653,10 @@ resource "aws_cloudwatch_metric_alarm" "queue_deployment_failed" {
   }
 
   alarm_actions = [
+    aws_sns_topic.metric_alarm.arn,
+  ]
+
+  ok_actions = [
     aws_sns_topic.metric_alarm.arn,
   ]
 
