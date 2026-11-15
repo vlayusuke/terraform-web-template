@@ -715,6 +715,7 @@ data "aws_iam_policy_document" "backup_vault_kms_policy" {
       ]
     }
   }
+
   statement {
     sid    = "AllowAccountAccess"
     effect = "Allow"
