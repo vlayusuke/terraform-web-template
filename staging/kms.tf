@@ -696,6 +696,27 @@ resource "aws_kms_key_policy" "backup_vault" {
 
 data "aws_iam_policy_document" "backup_vault_kms_policy" {
   statement {
+    sid    = "AllowBackupService"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      aws_kms_key.backup_vault.arn,
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "backup.amazonaws.com",
+      ]
+    }
+  }
+
+  statement {
     sid    = "AllowAccountAccess"
     effect = "Allow"
     actions = [
@@ -741,6 +762,27 @@ resource "aws_kms_key_policy" "backup_vault_osaka" {
 }
 
 data "aws_iam_policy_document" "backup_vault_osaka_kms_policy" {
+  statement {
+    sid    = "AllowBackupService"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      aws_kms_key.backup_vault_osaka.arn,
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "backup.amazonaws.com",
+      ]
+    }
+  }
+
   statement {
     sid    = "AllowAccountAccess"
     effect = "Allow"
