@@ -303,11 +303,12 @@ resource "aws_wafv2_web_acl_association" "main" {
 # AWS WAFv2 Logging Configuration
 # ===============================================================================
 resource "aws_wafv2_web_acl_logging_configuration" "main" {
+  provider     = aws.virginia
+  resource_arn = aws_wafv2_web_acl.main.arn
+
   log_destination_configs = [
     aws_s3_bucket.waf_logs.arn,
   ]
-  resource_arn = aws_wafv2_web_acl.main.arn
-  provider     = aws.virginia
 
   logging_filter {
     default_behavior = "KEEP"
