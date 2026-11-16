@@ -8,6 +8,11 @@ resource "aws_backup_vault" "aurora" {
   kms_key_arn   = aws_kms_key.backup_vault.arn
   force_destroy = true
 
+  depends_on = [
+    aws_kms_key.backup_vault,
+    aws_rds_cluster.aurora,
+  ]
+
   tags = {
     Name = "${local.project}-${local.env}-backup-vault-aurora"
   }
@@ -88,6 +93,11 @@ resource "aws_backup_selection" "aurora" {
     aws_rds_cluster.aurora.arn,
     aws_rds_cluster_instance.aurora[count.index].arn,
   ]
+
+  depends_on = [
+    aws_iam_role.backup,
+    aws_rds_cluster.aurora,
+  ]
 }
 
 resource "aws_backup_region_settings" "aurora" {
@@ -146,6 +156,10 @@ resource "aws_backup_vault" "aurora_osaka" {
   name        = "${local.project}-${local.env}-backup-vault-aurora-osaka"
   kms_key_arn = aws_kms_key.backup_vault_osaka.arn
 
+  depends_on = [
+    aws_kms_key.backup_vault_osaka,
+    aws_rds_cluster.aurora,
+  ]
   tags = {
     Name = "${local.project}-${local.env}-backup-vault-aurora-osaka"
   }
