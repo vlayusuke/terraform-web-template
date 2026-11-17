@@ -34,6 +34,7 @@ data "aws_iam_policy_document" "codecommit" {
     resources = [
       aws_kms_key.codecommit.arn,
     ]
+
     principals {
       type = "Service"
       identifiers = [
@@ -51,6 +52,7 @@ data "aws_iam_policy_document" "codecommit" {
     resources = [
       aws_kms_key.codecommit.arn,
     ]
+
     principals {
       type = "AWS"
       identifiers = [
