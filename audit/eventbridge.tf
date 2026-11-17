@@ -142,6 +142,7 @@ resource "aws_cloudwatch_event_rule" "cloudtrail_check_api_calls" {
         "ssm.amazonaws.com",
         "secretsmanager.amazonaws.com",
         "logs.amazonaws.com",
+        "backup.amazonaws.com",
       ]
     }
   })
